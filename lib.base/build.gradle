@@ -1,0 +1,55 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '25.0.0'
+    publishNonDefault true
+    defaultConfig {
+        minSdkVersion 9
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BBS_API_SERVER_URL", BBS_RELEASE_API_SEVER_URL
+            buildConfigField "String", "WEB_SITE_SERVER_URL", WEB_SITE_RELEASE_API_SERVER_URL
+            buildConfigField "String", "HUI_API_SERVER_URL", HUI_RELEASE_API_SERVER_URL
+        }
+        debug {
+            buildConfigField "String", "BBS_API_SERVER_URL", BBS_INSIDE_API_SEVER_URL
+            buildConfigField "String", "WEB_SITE_SERVER_URL", WEB_SITE_INSIDE_API_SERVER_URL
+            buildConfigField "String", "HUI_API_SERVER_URL", HUI_INSIDE_API_SERVER_URL
+        }
+        beta {
+            buildConfigField "String", "BBS_API_SERVER_URL", BBS_BETA_API_SEVER_URL
+            buildConfigField "String", "WEB_SITE_SERVER_URL", WEB_SITE_BETA_API_SERVER_URL
+            buildConfigField "String", "HUI_API_SERVER_URL", HUI_BETA_API_SERVER_URL
+        }
+    }
+
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile project(':lib.volley')
+    releaseCompile project(path:':lib.common',configuration:'release')
+    debugCompile project(path:':lib.common',configuration:'debug')
+    betaCompile project(path:':lib.common',configuration:'beta')
+    compile 'org.greenrobot:eventbus:3.0.0'
+//    releaseCompile project(path:':lib.ptr',configuration:'release')
+//    debugCompile project(path:':lib.ptr',configuration:'debug')
+//    betaCompile project(path:':lib.ptr',configuration:'beta')
+    compile 'com.android.support:support-v4:23.3.0'
+//    releaseCompile project(path:':lib.style',configuration:'release')
+//    debugCompile project(path:':lib.style',configuration:'debug')
+//    betaCompile project(path:':lib.style',configuration:'beta')
+//    releaseCompile project(path:':lib.share',configuration:'release')
+//    debugCompile project(path:':lib.share',configuration:'debug')
+//    betaCompile project(path:':lib.share',configuration:'beta')
+//    compile project(':lib.map')
+}
