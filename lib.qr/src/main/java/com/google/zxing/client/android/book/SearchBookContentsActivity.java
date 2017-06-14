@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 import com.google.zxing.client.android.Intents;
 import com.google.zxing.client.android.HttpHelper;
 import com.google.zxing.client.android.LocaleManager;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Uses Google Book Search to find a word or phrase in the requested book.

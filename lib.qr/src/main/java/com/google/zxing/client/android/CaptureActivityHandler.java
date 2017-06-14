@@ -22,7 +22,7 @@ import android.content.pm.ResolveInfo;
 import android.graphics.BitmapFactory;
 import android.provider.Browser;
 
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.DecodeHintType;

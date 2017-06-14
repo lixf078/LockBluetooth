@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Lib.common</string>
+    <string name="app_name">lib.common</string>
     <string name="lib_price_txt_flag">￥%s</string>
     <string name="lib_integal_txt_flag">-%s</string>
 </resources>

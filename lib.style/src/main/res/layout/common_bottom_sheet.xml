@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:background="@color/lib_style_transparent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/lib_style_corner_white">
+        <TextView
+            android:id="@+id/first_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:textColor="@color/orange_text"
+            android:text="第一个"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/first_line"
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#dedede" />
+
+        <TextView
+            android:id="@+id/second_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="第二个"
+            android:textColor="@color/orange_text"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/second_line"
+            android:layout_width="fill_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="#dedede"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/third_tv"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:text="第三个"
+            android:textColor="@color/orange_text"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/third_line"
+        android:layout_width="fill_parent"
+        android:layout_height="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/lib_style_transparent" />
+
+    <TextView
+        android:id="@+id/dissmiss_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="@color/orange_text"
+        android:background="@drawable/lib_style_corner_white"
+        android:text="取消"
+        android:textSize="16sp" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="8dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/lib_style_transparent" />
+</LinearLayout>

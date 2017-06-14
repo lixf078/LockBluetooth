@@ -15,7 +15,7 @@
  */
 
 package com.google.zxing.client.android.book;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 import android.content.Context;
 import android.graphics.Typeface;

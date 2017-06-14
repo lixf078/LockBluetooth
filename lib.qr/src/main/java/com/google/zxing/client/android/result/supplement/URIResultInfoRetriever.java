@@ -27,7 +27,7 @@ import com.google.zxing.client.result.URIParsedResult;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 final class URIResultInfoRetriever extends SupplementalInfoRetriever {
 

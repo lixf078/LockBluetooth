@@ -1,1 +1,1 @@
-include ':app', ':lib.qr', ':lib.volley', ':lib.base', ':lib.common'
+include ':app', ':lib.qr', ':lib.volley', ':lib.common', ':lib.ptr', ':lib.style', ':lib.smart', ':lib.api'

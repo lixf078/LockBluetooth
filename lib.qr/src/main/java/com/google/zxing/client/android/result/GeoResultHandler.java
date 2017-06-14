@@ -21,7 +21,7 @@ import com.google.zxing.client.result.GeoParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Handles geographic coordinates (typically encoded as geo: URLs).

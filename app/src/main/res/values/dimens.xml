@@ -1,0 +1,57 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="activity_tab_width">45dp</dimen>
+    <dimen name="activity_myinfor_text_tabsize">16sp</dimen>
+ <!-- 设置界面控件之间的大空隙-->
+    <dimen name="act_setting_margintop_class">20dp</dimen>
+    <dimen name="dialog_width">300dp</dimen>
+    <dimen name="dialog_height">300dp</dimen>
+    <dimen name="dialog_mini_height">220dip</dimen>
+
+    <!-- Volley -->
+    <dimen name="photo_crop_width">280dip</dimen>
+    <dimen name="photo_crop_stroke_width">1dip</dimen>
+    <dimen name="photo_preview_size">200dip</dimen>
+    
+    <dimen name="tabs_height">48dp</dimen>
+    <dimen name="viewpager_header_height">305dp</dimen>
+
+    <dimen name="text_size_xlarge">19sp</dimen>
+    <dimen name="text_size_large">17sp</dimen>
+    <dimen name="text_size_normal">15sp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="text_size_mini">12sp</dimen>
+
+    <dimen name="title_height">44dp</dimen>
+    <dimen name="tab_height">32dp</dimen>
+   <dimen name="linggan_text_margin">70dp</dimen>
+    <dimen name="xiaoguotu_pic_margin">41dp</dimen>
+    <dimen name="detail_top_margin">20dp</dimen>
+
+    <!-- material-->
+    <dimen name="inner_components_spacing">8dp</dimen>
+    <dimen name="bottom_ellipsis_height">4dp</dimen>
+    <dimen name="floating_label_text_size">12sp</dimen>
+    <dimen name="bottom_text_size">12sp</dimen>
+
+    <dimen name="community_all_img_height">180dp</dimen>
+    <dimen name="text_device">5dp</dimen>
+    <dimen name="big_text_device">7dp</dimen>
+    <dimen name="discovery_feed_left_size">249dp</dimen>
+    <dimen name="discovery_feed_right_size">123dp</dimen>
+    <dimen name="discovery_topic_item_width">186dp</dimen>
+    <dimen name="discovery_topic_item_height">130dp</dimen>
+    <dimen name="qr_size">230dp</dimen>
+
+    <!-- horizantalListView -->
+    <dimen name="thumnail_default_height">80dp</dimen>
+    <dimen name="thumnail_default_width">120dp</dimen>
+    <dimen name="indicator_right_padding">10dp</dimen>
+    <dimen name="indicator_corner_radius">12dp</dimen>
+    <dimen name="indicator_internal_padding">4dp</dimen>
+    <dimen name="header_footer_left_right_padding">24dp</dimen>
+    <dimen name="header_footer_top_bottom_padding">12dp</dimen>
+</resources>

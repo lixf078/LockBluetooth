@@ -30,7 +30,7 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 
 public final class PreferencesFragment 

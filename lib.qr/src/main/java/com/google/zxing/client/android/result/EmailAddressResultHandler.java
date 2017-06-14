@@ -21,7 +21,7 @@ import com.google.zxing.client.result.EmailAddressParsedResult;
 import com.google.zxing.client.result.ParsedResult;
 
 import android.app.Activity;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Handles email addresses.

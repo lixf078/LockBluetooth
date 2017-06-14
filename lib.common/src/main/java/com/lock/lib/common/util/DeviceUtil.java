@@ -157,7 +157,7 @@ public class DeviceUtil {
     public static int getOsVersion(){
         int osVersion;
         try{
-            osVersion = Integer.valueOf(android.os.Build.VERSION.SDK);
+            osVersion = Integer.valueOf(Build.VERSION.SDK);
         }
         catch (NumberFormatException e){
             osVersion = 0;

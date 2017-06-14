@@ -24,7 +24,7 @@ import com.google.zxing.client.result.URIParsedResult;
 import android.app.Activity;
 
 import java.util.Locale;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Offers appropriate actions for URLS.

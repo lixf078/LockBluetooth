@@ -1,0 +1,130 @@
+<resources>
+    <dimen name="tab_line_height">1px</dimen>
+    <dimen name="tab_line_selected_height">3px</dimen>
+    <dimen name="main_tab_height">48dp</dimen>
+
+    <dimen name="text_size_xxxxlarge">35sp</dimen>
+    <dimen name="text_size_xxxlarge">25sp</dimen>
+    <dimen name="text_size_xxlarge">21sp</dimen>
+    <dimen name="text_size_xlarge">20sp</dimen>
+    <dimen name="text_size_large">18sp</dimen>
+    <dimen name="text_size_big">16sp</dimen>
+    <dimen name="text_size_normal">15sp</dimen>
+    <dimen name="text_size_small">14sp</dimen>
+    <dimen name="text_size_tiny">13sp</dimen>
+    <dimen name="text_size_mini">12sp</dimen>
+    <dimen name="text_size_extre_mini">10sp</dimen>
+
+    <dimen name="home_head_title_height">44dp</dimen>
+    <dimen name="home_budget_area">150dp</dimen>
+    <dimen name="home_course_title_marg_ver">15dp</dimen>
+    <dimen name="home_course_title_marg_hor">10dp</dimen>
+    <dimen name="home_course_title_icon_drawable_padding">5dp</dimen>
+    <dimen name="home_text_area_line_space">10dp</dimen>
+    <dimen name="budget_collect_wheel_marg_top">9dp</dimen>
+
+    <dimen name="school_menu_width">187dp</dimen>
+
+    <dimen name="course_school_icon_size">60dp</dimen>
+    <dimen name="course_owner_other_flag_marg_hor">20dp</dimen>
+    <dimen name="course_owner_other_flag_drawable_padding">5dp</dimen>
+    <dimen name="course_owner_img_size">110dp</dimen>
+    <dimen name="course_tab_marg_top">5dp</dimen>
+    <dimen name="course_tab_marg_bottom">5dp</dimen>
+    <dimen name="course_tab_height">48dp</dimen>
+    <dimen name="course_actual_cost_marg_bottom">35dp</dimen>
+    <dimen name="my_process_list_divider_height">30dp</dimen>
+    <dimen name="my_process_child_item_mar">102dp</dimen>
+    <dimen name="my_process_group_item_mar">89dp</dimen>
+    <dimen name="my_process_group_item_divid_mar">24dp</dimen>
+
+    <dimen name="home_budget_customize_marg_bottom">77.5dp</dimen>
+    <dimen name="home_budget_customize_marg_top">15dp</dimen>
+    <dimen name="detail_top_margin">20dp</dimen>
+    <dimen name="detail_top_new_margin">18dp</dimen>
+
+    <dimen name="linggan_pic_height">211dp</dimen>
+    <dimen name="linggan_pic_title_textsize">17sp</dimen>
+    <dimen name="linggan_pic_num_text_size">13sp</dimen>
+    <dimen name="linggan_pic_content_text_size">14sp</dimen>
+    <dimen name="linggan_pic_margin">15dp</dimen>
+    <dimen name="linggan_pic_marginbottom">30dp</dimen>
+    <dimen name="linggan_text_margin">70dp</dimen>
+
+
+    <dimen name="xiaoguotu_pic_margin">41dp</dimen>
+    <dimen name="margin_side">15dp</dimen>
+    <dimen name="margin_big_side">30dp</dimen>
+    <dimen name="little_title_size">14sp</dimen>
+    <dimen name="title_text_size">18sp</dimen>
+    <dimen name="line_space">10dp</dimen>
+    <dimen name="divider_height">0.5dp</dimen>
+    <dimen name="pic_special_title_bottom_size">49.5dp</dimen>
+    <dimen name="pic_special_sub_tab_size">25dp</dimen>
+    <dimen name="pic_special_sub_tab_text_size">13sp</dimen>
+    <dimen name="pic_special_sun_tab_device">10dp</dimen>
+    <dimen name="gride_device">10dp</dimen>
+    <dimen name="list_view_device">1dp</dimen>
+    <dimen name="big_device">20dp</dimen>
+    <dimen name="tab_height">30dp</dimen>
+
+    <dimen name="community_head_height">30dp</dimen>
+    <dimen name="community_head_mar_hor">15dp</dimen>
+    <dimen name="community_mar_ver">10dp</dimen>
+    <dimen name="community_list_item_height">65dp</dimen>
+    <dimen name="community_all_img_height">211.5dp</dimen>
+    <dimen name="community_all_flag_height">44dp</dimen>
+    <dimen name="community_day_hot_item_height">65dp</dimen>
+    <dimen name="community_num_mar_hor">20dp</dimen>
+    <dimen name="community_smart_tab_height">44dp</dimen>
+    <dimen name="community_smart_tab_spacing">33dp</dimen>
+    <dimen name="community_drop_down_menu_height">40dp</dimen>
+
+    <dimen name="fengshui_pic_height">90dp</dimen>
+    <!-- 一般小标题的宽度-->
+    <dimen name="fengshui_title_size">15sp</dimen>
+    <dimen name="fengshui_content_size">13sp</dimen>
+    <dimen name="fengshui_collect_size">12sp</dimen>
+    <dimen name="fengshui_item_ll_height">110dp</dimen>
+    <dimen name="group_purchase_smart_tab_spacing">60dp</dimen>
+    <dimen name="community_city_menu_padding">5dp</dimen>
+    <dimen name="gp_bigpic_height">130dp</dimen>
+    <dimen name="gp_purchase_brance_marging">12dp</dimen>
+    <dimen name="gp_purchase_brand_height">70dp</dimen>
+    <dimen name="gp_purchase_text_bottom_size">62dp</dimen>
+    <dimen name="gp_purchase_review_pic_size">60dp</dimen>
+    <dimen name="circle_pic_size">65dp</dimen>
+    <dimen name="margin_size_big">20dp</dimen>
+    <dimen name="problem_circle_pic_size">30dp</dimen>
+    <dimen name="inspection_gvpic_size">124dp</dimen>
+    <dimen name="supervision_top_height">100dp</dimen>
+    <dimen name="supervision_worry_item">90dp</dimen>
+    <dimen name="five_point">24dp</dimen>
+    <dimen name="image_size">120dp</dimen>
+    <dimen name="pop_near_size">50dp</dimen>
+    <dimen name="pop_bigtab_marging">33dp</dimen>
+    <dimen name="nearby_bottom_pic">25dp</dimen>
+    <dimen name="merchant_top_banner_height">211dp</dimen>
+    <dimen name="merchant_group_pic_height">130dp</dimen>
+    <dimen name="pop_menu_post_detail_width">140dp</dimen>
+    <dimen name="pop_menu_post_detail_menu_height">40dp</dimen>
+    <dimen name="special_pic_height">281dp</dimen>
+
+    <dimen name="community_tab_padding">18dp</dimen>
+    <dimen name="discovery_feed_left_size">229dp</dimen>
+    <dimen name="discovery_feed_right_size">123dp</dimen>
+    <dimen name="discovery_topic_item_width">186dp</dimen>
+    <dimen name="discovery_topic_item_height">130dp</dimen>
+    <dimen name="qr_size">230dp</dimen>
+    <dimen name="dis_detail_bottom_btn_h">50dp</dimen>
+    <dimen name="input_detail_adress_info">73dp</dimen>
+    <dimen name="pre_order_noti_h">90dp</dimen>
+    <dimen name="order_money_h">60dp</dimen>
+    <!--发现-->
+    <dimen name="frag_discover_tabh">107dp</dimen>
+    <dimen name="large_device">30dp</dimen>
+    <dimen name="small_device">5dp</dimen>
+    <dimen name="smeller_device">3dp</dimen>
+    <dimen name="text_size_username">10sp</dimen>
+    <dimen name="home_grid_horizontalSpacing">35dp</dimen>
+</resources>

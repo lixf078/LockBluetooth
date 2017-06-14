@@ -19,7 +19,7 @@ package com.google.zxing.client.android.share;
 import android.provider.ContactsContract;
 
 
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Qr.QrBrowser;
 import com.google.zxing.client.android.Contents;

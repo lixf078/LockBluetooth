@@ -100,7 +100,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 
 /**

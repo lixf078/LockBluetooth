@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_home"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/translucent_selector"
+    android:gravity="bottom|center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="5dp">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_home_selector"
+        android:contentDescription="@null"
+        android:scaleType="fitXY" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="首页"
+        android:textSize="@dimen/text_size_extre_mini"
+        android:textColor="@color/home_tab_txt_color"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="3dp"/>
+</LinearLayout>

@@ -19,7 +19,7 @@ package com.google.zxing.client.android;
 import com.google.zxing.QrUtil;
 import com.google.zxing.ResultPoint;
 import com.google.zxing.client.android.camera.CameraManager;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

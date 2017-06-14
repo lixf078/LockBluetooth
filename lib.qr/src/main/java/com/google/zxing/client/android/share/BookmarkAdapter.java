@@ -24,7 +24,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
  
 

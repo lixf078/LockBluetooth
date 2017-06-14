@@ -22,7 +22,7 @@ import com.google.zxing.client.result.TelParsedResult;
 
 import android.app.Activity;
 import android.telephony.PhoneNumberUtils;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Offers relevant actions for telephone numbers.

@@ -37,9 +37,11 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
-    compile project(':lib.base')
     compile project(':lib.common')
     compile project(':lib.qr')
+    compile project(':lib.smart')
+    compile project(':lib.api')
     compile project(':lib.volley')
-
+    compile project(':lib.style')
+    compile project(':lib.ptr')
 }

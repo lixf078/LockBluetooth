@@ -29,7 +29,7 @@ import android.widget.TextView;
 import com.google.zxing.Result;
 
 import java.util.ArrayList;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 final class HistoryItemAdapter extends ArrayAdapter<HistoryItem> {
 

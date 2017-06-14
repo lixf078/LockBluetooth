@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lib.api</string>
+    <string name="fail_web_loading">加载界面失败，请稍后重试</string>
+    <string name="no_acq_data">没有获取到数据</string>
+</resources>

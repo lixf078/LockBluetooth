@@ -32,7 +32,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.google.zxing.client.android.history.HistoryManager;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * @author Kamil Kaczmarczyk

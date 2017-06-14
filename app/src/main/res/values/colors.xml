@@ -3,4 +3,135 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+        <color name="app_color">#0000ff</color>
+        <color name="app_bg">#fafafa</color>
+        <color name="default_app_bg">#eef2f3</color>
+        <color name="background_tab_pressed">#6633B5E5</color>
+        <color name="white">#ffffff</color>
+        <color name="half_white">#64ffffff</color>
+        <color name="jiu_white">#d1ffffff</color>
+        <color name="yf_sp_string_color">#febd58</color>
+        <color name="darker_gray">#383838</color>
+        <color name="black">#000000</color>
+        <color name="user_name">#6E6E6E</color>
+        <color name="backgroundshape">#FCFCFC</color>
+        <color name="tab_background">#CDAA7D</color>
+        <color name="tab_head">#FAEBD7</color>
+        <color name="act_my_background">#B0B0B0</color>
+        <color name="no_color">#00000000</color>
+        <color name="background_gradient_start">#000000</color>
+        <color name="background_gradient_end">#DDDDDD</color>
+        <color name="fastlane_background">#0096a6</color>
+        <color name="search_opaque">#ffaa3f</color>
+        <color name="detail_background">#0096a6</color>
+        <color name="soft_opaque">#30000000</color>
+        <color name="img_soft_opaque">#30FF0000</color>
+        <color name="img_full_opaque">#00000000</color>
+        <color name="black_opaque">#AA000000</color>
+        <color name="orange_transparent">#AAFADCA7</color>
+        <color name="orange">#FADCA7</color>
+        <color name="aiyiqi_orange">#00a051</color>
+        <color name="yellow">#EEFF41</color>
+        <color name="default_background">#3d3d3d</color>
+        <color name="main_color">#00BFB0</color>
+        <color name="main_color_2">#57d19f</color>
+        <color name="light_main_color">#00FFCC</color>
+        <color name="menu_background">#555555</color>
+        <color name="golden">#E0D7C8</color>
+        <color name="red">#EE0000</color>
+        <color name="green">#2FA834</color>
+        <color name="blue">#33B5E5</color>
+        <color name="light_blue">#1aabff</color>
+        <color name="dark_blue">#0000EE</color>
+        <color name="black_blue">#303D4D</color>
+        <color name="gray">#7A7A7A</color>
+        <color name="soft_gray">#A0A0A0</color>
+        <color name="light_gray">#DDDDDD</color>
+        <color name="bright_gray">#EEEEEE</color>
+        <color name="dark_gray">#505050</color>
+        <color name="deep_gray">#282828</color>
+        <color name="nacarat">#FF6600</color>
+        <color name="brick_red">#E04F3A</color>
+        <color name="default_color">#C9CBCD</color>
+        <drawable name="default_icon_community">#C9CBCD</drawable>
+        <drawable name="order_drawable">#00a051</drawable>
+
+        <!-- Photo Viewer Colors (Volley)-->
+        <color name="solid_black">#ff000000</color>
+        <color name="photo_crop_dim_color">#cc000000</color>
+        <color name="photo_crop_highlight_color">#fff</color>
+
+        <color name="home_edit_frame_color">#e0e0e0</color>
+        <color name="icon_bg">#696969</color>
+        <color name="edit_gray">#e0e0e0</color>
+        <color name="orange_color">#e64202</color>
+
+        <color name="home_wave">#00d8f1</color>
+        <color name="divider">#eeeeee</color>
+        <color name="view_divider">#d5d5d5</color>
+        <color name="view_school_divider">#e4e4e4</color>
+        <color name="list_divider">#eeeeee</color>
+        <color name="list_divider_new">#eef2f3</color>
+        <color name="bicpic_bottom_bg">#2e2e2e</color>
+        <color name="actionbar_bg">#242424</color>
+        <color name="textcolor">#646464</color>
+        <color name="text_color">#646464</color>
+        <color name="text_budget_color">#ccffffff</color>
+        <color name="text_budget_golden">#feb334</color>
+        <color name="text_budget_green">#42d58b</color>
+
+        <drawable name="button_focused">#FFEEEEEE</drawable>
+        <drawable name="button_pressed">#FFFaFaFa</drawable>
+        <drawable name="drawable_white">#FFFFFFFF</drawable>
+        <drawable name="divider">#eeeeee</drawable>
+        <drawable name="user_divider">#e4e4e4</drawable>
+        <!-- BouncyEdittext -->
+        <color name="hint_color">#9e9e9e</color>
+
+        <!-- DropDownMenu-->
+        <color name="default_menu_back">#f1f1f1</color>
+        <color name="default_menu_press_back">#fafafa</color>
+        <color name="default_menu_press_text">#000000</color>
+        <color name="default_menu_text">#00cf9b</color>
+
+        <color name="text_title_color">#282828</color>
+        <color name="text_content_color">#a0a0a0</color>
+        <drawable name="community_drop_bg">#99000000</drawable>
+
+        <drawable name="nearby_grid_item_selected">#f3f3f3</drawable>
+        <drawable name="nearby_grid_item_normal">@android:color/white</drawable>
+        <drawable name="translucent_focused">#6620B5A7</drawable>
+        <drawable name="translucent_pressed">#6600B5A7</drawable>
+        <drawable name="drawable_light_gray">#44000000</drawable>
+        <drawable name="icon_default">#c9cbcd</drawable>
+        <drawable name="icon_default_white">#FFFFFF</drawable>
+
+        <color name="loading_bg_color">#98000000</color>
+        <color name="my_join">#cc44ad6e</color>
+        <drawable name="umeng_cover_layer">#66000000</drawable>
+        <drawable name="umeng_search_cover_layer">#48000000</drawable>
+        <color name="umeng_feed_cover_layer">#99000000</color>
+        <color name="foucese_btn">#99ffffff</color>
+        <drawable name="confirm_pay_enable">#1aabff</drawable>
+        <drawable name="confirm_pay_unable">#d4d4d4</drawable>
+        <color name="blue_bottom_button">#1aabff</color>
+        <color name="btn_unfored">#d4d4d4</color>
+        <color name="navpage">#FFE1E8EB</color>
+        <color name="discover_bg">#eef2f3</color>
+        <!-- 我的-->
+        <color name="my_top_bg">#00a051</color>
+        <color name="my_to_btn_bg">#f6541c</color>
+
+        <!--home-->
+        <drawable name="doctor_tip_ll_color_doctor">#ff897c</drawable>
+        <drawable name="doctor_tip_ll_color_xuetang">#50ddd5</drawable>
+        <drawable name="doctor_tip_ll_color_toutiao">#ffb759</drawable>
+        <drawable name="doctor_tip_ll_color_zhuanti">#84b8ff</drawable>
+        <drawable name="homt_title_scan_layer">#80ffffff</drawable>
+
+        <color name="pop_bg">#cd2d343b</color>
+        <color name="topic_wrapper_text_color">#2d61af</color>
+        <color name="status_bar">#00a051</color>
+        <color name="two_white">#f0ffffff</color>
 </resources>

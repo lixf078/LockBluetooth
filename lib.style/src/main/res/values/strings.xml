@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Lib.style</string>
+    <string name="lib_style_no_more">没有更多内容了</string>
+    <string name="lib_no_data">暂无数据</string>
+    <string name="lib_no_content">暂无内容</string>
+    <string name="lib_no_msg">暂无消息</string>
+    <string name="lib_no_msg_des">您还没有消息，快去活跃一下吧！</string>
+    <string name="lib_no_content_des">还未发表任何内容！快去社区里转转吧！</string>
+    <string name="lib_no_attention">暂无关注</string>
+    <string name="lib_no_attention_des">您还没有关注他人，快去关注吧！</string>
+    <string name="lib_no_fans">暂无粉丝</string>
+    <string name="lib_no_fans_des">您还没有粉丝，活跃发帖会有更多粉丝哦！</string>
+</resources>

@@ -25,7 +25,7 @@ import android.widget.ArrayAdapter;
  
 
 import java.util.List;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Manufactures list items which represent SBC results.

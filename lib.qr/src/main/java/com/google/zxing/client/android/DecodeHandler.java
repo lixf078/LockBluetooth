@@ -35,7 +35,7 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 final class DecodeHandler extends Handler {
 

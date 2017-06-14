@@ -33,7 +33,7 @@ import android.widget.ListAdapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 /**
  * Loads a list of packages installed on the device asynchronously.

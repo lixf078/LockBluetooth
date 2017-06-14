@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="lib_style_loading_bg_color">#98000000</color>
+    <color name="lib_style_view_divider">#e4e4e4</color>
+    <color name="lib_style_divider_head">#d5d5d5</color>
+    <color name="lib_style_half_black">#282828</color>
+    <color name="text_color">#282828</color>
+    <drawable name="lib_style_icon_default">#c9cbcd</drawable>
+    <color name="orange_text">#00a051</color>
+    <color name="orange_text_unable">#8000a051</color>
+
+    <color name="lib_style_transparent">#00000000</color>
+    <color name="lib_style_white">#ffffff</color>
+    <color name="lib_style_alert_view_divider">#d5d5d5</color>
+
+</resources>

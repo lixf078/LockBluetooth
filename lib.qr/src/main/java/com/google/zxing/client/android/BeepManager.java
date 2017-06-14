@@ -26,7 +26,7 @@ import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.aiyiqi.lib.qr.R;
+import com.lock.lib.qr.R;
 
 import java.io.Closeable;
 import java.io.IOException;
