@@ -7,7 +7,7 @@ package com.lock.lib.common.constants;
  * 常量
  */
 public class Constants {
-    public static final String TAG = "yi";
+    public static final String TAG = "ble";
     public static final int INVALID = -1;
     public static final String HUANXIN_PASSWORD = "P8SVu2jzu8ClCSUEob9C3K";
     public static final String WEB_SITE = "http://m.17house.com";

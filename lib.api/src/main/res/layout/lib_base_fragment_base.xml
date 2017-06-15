@@ -3,7 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
+    <include
+        android:id="@+id/common_head_layout"
+        layout="@layout/lib_style_common_head_layout" />
+
     <in.srain.cube.views.ptr.PtrClassicFrameLayout xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
+        android:layout_below="@+id/common_head_layout"
         android:id="@+id/rotate_header_frg_order"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,6 +29,7 @@
             android:background="#eef2f3"
             android:orientation="vertical" />
     </in.srain.cube.views.ptr.PtrClassicFrameLayout>
+
     <TextView
         android:id="@+id/foot_view"
         android:layout_width="match_parent"
@@ -32,38 +39,40 @@
         android:gravity="center"
         android:textColor="@color/lib_style_half_black"
         android:textSize="@dimen/lib_style_text_size_large"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/stub_loading"
+        layout="@layout/lib_style_common_loading"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        layout="@layout/lib_style_common_loading" />
+        android:layout_height="match_parent" />
 
     <include
         android:id="@+id/stub_no_data"
+        layout="@layout/lib_style_common_no_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/head_layout"
         android:layout_above="@id/foot_view"
-        layout="@layout/lib_style_common_no_data" />
+        android:layout_below="@id/head_layout" />
 
     <include
         android:id="@+id/stub_no_net"
+        layout="@layout/lib_style_common_no_net"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/head_layout"
-        layout="@layout/lib_style_common_no_net" />
+        android:layout_below="@id/head_layout" />
+
     <include
         android:id="@+id/stub_no_attention"
+        layout="@layout/lib_style_common_no_attention"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/head_layout"
-        layout="@layout/lib_style_common_no_attention" />
+        android:layout_below="@id/head_layout" />
+
     <include
         android:id="@+id/stub_no_fans"
+        layout="@layout/lib_style_common_no_fans"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/head_layout"
-        layout="@layout/lib_style_common_no_fans" />
+        android:layout_below="@id/head_layout" />
 </RelativeLayout>

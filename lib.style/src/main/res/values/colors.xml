@@ -8,7 +8,7 @@
     <drawable name="lib_style_icon_default">#c9cbcd</drawable>
     <color name="orange_text">#00a051</color>
     <color name="orange_text_unable">#8000a051</color>
-
+    <color name="lib_style_light_blue">#1aabff</color>
     <color name="lib_style_transparent">#00000000</color>
     <color name="lib_style_white">#ffffff</color>
     <color name="lib_style_alert_view_divider">#d5d5d5</color>

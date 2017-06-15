@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/ble_connect_device"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/lib_style_corner_orange"
+            android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+            android:text="Connect Device"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:layout_marginRight="15dp"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/ble_scan_qr_code"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:padding="5dp"
+            android:textColor="@color/white"
+            android:background="@drawable/lib_style_corner_orange"
+            android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+            android:text="Scan QR Code"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5px"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Click to display QR code"
+            android:gravity="center_vertical"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Swipe to delete"
+            android:gravity="center_vertical"/>
+    </LinearLayout>
+
+    <in.srain.cube.views.loadmore.LoadMoreRecycleViewContainer
+        android:id="@+id/load_more_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eef2f3">
+
+        <cn.iwgang.familiarrecyclerview.FamiliarRecyclerView
+            android:id="@+id/id_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#eef2f3"
+            app:frv_dividerHeight="@dimen/tab_line_height"
+            app:frv_divider="@color/discover_bg"
+            app:frv_footerDividersEnabled="false"
+            app:frv_headerDividersEnabled="false"
+            app:frv_layoutManager="linear"
+            app:frv_layoutManagerOrientation="vertical" />
+    </in.srain.cube.views.loadmore.LoadMoreRecycleViewContainer>
+</LinearLayout>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<in.srain.cube.views.loadmore.LoadMoreListViewContainer xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_load_more_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal">
+
+    <com.example.bluetooth.le.view.SlideListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="#fafafa"
+        android:dividerHeight="10dp" />
+</in.srain.cube.views.loadmore.LoadMoreListViewContainer>

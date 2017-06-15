@@ -15,17 +15,22 @@ import com.lock.lib.api.event.ResponseEvent;
 
 public class SmartCoolFragment extends BaseFragment{
 
-
     @Override
     protected View createContentView(LayoutInflater inflater, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, null);
-//        initContentView(view);
+        initContentView(view);
         return view;
     }
 
     @Override
     protected void onEventResponse(ResponseEvent event) {
 
+    }
+
+    private void initContentView(View view){
+        setHeadLayoutVisiable(View.VISIBLE);
+        getHeadMiddelView().setText("Home");
+        getHeadLeftView().setVisibility(View.GONE);
     }
 
 }
