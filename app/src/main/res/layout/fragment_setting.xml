@@ -1,88 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/white"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
-            android:id="@+id/ble_connect_device"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/lib_style_corner_orange"
-            android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
-            android:text="Connect Device"
-            android:padding="5dp"
-            android:textColor="@color/white"
-            android:layout_marginRight="15dp"
-            android:gravity="center_vertical"/>
+        android:id="@+id/ble_connect_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/lib_style_corner_orange"
+        android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+        android:text="Connect Device"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textColor="@color/white"
+        android:layout_marginRight="18dp"
+        android:textSize="18sp"
+        android:gravity="center_vertical"/>
+        <!--<ImageView-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/ble_connect_device"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:src="@drawable/ic_connect_device" />-->
 
+        <!--<ImageView-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/ble_scan_qr_code"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:src="@drawable/ic_scan_qr_code" />-->
         <TextView
-            android:id="@+id/ble_scan_qr_code"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginLeft="15dp"
-            android:padding="5dp"
-            android:textColor="@color/white"
-            android:background="@drawable/lib_style_corner_orange"
-            android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
-            android:text="Scan QR Code"
-            android:gravity="center_vertical"/>
+        android:id="@+id/ble_scan_qr_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="18dp"
+        android:paddingRight="5dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:background="@drawable/lib_style_corner_orange"
+        android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+        android:text="Scan QR Code"
+        android:gravity="center_vertical"/>
     </LinearLayout>
+
     <View
         android:id="@+id/view_divider"
         android:layout_width="match_parent"
-        android:layout_height="0.5px"/>
+        android:layout_height="0.5px" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Click to display QR code"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical"
+            android:text="Click to display QR code" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Swipe to delete"
-            android:gravity="center_vertical"/>
+            android:gravity="center"
+            android:text="Swipe to delete" />
     </LinearLayout>
 
-    <in.srain.cube.views.loadmore.LoadMoreRecycleViewContainer
-        android:id="@+id/load_more_container"
+    <in.srain.cube.views.loadmore.LoadMoreListViewContainer xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/fragment_load_more_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#eef2f3">
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-        <cn.iwgang.familiarrecyclerview.FamiliarRecyclerView
-            android:id="@+id/id_recycler_view"
+        <ListView
+            android:id="@+id/list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#eef2f3"
-            app:frv_dividerHeight="@dimen/tab_line_height"
-            app:frv_divider="@color/discover_bg"
-            app:frv_footerDividersEnabled="false"
-            app:frv_headerDividersEnabled="false"
-            app:frv_layoutManager="linear"
-            app:frv_layoutManagerOrientation="vertical" />
-    </in.srain.cube.views.loadmore.LoadMoreRecycleViewContainer>
+            android:divider="#fafafa"
+            android:dividerHeight="10dp"
+            android:scrollbars="none" />
+    </in.srain.cube.views.loadmore.LoadMoreListViewContainer>
 </LinearLayout>

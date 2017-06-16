@@ -51,7 +51,8 @@ public abstract class BaseFragment extends Fragment {
 
     public View mLoadingLayout;
     public View mNoDataLayout;
-    public TextView mNoDataTextView;
+    public TextView mNoDataTextView, mNoDateTitle;
+
     public View mNoNetLayout;
     public View mNoAttentionLayout;
     public View mNoFansLayout;
@@ -191,13 +192,13 @@ public abstract class BaseFragment extends Fragment {
         /*if(mNoDataView == null){
             mNoDataView = mNoDataStub.inflate();
         }*/
+
         mNoDataLayout.setVisibility(View.VISIBLE);
     }
     protected void showNoDataVew(String emptyText){
         /*if(mNoDataView == null){
             mNoDataView = mNoDataStub.inflate();
         }*/
-        mNoDataTextView = (TextView) mNoDataLayout.findViewById(R.id.empty_text_des);
         mNoDataTextView.setText(emptyText);
         mNoDataLayout.setVisibility(View.VISIBLE);
     }
@@ -272,6 +273,8 @@ public abstract class BaseFragment extends Fragment {
 
         mLoadingLayout =  contentView.findViewById(R.id.stub_loading);
         mNoDataLayout =  contentView.findViewById(R.id.stub_no_data);
+        mNoDataTextView = (TextView) mNoDataLayout.findViewById(R.id.empty_text_des);
+        mNoDateTitle = (TextView) mNoDataLayout.findViewById(R.id.empty_text);
         mNoNetLayout =  contentView.findViewById(R.id.stub_no_net);
 
         mNoAttentionLayout = contentView.findViewById(R.id.stub_no_attention);

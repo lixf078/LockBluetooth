@@ -1,34 +1,26 @@
 package com.example.bluetooth.le.adapter;
 
 import android.content.Context;
-import android.net.Uri;
-import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.RatingBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bluetooth.le.R;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.example.bluetooth.le.view.SwipeLayout;
 import com.lock.lib.api.device.LockBluetoothDevice;
-import com.lock.lib.common.constants.Constants;
-import com.lock.lib.common.util.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by lixufeng on 16/4/11.
  */
-public class DeviceAdapter extends GBaseAdapter {
+public class DeviceAdapter extends CommonAdapter<LockBluetoothDevice> {
 
     private ArrayList<LockBluetoothDevice> blocks;
 
     private Context mContext;
 
-    public DeviceAdapter(Context context) {
+    public DeviceAdapter(Context context, List<LockBluetoothDevice> datas, int layoutId) {
+        super(context, datas, layoutId);
         mContext = context;
     }
 
@@ -41,49 +33,37 @@ public class DeviceAdapter extends GBaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return blocks != null ? blocks.size() : 0;
-    }
+    public void convert(ViewHolder holder, final LockBluetoothDevice lockBluetoothDevice) {
+        holder.setText(R.id.device_name, lockBluetoothDevice.name);
+        holder.setText(R.id.device_address, lockBluetoothDevice.mac);
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Holder holder = null;
-        if (convertView == null) {
-            holder = new Holder();
-            convertView = View.inflate(mContext, R.layout.setting_list_item_device, null);
-            holder.deviceName = (TextView) convertView.findViewById(R.id.device_name);
-            holder.deviceMac = (TextView) convertView.findViewById(R.id.device_address);
-            convertView.setTag(holder);
-        } else {
-            holder = (Holder) convertView.getTag();
-        }
+        final SwipeLayout swipeLayout = holder.getView(R.id.swipelayout);
 
-        LockBluetoothDevice item = blocks.get(position);
-        if (item != null) {
-            if (!TextUtils.isEmpty(item.name)) {
-                holder.deviceName.setText(item.name);
+        swipeLayout.setOnSwipeLayoutClickListener(new SwipeLayout.OnSwipeLayoutClickListener() {
+            @Override
+            public void onClick() {
+                Toast.makeText(mContext, lockBluetoothDevice.name, Toast.LENGTH_SHORT).show();
             }
+        });
 
-            if (!TextUtils.isEmpty(item.mac)) {
-                holder.deviceMac.setText(item.mac);
-            }
-        }
-        return convertView;
-    }
+//        ((LinearLayout)swipeLayout.getDeleteView()).getChildAt(0).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mContext, "call", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
-    public LockBluetoothDevice getItem(int position) {
-        return blocks.get(position);
-    }
 
-    class Holder {
-
-        public TextView deviceName;
-        public TextView deviceMac;
+//        ((LinearLayout)swipeLayout.getDeleteView()).getChildAt(1).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SwipeLayoutManager.getInstance().closeOpenInstance();
+////                datas.remove(s);
+////                adapter.notifyDataSetChanged();
+////                Toast.makeText(mContext, "datas.size():" + datas.size(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }
 

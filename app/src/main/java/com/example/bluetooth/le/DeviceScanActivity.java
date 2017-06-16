@@ -41,27 +41,22 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import com.example.bluetooth.le.BluetoothLeClass.OnDataAvailableListener;
 import com.example.bluetooth.le.BluetoothLeClass.OnServiceDiscoverListener;
+import com.example.bluetooth.le.adapter.LeDeviceListAdapter;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
-public class DeviceScanActivity extends ListActivity {
+public class DeviceScanActivity extends Activity implements AdapterView.OnItemClickListener{
 	private final static String TAG = DeviceScanActivity.class.getSimpleName();
 //	private final static String UUID_KEY_DATA = "0000ffe1-0000-1000-8000-00805f9b34fba";
     private final static String UUID_KEY_DATA = "00001800-0000-1000-8000-00805f9b34fb";
@@ -97,10 +92,23 @@ public class DeviceScanActivity extends ListActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 100000;
 
+    public ListView mListView;
+    public TextView mBackView, mMiddleView;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getActionBar().setTitle(R.string.title_devices);
+        setContentView(R.layout.activity_ble_list);
+        mListView = (ListView) findViewById(R.id.list_view);
+        mBackView = (TextView) findViewById(R.id.head_left_view);
+        mBackView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mMiddleView = (TextView) findViewById(R.id.head_middel_view);
+        mMiddleView.setText("Setting");
         mHandler = new Handler();
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -144,7 +152,8 @@ public class DeviceScanActivity extends ListActivity {
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter(this);
         mScanner = mBluetoothAdapter.getBluetoothLeScanner();
-        setListAdapter(mLeDeviceListAdapter);
+        mListView.setAdapter(mLeDeviceListAdapter);
+        mListView.setOnItemClickListener(this);
         requestPermission();
     }
 
@@ -161,9 +170,9 @@ public class DeviceScanActivity extends ListActivity {
         super.onStop();
         mBLE.close();
     }
-    
+
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
         final BluetoothDevice device = mLeDeviceListAdapter.getDevice(position);
         if (device == null) return;
         if (mScanning) {
@@ -449,4 +458,6 @@ public class DeviceScanActivity extends ListActivity {
     }
 
     public native String aesEncrypt();
+
+
 }

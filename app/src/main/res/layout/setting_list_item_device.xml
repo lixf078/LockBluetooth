@@ -16,41 +16,52 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="10dp">
+    android:paddingRight="10dp">
 
-    <RelativeLayout
+    <com.example.bluetooth.le.view.SwipeLayout
+        android:id="@+id/swipelayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/device_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="20dp"
-            android:text="SC Device"
-            android:textSize="24dp" />
+        <RelativeLayout
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:paddingLeft="15dp"
+            android:id="@+id/root"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
 
+            <TextView
+                android:id="@+id/device_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="SC Device"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/device_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@+id/device_name"
+                android:gravity="right"
+                android:text="ASDFASsF"
+                android:textSize="20sp" />
+        </RelativeLayout>
+
+
+        <!--delete-->
         <TextView
-            android:id="@+id/wrap_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/device_name"
-            android:text="ASDFASsF"
-            android:gravity="right"
-            android:layout_alignParentRight="true"
-            android:textSize="24dp" />
-    </RelativeLayout>
-    <!--delete-->
-    <TextView
-        android:id="@+id/delete"
-        android:layout_width="80dp"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="1dp"
-        android:background="#FFFF0000"
-        android:gravity="center"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:text="删除"
-        android:textColor="@android:color/white" />
+            android:id="@+id/swipe_delete"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:textSize="18sp"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:background="#eeff0000"
+            android:text="Delete"/>
+    </com.example.bluetooth.le.view.SwipeLayout>
 </LinearLayout>

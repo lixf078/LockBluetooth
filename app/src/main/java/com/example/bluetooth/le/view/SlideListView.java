@@ -47,8 +47,7 @@ public class SlideListView extends ListView {
             case MotionEvent.ACTION_MOVE:
                 return performActionMove(ev);
             case MotionEvent.ACTION_UP:
-                performActionUp();
-                break;
+                return performActionUp(ev);
         }
 
         return super.onTouchEvent(ev);
@@ -96,17 +95,19 @@ public class SlideListView extends ListView {
     }
 
     // 处理action_up事件
-    private void performActionUp() {
+    private boolean performActionUp(MotionEvent ev) {
         // 偏移量大于button的一半，则显示button
         // 否则恢复默认
         if (-mLayoutParams.leftMargin >= mDeleteBtnWidth / 2) {
-            mLayoutParams.leftMargin = -mDeleteBtnWidth * 2;
+            mLayoutParams.leftMargin = -mDeleteBtnWidth + 10;
             isDeleteShown = true;
+            return true;
         } else {
             turnToNormal();
         }
 
         mPointChild.getChildAt(0).setLayoutParams(mLayoutParams);
+        return super.onTouchEvent(ev);
     }
 
     /**
