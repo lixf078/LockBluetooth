@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
-//#include "AES_doorOpen.c"
+#include "AES_doorOpen.h"
+#include "JniUtil.h"
+#include <android/log.h>
 
 extern "C"
 JNIEXPORT jstring JNICALL
@@ -15,22 +17,27 @@ extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
         JNIEnv* env,
-        jcharArray dat,
-        jcharArray chainCipherBlock) {
-    jchar buf[32];
-    jchar chainBuf[16];
-    unsigned char buffer[32];
-    unsigned char chainBuffer[32];
-    (env)->GetCharArrayRegion(dat, 0, 32, buf);
-    (env)->GetCharArrayRegion(chainCipherBlock, 0, 32, chainBuf);
-    for (int i = 0; i < 32; ++i) {
-        buffer[i] = buf[i];
-    }
-    for (int i = 0; i < 32; ++i) {
-        chainBuffer[i] = chainBuf[i];
-    }
+        jobject ,
+        jstring data,
+        jstring key) {
+    unsigned char* buffer;
+    unsigned char* keyBuffer;
 
-//    aesEncrypt(buffer, chainBuffer);
+    std::string dataStr = returnstring(env, data);
+    std::string keyStr = returnstring(env, key);
+    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt dataStr 1");
+    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt keyStr 2");
+    buffer = (unsigned char *)(dataStr.c_str());
+    keyBuffer = (unsigned char *)(keyStr.c_str());
+    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt buffer 3" );
+    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt keyBuffer 4 ");
+    aesEncInit();
+    aesEncrypt(buffer, keyBuffer);
+    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt c++ buffer 5");
+
     std::string hello = "Hello from C++";
-    return env->NewStringUTF(hello.c_str());
+//    return env->NewStringUTF(hello.c_str());
+    return str2jstring(env, (const char*)buffer);
+    return env->NewStringUTF((const char *)buffer);
+//    return env->NewStringUTF((char*)buffer);
 }

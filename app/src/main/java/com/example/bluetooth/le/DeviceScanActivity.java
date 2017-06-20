@@ -76,6 +76,7 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         0xea, 0x8b, 0x2a, 0x73, 0x16, 0xe9, 0xb0, 0x49,
                 0x45, 0xb3, 0x39, 0x28, 0x0a, 0xc3, 0x28, 0x3c
     };
+    String HandShackKey_String = "ea8b2a7316e9b04945b339280ac3283c";
 
     char[] AES_Key_Table = new char[]{};
 
@@ -94,6 +95,10 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
 
     public ListView mListView;
     public TextView mBackView, mMiddleView;
+
+    static {
+        System.loadLibrary("native_le-lib");
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -143,6 +148,9 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         mBLE.setOnServiceDiscoverListener(mOnServiceDiscover);
         //收到BLE终端数据交互的事件
         mBLE.setOnDataAvailableListener(mOnDataAvailable);
+        String result = "";
+        result = aesEncrypt(HandShackKey_String, HandShackKey_String);
+        Log.e("lxf", "result " + result);
     }
 
     @Override
@@ -457,7 +465,5 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         } else super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public native String aesEncrypt();
-
-
+    public native String aesEncrypt(String data, String key);
 }
