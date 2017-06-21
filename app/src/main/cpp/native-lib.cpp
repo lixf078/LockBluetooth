@@ -12,32 +12,64 @@ Java_com_example_bluetooth_le_DeviceScanActivity_stringFromJNI(
     std::string hello = "Hello from C++";
     return env->NewStringUTF(hello.c_str());
 }
-
+//
 extern "C"
-JNIEXPORT jstring JNICALL
+JNIEXPORT jbyteArray JNICALL
 Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
         JNIEnv* env,
         jobject ,
-        jstring data,
-        jstring key) {
-    unsigned char* buffer;
-    unsigned char* keyBuffer;
+        jbyteArray data,
+        jbyteArray key) {
 
-    std::string dataStr = returnstring(env, data);
-    std::string keyStr = returnstring(env, key);
-    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt dataStr 1");
-    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt keyStr 2");
-    buffer = (unsigned char *)(dataStr.c_str());
-    keyBuffer = (unsigned char *)(keyStr.c_str());
-    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt buffer 3" );
-    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt keyBuffer 4 ");
+    jbyte * dataByte = (jbyte*)env->GetByteArrayElements(data, 0);
+
+    char* byArray = (char*)dataByte;
+
+    jbyte * keyByte = (jbyte*)env->GetByteArrayElements(key, 0);
+
+    char* keyArray = (char*)keyByte;
+
+    for (int i = 0; i < 16; ++i) {
+        AES_Key_Table[i] = keyArray[i];
+    }
+
+    unsigned char dat[16];
+    memcpy(dat, dataByte, 16);
+
+    unsigned char chainCipherBlock[16];
+    memset(chainCipherBlock, 0x00, sizeof(chainCipherBlock));
     aesEncInit();
-    aesEncrypt(buffer, keyBuffer);
-    __android_log_print(ANDROID_LOG_ERROR, "JNITag", "aesEncrypt c++ buffer 5");
+    aesEncrypt(dat, chainCipherBlock);
 
-    std::string hello = "Hello from C++";
-//    return env->NewStringUTF(hello.c_str());
-    return str2jstring(env, (const char*)buffer);
-    return env->NewStringUTF((const char *)buffer);
-//    return env->NewStringUTF((char*)buffer);
+
+//    jbyteArray  result = env->NewByteArray(16);
+//
+//    jbyte * resultBuffer;
+//    memcpy(resultBuffer, dat, 16);
+//
+//    env->SetByteArrayRegion(result, 0, 16, resultBuffer);
+    return  NULL;
+//    return result;
+//    result
+//    return str2jstring(env, (const char*)dat);
 }
+//
+//extern "C"
+//JNIEXPORT jstring JNICALL
+//Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
+//        JNIEnv* env,
+//        jobject ,
+//        jstring data,
+//        jstring key) {
+//    unsigned char* buffer;
+//    unsigned char* keyBuffer;
+//
+//    std::string dataStr = returnstring(env, data);
+//    std::string keyStr = returnstring(env, key);
+//    buffer = (unsigned char *)(dataStr.c_str());
+//    keyBuffer = (unsigned char *)(keyStr.c_str());
+//    aesEncInit();
+//    aesEncrypt(buffer, keyBuffer);
+//
+//    return str2jstring(env, (const char*)buffer);
+//}

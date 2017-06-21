@@ -37,7 +37,8 @@ jstring str2jstring(JNIEnv* env,const char* pat)
 {
     __android_log_print(ANDROID_LOG_ERROR, "JNITag", "str2jstring dataStr 1");
     //定义java String类 strClass
-    jclass strClass = env->FindClass("Ljava/lang/String;");
+//    jclass strClass = env->FindClass("Ljava/lang/String;");
+    jclass strClass = env->FindClass("java/lang/String");
     __android_log_print(ANDROID_LOG_ERROR, "JNITag", "str2jstring dataStr 2");
     //获取String(byte[],String)的构造器,用于将本地byte[]数组转换为一个新String
     jmethodID ctorID = (env)->GetMethodID(strClass, "<init>", "([BLjava/lang/String;)V");

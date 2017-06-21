@@ -47,6 +47,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.example.bluetooth.le.BluetoothLeClass.OnDataAvailableListener;
@@ -148,9 +149,35 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         mBLE.setOnServiceDiscoverListener(mOnServiceDiscover);
         //收到BLE终端数据交互的事件
         mBLE.setOnDataAvailableListener(mOnDataAvailable);
-        String result = "";
-        result = aesEncrypt(HandShackKey_String, HandShackKey_String);
+        byte[] result ;
+        byte[] temp = hexStringToBytes(HandShackKey_String);
+        String key = "";
+        try {
+            key = new String(temp, "utf8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        result = aesEncrypt(temp, temp);
         Log.e("lxf", "result " + result);
+    }
+
+    public static byte[] hexStringToBytes(String hexString) {
+        if (hexString == null || hexString.equals("")) {
+            return null;
+        }
+        hexString = hexString.toUpperCase();
+        int length = hexString.length() / 2;
+        char[] hexChars = hexString.toCharArray();
+        byte[] d = new byte[length];
+        for (int i = 0; i < length; i++) {
+            int pos = i * 2;
+            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
+        }
+        return d;
+    }
+
+    private static byte charToByte(char c) {
+        return (byte) "0123456789ABCDEF".indexOf(c);
     }
 
     @Override
@@ -465,5 +492,7 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         } else super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public native String aesEncrypt(String data, String key);
+    public native byte[] aesEncrypt(byte[] data, byte[] key);
+//    public native String aesEncrypt(String data, String key);
+
 }
