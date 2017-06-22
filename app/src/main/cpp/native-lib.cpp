@@ -41,18 +41,82 @@ Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
     aesEncInit();
     aesEncrypt(dat, chainCipherBlock);
 
+    int size = sizeof(dat);
 
-//    jbyteArray  result = env->NewByteArray(16);
-//
-//    jbyte * resultBuffer;
-//    memcpy(resultBuffer, dat, 16);
-//
-//    env->SetByteArrayRegion(result, 0, 16, resultBuffer);
-    return  NULL;
-//    return result;
-//    result
-//    return str2jstring(env, (const char*)dat);
+
+    jbyte *by = (jbyte*)dat;
+    jbyteArray jarray = env->NewByteArray(size);
+    env->SetByteArrayRegion(jarray, 0, size, by);
+
+    return  jarray;
 }
+
+
+
+extern "C"
+JNIEXPORT jbyteArray JNICALL
+Java_com_example_bluetooth_le_DeviceScanActivity_aesDecrypt(
+        JNIEnv* env,
+        jobject ,
+        jbyteArray data,
+        jbyteArray key) {
+
+    jbyte * dataByte = (jbyte*)env->GetByteArrayElements(data, 0);
+
+    char* byArray = (char*)dataByte;
+
+    jbyte * keyByte = (jbyte*)env->GetByteArrayElements(key, 0);
+
+    char* keyArray = (char*)keyByte;
+
+    for (int i = 0; i < 16; ++i) {
+        AES_Key_Table[i] = keyArray[i];
+    }
+
+    unsigned char dat[16];
+    memcpy(dat, dataByte, 16);
+
+    unsigned char chainCipherBlock[16];
+    memset(chainCipherBlock, 0x00, sizeof(chainCipherBlock));
+    aesDecInit();
+    aesDecrypt(dat, chainCipherBlock);
+
+    int size = sizeof(dat);
+
+
+    jbyte *by = (jbyte*)dat;
+    jbyteArray jarray = env->NewByteArray(size);
+    env->SetByteArrayRegion(jarray, 0, size, by);
+
+    return  jarray;
+
+//    int dataSize = sizeof(data);
+//
+//    jbyte *dataByte = (jbyte *) env->GetByteArrayElements(data, 0);
+//    char *byArray = (char *) dataByte;
+//    jbyte *keyByte = (jbyte *) env->GetByteArrayElements(key, 0);
+//    char *keyArray = (char *) keyByte;
+//    for (int i = 0; i < 16; ++i) {
+//        AES_Key_Table[i] = keyArray[i];
+//    }
+//
+//    unsigned char dat[dataSize];
+//    memcpy(dat, dataByte, dataSize);
+//
+//    unsigned char chainCipherBlock[16];
+//    memset(chainCipherBlock, 0x00, sizeof(chainCipherBlock));
+//
+//    aesDecInit();
+//    aesDecrypt(dat, chainCipherBlock);
+//
+//    int size = sizeof(dat);
+//    jbyte *by = (jbyte *) dat;
+//    jbyteArray jarray = env->NewByteArray(size);
+//    env->SetByteArrayRegion(jarray, 0, size, by);
+//
+//    return jarray;
+}
+
 //
 //extern "C"
 //JNIEXPORT jstring JNICALL

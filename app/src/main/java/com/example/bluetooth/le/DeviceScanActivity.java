@@ -41,6 +41,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -53,6 +54,7 @@ import java.util.List;
 import com.example.bluetooth.le.BluetoothLeClass.OnDataAvailableListener;
 import com.example.bluetooth.le.BluetoothLeClass.OnServiceDiscoverListener;
 import com.example.bluetooth.le.adapter.LeDeviceListAdapter;
+import com.lock.lib.common.util.ByteUtil;
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
@@ -73,11 +75,18 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     public BluetoothGattCharacteristic mCharacteristicAc;
     BluetoothLeScanner mScanner = null;
 
+    public int current_status = 1;
+    public int status_activation = 0; //激活
+    public int status_unlock = 1; //激活
+
     char[] HandShakeKey = new char[]{
         0xea, 0x8b, 0x2a, 0x73, 0x16, 0xe9, 0xb0, 0x49,
                 0x45, 0xb3, 0x39, 0x28, 0x0a, 0xc3, 0x28, 0x3c
     };
     String HandShackKey_String = "ea8b2a7316e9b04945b339280ac3283c";
+
+    byte[] HandShakeKey2;
+    String HandShackKey_String2 = "ea8b2a7316e9b04945b339280ac3283c";
 
     char[] AES_Key_Table = new char[]{};
 
@@ -138,9 +147,8 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         }
         //开启蓝牙
         mBluetoothAdapter.enable();
-        
+
         mBLE = new BluetoothLeClass(this);
-        Log.e(TAG, "onCreate Initialize Bluetooth");
         if (!mBLE.initialize()) {
             Log.e(TAG, "Unable to initialize Bluetooth");
             finish();
@@ -149,36 +157,28 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         mBLE.setOnServiceDiscoverListener(mOnServiceDiscover);
         //收到BLE终端数据交互的事件
         mBLE.setOnDataAvailableListener(mOnDataAvailable);
+
+        /*
         byte[] result ;
-        byte[] temp = hexStringToBytes(HandShackKey_String);
+        byte[] temp = ByteUtil.hexStringToBytes(HandShackKey_String);
         String key = "";
         try {
             key = new String(temp, "utf8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
         result = aesEncrypt(temp, temp);
-        Log.e("lxf", "result " + result);
+        String res = ByteUtil.bytesToHexString(result);
+        Log.e("lxf", "res " + res);
+
+        byte[] result2 =aesDecrypt(result, temp);
+        String res2 = ByteUtil.bytesToHexString(result2);
+        Log.e("lxf", "res2 " + res2);
+        */
     }
 
-    public static byte[] hexStringToBytes(String hexString) {
-        if (hexString == null || hexString.equals("")) {
-            return null;
-        }
-        hexString = hexString.toUpperCase();
-        int length = hexString.length() / 2;
-        char[] hexChars = hexString.toCharArray();
-        byte[] d = new byte[length];
-        for (int i = 0; i < length; i++) {
-            int pos = i * 2;
-            d[i] = (byte) (charToByte(hexChars[pos]) << 4 | charToByte(hexChars[pos + 1]));
-        }
-        return d;
-    }
 
-    private static byte charToByte(char c) {
-        return (byte) "0123456789ABCDEF".indexOf(c);
-    }
 
     @Override
     protected void onResume() {
@@ -268,12 +268,16 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
 		@Override
 		public void onCharacteristicRead(BluetoothGatt gatt,
 				BluetoothGattCharacteristic characteristic, int status) {
-			if (status == BluetoothGatt.GATT_SUCCESS) 
-				Log.e(TAG,"onCharRead "+gatt.getDevice().getName()
-						+" read "
-						+characteristic.getUuid().toString()
-						+" -> "
-						+Utils.bytesToHexString(characteristic.getValue()));
+			if (status == BluetoothGatt.GATT_SUCCESS) {
+                Log.e(TAG,"onCharRead "+gatt.getDevice().getName()
+                        +" read "
+                        +characteristic.getUuid().toString()
+                        +" -> "
+                        +Utils.bytesToHexString(characteristic.getValue()));
+
+            }
+
+
 		}
 		
 	    /**
@@ -281,54 +285,86 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
 	     */
 		@Override
 		public void onCharacteristicWrite(BluetoothGatt gatt,
-				BluetoothGattCharacteristic characteristic) {
+				final BluetoothGattCharacteristic characteristic) {
 			Log.e(TAG,"onCharWrite "+gatt.getDevice().getName()
 					+" write "
 					+characteristic.getUuid().toString()
 					+" -> "
 					+new String(characteristic.getValue()));
+
+            if (current_status == status_activation){
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+//                        current_status = status_unlock;
+                        HandShakeKey2 = characteristic.getValue();
+                        if (HandShakeKey2.length == 20){
+                            String key2Temp = ByteUtil.bytesToHexString(HandShakeKey2);
+                            byte[] key2TempByte = ByteUtil.hexStringToBytes(key2Temp.substring(0, 32));
+                            byte[] tempKeyByte = ByteUtil.hexStringToBytes(HandShackKey_String);
+                            HandShakeKey2 = aesDecrypt(key2TempByte, tempKeyByte);
+
+
+                            String mac = mDevice.getAddress();
+                            Log.e(TAG, "--------> Device Mac Address " + mac);
+
+                            mac = mac.replace(":", "");
+                            StringBuffer stringBufferMac = new StringBuffer(mac);
+                            String temp = ByteUtil.getStringRandom(20);
+                            temp = temp + stringBufferMac;
+                            Log.e(TAG, "-------> 16 byte data " + temp);
+                            Log.e(TAG, "-------> 16 byte key " + key2Temp);
+                            byte[] bytes = ByteUtil.hexStringToBytes(temp);
+                            byte[] result = aesEncrypt(bytes, HandShakeKey2);
+                            Log.e(TAG, "-------> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
+                            byte[] result2 = new byte[4];
+                            final byte[] result3 = ByteUtil.addBytes(result, result2);
+
+                            mCharacteristicAa.setValue(result3);
+                            //往蓝牙模块写入数据
+                            mBLE.writeCharacteristic(mCharacteristicAa);
+                        }else if (HandShakeKey2.length == 2){
+                            String key2Temp = ByteUtil.bytesToHexString(HandShakeKey2);
+                            if ("FF01".equals(key2Temp.toUpperCase())){
+                                Log.e(TAG, "-------> activation device success ");
+                            }
+                        }
+
+                    }
+                }, 3000);
+
+            }
 		}
     };
     BluetoothDevice mDevice ;
-    // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-            Log.e(TAG, "onLeScan device " + device + ", scanRecord " + scanRecord);
-            String str = new String(scanRecord);
-            Log.e(TAG, "onLeScan device " + device + ", scanRecord " + scanRecord + " , \n\r str " + str);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if ("SC".equals(device.getName())){
-                        mDevice = device;
-                    }
-                    mLeDeviceListAdapter.addDevice(device);
-                    mLeDeviceListAdapter.notifyDataSetChanged();
-                }
-            });
-        }
-    };
 
     ScanCallback mScanCallback = new ScanCallback() {
         @Override
-        public void onScanResult(int callbackType, ScanResult result) {
+        public void onScanResult(int callbackType, final ScanResult result) {
             super.onScanResult(callbackType, result);
             final BluetoothDevice device = result.getDevice();
 
-            String str = new String(result.getScanRecord().getBytes());
-            Log.e(TAG, "onScanResult device " + device + ", scanRecord toString " + result.getScanRecord().toString() + " , \n\r str " + str);
+//            String str = new String(result.getScanRecord().getBytes());
+            String str2 = ByteUtil.bytesToHexString(result.getScanRecord().getBytes());
+            if ("SC".equals(device.getName())){
+                Log.e(TAG, "onScanResult device " + device + ", scanRecord toString " + result.getScanRecord().toString() + " , \n\r str2 " + str2);
+            }
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     if ("SC".equals(device.getName())){
                         mDevice = device;
+                        SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
+                        byte[] b = manufacturerSpecificData.get(3);
+                        if (new String(b).equals("0")){
+                            current_status = -1;
+                        }else{
+                            current_status = 0;
+                        }
+                        mLeDeviceListAdapter.addDevice(device);
+                        mLeDeviceListAdapter.notifyDataSetChanged();
                     }
-                    mLeDeviceListAdapter.addDevice(device);
-                    mLeDeviceListAdapter.notifyDataSetChanged();
                 }
             });
         }
@@ -348,13 +384,29 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
 
     private void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
+        String mac = mDevice.getAddress();
+        Log.e(TAG, "--> Device Mac Address " + mac);
+
+        mac = mac.replace(":", "");
+        StringBuffer stringBufferMac = new StringBuffer(mac);
+        String temp = ByteUtil.getStringRandom(20);
+        temp = temp + stringBufferMac;
+        Log.e(TAG, "--> 16 byte data " + temp);
+        Log.e(TAG, "--> 16 byte key " + HandShackKey_String);
+        byte[] bytes = ByteUtil.hexStringToBytes(temp);
+        byte[] tempByte = ByteUtil.hexStringToBytes(HandShackKey_String);
+        byte[] result = aesEncrypt(bytes, tempByte);
+        Log.e(TAG, "--> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
+        byte[] result2 = new byte[4];
+        final byte[] result3 = ByteUtil.addBytes(result, result2);
+        Log.e(TAG,"----> result3 " + ByteUtil.bytesToHexString(result3));
 
         for (BluetoothGattService gattService : gattServices) {
         	//-----Service的字段信息-----//
         	int type = gattService.getType();
-            Log.e(TAG,"-->service type:"+Utils.getServiceType(type));
-            Log.e(TAG,"-->includedServices size:"+gattService.getIncludedServices().size());
-            Log.e(TAG,"-->service uuid:"+gattService.getUuid());
+//            Log.e(TAG,"-->service type:"+Utils.getServiceType(type));
+//            Log.e(TAG,"-->includedServices size:"+gattService.getIncludedServices().size());
+//            Log.e(TAG,"-->service uuid:"+gattService.getUuid());
             if (gattService.getUuid().toString().equals(UUID_KEY_DATA_SERVICE)){
                 mGattService = gattService;
             }
@@ -362,13 +414,13 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
             //-----Characteristics的字段信息-----//
             List<BluetoothGattCharacteristic> gattCharacteristics =gattService.getCharacteristics();
             for (final BluetoothGattCharacteristic  gattCharacteristic: gattCharacteristics) {
-                Log.e(TAG,"---->char uuid:"+gattCharacteristic.getUuid());
+//                Log.e(TAG,"---->char uuid:"+gattCharacteristic.getUuid());
 
                 int permission = gattCharacteristic.getPermissions();
-                Log.e(TAG,"---->char permission:"+Utils.getCharPermission(permission));
+//                Log.e(TAG,"---->char permission:"+Utils.getCharPermission(permission));
                 
                 int property = gattCharacteristic.getProperties();
-                Log.e(TAG,"---->char property:"+Utils.getCharPropertie(property));
+//                Log.e(TAG,"---->char property:"+Utils.getCharPropertie(property));
 
                 byte[] data = gattCharacteristic.getValue();
         		if (data != null && data.length > 0) {
@@ -376,42 +428,85 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
         		}
 
         		//UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
-        		if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_C)){
-                    mCharacteristicAc = gattCharacteristic;
-        			//测试读取当前Characteristic数据，会触发mOnDataAvailable.onCharacteristicRead()
-        			mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                        	mBLE.readCharacteristic(gattCharacteristic);
-                        }
-                    }, 500);
-        			
-        			//接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
-        			mBLE.setCharacteristicNotification(gattCharacteristic, true);
-        			//设置数据内容
-        			gattCharacteristic.setValue("send data->");
-        			//往蓝牙模块写入数据
-        			mBLE.writeCharacteristic(gattCharacteristic);
-        		}else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_A)){
+        		if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_A)){
                     mCharacteristicAa = gattCharacteristic;
+                    //接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
+//                    mBLE.setCharacteristicNotification(mCharacteristicAa, true);
+
+
+//        			//测试读取当前Characteristic数据，会触发mOnDataAvailable.onCharacteristicRead()
+//        			mHandler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                        	mBLE.readCharacteristic(gattCharacteristic);
+//                        }
+//                    }, 500);
+//
+//        			//接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
+//        			mBLE.setCharacteristicNotification(gattCharacteristic, true);
+//        			//设置数据内容
+//                    Log.e(TAG,"---->will write data  result3 " + ByteUtil.bytesToHexString(result3));
+//        			gattCharacteristic.setValue(result3);
+//        			//往蓝牙模块写入数据
+//        			mBLE.writeCharacteristic(gattCharacteristic);
+//
+//                    if (mCharacteristicAc != null){
+//                        Log.e(TAG,"---->will write data  mCharacteristicAc " + mCharacteristicAc);
+//                        mBLE.setCharacteristicNotification(mCharacteristicAc, true);
+//                        mHandler.postDelayed(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                mBLE.readCharacteristic(gattCharacteristic);
+//                            }
+//                        }, 1500);
+//                    }
+
+        		}else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_C)){
+                    mCharacteristicAc = gattCharacteristic;
+                    //接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
+                    mBLE.setCharacteristicNotification(mCharacteristicAc, true);
                 }else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_B)){
                     mCharacteristicAb = gattCharacteristic;
+                    //接受Characteristic被写的通知,收到蓝牙模块的数据后会触发mOnDataAvailable.onCharacteristicWrite()
+//                    mBLE.setCharacteristicNotification(mCharacteristicAb, true);
                 }
         		
         		//-----Descriptors的字段信息-----//
-				List<BluetoothGattDescriptor> gattDescriptors = gattCharacteristic.getDescriptors();
-				for (BluetoothGattDescriptor gattDescriptor : gattDescriptors) {
-					Log.e(TAG, "-------->desc uuid:" + gattDescriptor.getUuid());
-					int descPermission = gattDescriptor.getPermissions();
-					Log.e(TAG,"-------->desc permission:"+ Utils.getDescPermission(descPermission));
-					
-					byte[] desData = gattDescriptor.getValue();
-					if (desData != null && desData.length > 0) {
-						Log.e(TAG, "-------->desc value:"+ new String(desData));
-					}
-        		 }
+//				List<BluetoothGattDescriptor> gattDescriptors = gattCharacteristic.getDescriptors();
+//				for (BluetoothGattDescriptor gattDescriptor : gattDescriptors) {
+//					Log.e(TAG, "-------->desc uuid:" + gattDescriptor.getUuid());
+//					int descPermission = gattDescriptor.getPermissions();
+//					Log.e(TAG,"-------->desc permission:"+ Utils.getDescPermission(descPermission));
+//
+//					byte[] desData = gattDescriptor.getValue();
+//					if (desData != null && desData.length > 0) {
+//						Log.e(TAG, "-------->desc value:"+ new String(desData));
+//					}
+//        		 }
             }
+
+
         }//
+
+        //UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
+        if(mCharacteristicAa != null) {
+            if (current_status == status_activation){
+                return;
+            }
+            mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+//                                mBLE.setCharacteristicNotification(mCharacteristicAc, true);
+                                //设置数据内容
+                                Log.e(TAG, "---->will write data  result3 " + ByteUtil.bytesToHexString(result3));
+                                current_status = status_activation;
+                                mCharacteristicAa.setValue(result3);
+                                //往蓝牙模块写入数据
+                                // mBLE.writeCharacteristic(mCharacteristicAa);
+                            }
+                        }, 5000);
+
+        }
 
     }
 
@@ -493,6 +588,6 @@ public class DeviceScanActivity extends Activity implements AdapterView.OnItemCl
     }
 
     public native byte[] aesEncrypt(byte[] data, byte[] key);
-//    public native String aesEncrypt(String data, String key);
+    public native byte[] aesDecrypt(byte[] data, byte[] key);
 
 }

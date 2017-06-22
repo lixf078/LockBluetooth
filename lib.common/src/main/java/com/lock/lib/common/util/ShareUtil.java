@@ -20,8 +20,8 @@ public class ShareUtil  implements  SharedPreferences.OnSharedPreferenceChangeLi
 
     private On17SharedPreferenceChangeListener changeListener;
     private ShareUtil(Context context){
-        sp = context.getSharedPreferences("17House",Context.MODE_MULTI_PROCESS);
-        homeSp = context.getSharedPreferences("17House_Home",Context.MODE_MULTI_PROCESS);
+        sp = context.getSharedPreferences("ble_lock",Context.MODE_MULTI_PROCESS);
+        homeSp = context.getSharedPreferences("ble_lock_home",Context.MODE_MULTI_PROCESS);
     };
 
     public static ShareUtil getInstance(Context context){

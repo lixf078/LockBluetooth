@@ -94,15 +94,15 @@ public class BluetoothLeClass{
             if (newState == BluetoothProfile.STATE_CONNECTED) {
             	if(mOnConnectListener!=null)
             		mOnConnectListener.onConnect(gatt);
-                Log.i(TAG, "Connected to GATT server.");
+                Log.e(TAG, "Connected to GATT server.");
                 // Attempts to discover services after successful connection.
-                Log.i(TAG, "Attempting to start service discovery:" +
+                Log.e(TAG, "Attempting to start service discovery:" +
                         mBluetoothGatt.discoverServices());
 
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 if(mOnDisconnectListener!=null)
                 	mOnDisconnectListener.onDisconnect(gatt);
-                Log.i(TAG, "Disconnected from GATT server.");
+                Log.e(TAG, "Disconnected from GATT server.");
             }
         }
 
@@ -111,7 +111,7 @@ public class BluetoothLeClass{
             if (status == BluetoothGatt.GATT_SUCCESS && mOnServiceDiscoverListener!=null) {
                 	mOnServiceDiscoverListener.onServiceDiscover(gatt);
             } else {
-                Log.w(TAG, "onServicesDiscovered received: " + status);
+                Log.e(TAG, "onServicesDiscovered received: " + status);
             }
         }
 
@@ -119,6 +119,7 @@ public class BluetoothLeClass{
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic,
                                          int status) {
+            Log.e(TAG, "onCharacteristicRead received: " + status);
         	if (mOnDataAvailableListener!=null)
         		mOnDataAvailableListener.onCharacteristicRead(gatt, characteristic, status);
         }
@@ -126,6 +127,7 @@ public class BluetoothLeClass{
         @Override
         public void onCharacteristicChanged(BluetoothGatt gatt,
                                             BluetoothGattCharacteristic characteristic) {
+            Log.e(TAG, "onCharacteristicChanged received: ");
         	if (mOnDataAvailableListener!=null)
         		mOnDataAvailableListener.onCharacteristicWrite(gatt, characteristic);
         }
@@ -168,14 +170,14 @@ public class BluetoothLeClass{
      */
     public boolean connect(final String address) {
         if (mBluetoothAdapter == null || address == null) {
-            Log.w(TAG, "BluetoothAdapter not initialized or unspecified address.");
+            Log.e(TAG, "BluetoothAdapter not initialized or unspecified address.");
             return false;
         }
 
         // Previously connected device.  Try to reconnect.
         if (mBluetoothDeviceAddress != null && address.equals(mBluetoothDeviceAddress)
                 && mBluetoothGatt != null) {
-            Log.d(TAG, "Trying to use an existing mBluetoothGatt for connection.");
+            Log.e(TAG, "Trying to use an existing mBluetoothGatt for connection.");
             if (mBluetoothGatt.connect()) {
                 return true;
             } else {
@@ -185,13 +187,13 @@ public class BluetoothLeClass{
 
         final BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         if (device == null) {
-            Log.w(TAG, "Device not found.  Unable to connect.");
+            Log.e(TAG, "Device not found.  Unable to connect.");
             return false;
         }
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
         mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
-        Log.d(TAG, "Trying to create a new connection.");
+        Log.e(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
         return true;
     }
@@ -204,7 +206,7 @@ public class BluetoothLeClass{
      */
     public void disconnect() {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "disconnect BluetoothAdapter not initialized mBluetoothAdapter " + mBluetoothAdapter + ", mBluetoothGatt " + mBluetoothGatt);
+            Log.e(TAG, "disconnect BluetoothAdapter not initialized mBluetoothAdapter " + mBluetoothAdapter + ", mBluetoothGatt " + mBluetoothGatt);
 
             return;
         }
@@ -232,7 +234,7 @@ public class BluetoothLeClass{
      */
     public void readCharacteristic(BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "readCharacteristic BluetoothAdapter not initialized mBluetoothAdapter " + mBluetoothAdapter + ", mBluetoothGatt " + mBluetoothGatt);
+            Log.e(TAG, "readCharacteristic BluetoothAdapter not initialized mBluetoothAdapter " + mBluetoothAdapter + ", mBluetoothGatt " + mBluetoothGatt);
 
             return;
         }
@@ -249,14 +251,20 @@ public class BluetoothLeClass{
                                               boolean enabled) {
 
         if (mBluetoothAdapter == null || mBluetoothGatt == null) {
-            Log.w(TAG, "setCharacteristicNotification BluetoothAdapter not initialized mBluetoothAdapter " + mBluetoothAdapter + ", mBluetoothGatt " + mBluetoothGatt);
+            Log.e(TAG, "setCharacteristicNotification BluetoothAdapter not initialized mBluetoothAdapter " + mBluetoothAdapter + ", mBluetoothGatt " + mBluetoothGatt);
             return;
         }
         mBluetoothGatt.setCharacteristicNotification(characteristic, enabled);
+        List<BluetoothGattDescriptor> descriptors=characteristic.getDescriptors();
+        for(BluetoothGattDescriptor dp:descriptors){
+            dp.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothGatt.writeDescriptor(dp);
+        }
     }
 
     public void writeCharacteristic(BluetoothGattCharacteristic characteristic){
-    	 mBluetoothGatt.writeCharacteristic(characteristic);
+    	 boolean flag = mBluetoothGatt.writeCharacteristic(characteristic);
+        Log.e(TAG, "writeCharacteristic flag " + flag);
     }
     /**
      * Retrieves a list of supported GATT services on the connected device. This should be
