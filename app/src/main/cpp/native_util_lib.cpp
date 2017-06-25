@@ -1,12 +1,11 @@
 #include <jni.h>
 #include <string>
 #include "AES_doorOpen.h"
-#include "JniUtil.h"
 #include <android/log.h>
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_example_bluetooth_le_DeviceScanActivity_stringFromJNI(
+Java_com_example_bluetooth_le_BleConnectUtil_stringFromJNI(
         JNIEnv* env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
@@ -15,7 +14,7 @@ Java_com_example_bluetooth_le_DeviceScanActivity_stringFromJNI(
 //
 extern "C"
 JNIEXPORT jbyteArray JNICALL
-Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
+Java_com_example_bluetooth_le_BleConnectUtil_aesEncrypt(
         JNIEnv* env,
         jobject ,
         jbyteArray data,
@@ -55,7 +54,7 @@ Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
 
 extern "C"
 JNIEXPORT jbyteArray JNICALL
-Java_com_example_bluetooth_le_DeviceScanActivity_aesDecrypt(
+Java_com_example_bluetooth_le_BleConnectUtil_aesDecrypt(
         JNIEnv* env,
         jobject ,
         jbyteArray data,
@@ -90,50 +89,5 @@ Java_com_example_bluetooth_le_DeviceScanActivity_aesDecrypt(
 
     return  jarray;
 
-//    int dataSize = sizeof(data);
-//
-//    jbyte *dataByte = (jbyte *) env->GetByteArrayElements(data, 0);
-//    char *byArray = (char *) dataByte;
-//    jbyte *keyByte = (jbyte *) env->GetByteArrayElements(key, 0);
-//    char *keyArray = (char *) keyByte;
-//    for (int i = 0; i < 16; ++i) {
-//        AES_Key_Table[i] = keyArray[i];
-//    }
-//
-//    unsigned char dat[dataSize];
-//    memcpy(dat, dataByte, dataSize);
-//
-//    unsigned char chainCipherBlock[16];
-//    memset(chainCipherBlock, 0x00, sizeof(chainCipherBlock));
-//
-//    aesDecInit();
-//    aesDecrypt(dat, chainCipherBlock);
-//
-//    int size = sizeof(dat);
-//    jbyte *by = (jbyte *) dat;
-//    jbyteArray jarray = env->NewByteArray(size);
-//    env->SetByteArrayRegion(jarray, 0, size, by);
-//
-//    return jarray;
 }
 
-//
-//extern "C"
-//JNIEXPORT jstring JNICALL
-//Java_com_example_bluetooth_le_DeviceScanActivity_aesEncrypt(
-//        JNIEnv* env,
-//        jobject ,
-//        jstring data,
-//        jstring key) {
-//    unsigned char* buffer;
-//    unsigned char* keyBuffer;
-//
-//    std::string dataStr = returnstring(env, data);
-//    std::string keyStr = returnstring(env, key);
-//    buffer = (unsigned char *)(dataStr.c_str());
-//    keyBuffer = (unsigned char *)(keyStr.c_str());
-//    aesEncInit();
-//    aesEncrypt(buffer, keyBuffer);
-//
-//    return str2jstring(env, (const char*)buffer);
-//}

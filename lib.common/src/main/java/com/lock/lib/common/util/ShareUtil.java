@@ -3,6 +3,7 @@ package com.lock.lib.common.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,7 +16,7 @@ public class ShareUtil  implements  SharedPreferences.OnSharedPreferenceChangeLi
     private SharedPreferences sp;
     private SharedPreferences homeSp;
 
-    private String HOME_DTAT = "home";
+    private String HOME_DATA = "home";
 
 
     private On17SharedPreferenceChangeListener changeListener;
@@ -57,6 +58,8 @@ public class ShareUtil  implements  SharedPreferences.OnSharedPreferenceChangeLi
             saveFloat(key, (Float) value);
         }else if(value == null){
             saveNull(key);
+        }else if(value instanceof List){
+
         }else{
             throw new IllegalArgumentException(" not support value class.");
         }
@@ -147,10 +150,10 @@ public class ShareUtil  implements  SharedPreferences.OnSharedPreferenceChangeLi
 
     public void saveHome(String data){
         SharedPreferences.Editor editor = homeSp.edit();
-        editor.putString(HOME_DTAT, data);
+        editor.putString(HOME_DATA, data);
         editor.commit();
     }
     public String getHomeData(){
-        return homeSp.getString(HOME_DTAT,null);
+        return homeSp.getString(HOME_DATA,null);
     }
 }

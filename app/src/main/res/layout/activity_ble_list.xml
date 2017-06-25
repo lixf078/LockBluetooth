@@ -5,11 +5,17 @@
     android:background="@color/white"
     android:orientation="vertical">
     <include layout="@layout/lib_style_common_head_layout"/>
+
     <ListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:divider="#fafafa"
         android:dividerHeight="10dp"
         android:scrollbars="none" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/log"/>
 </LinearLayout>

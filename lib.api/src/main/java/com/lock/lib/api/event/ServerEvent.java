@@ -114,4 +114,7 @@ public class ServerEvent extends BaseEvent {
     public static final int TYPE_REGIST_USER = TYPE_SMS_LOADING + 1;//注册接口
 //    public static final int TYPE_SMS_VERIFY_CODE = TYPE_IMAGE_VERIFY_CODE + 1;//获取短信验证码
 
+    public static final int TYPE_ACTIVITY_DEVICE = TYPE_REGIST_USER + 1;// 激活设备
+    public static final int TYPE_UNLOCK_DEVICE = TYPE_ACTIVITY_DEVICE + 1;// 开锁设备
+
 }

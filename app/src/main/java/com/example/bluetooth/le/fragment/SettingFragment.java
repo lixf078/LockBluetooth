@@ -11,7 +11,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.bluetooth.le.DeviceConnectActivity;
+import com.example.bluetooth.le.DeviceModel;
 import com.example.bluetooth.le.DeviceScanActivity;
+import com.example.bluetooth.le.DeviceShare;
 import com.example.bluetooth.le.R;
 import com.example.bluetooth.le.activity.QrCodeActivity;
 import com.example.bluetooth.le.adapter.DeviceAdapter;
@@ -26,6 +29,7 @@ import com.lock.lib.common.util.AppUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import cn.iwgang.familiarrecyclerview.FamiliarRecyclerView;
 import in.srain.cube.views.loadmore.LoadMoreContainer;
@@ -45,7 +49,8 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     private ListView mListView;
     private DeviceAdapter mDeviceAdapter;
-    ArrayList<LockBluetoothDevice> list = new ArrayList<LockBluetoothDevice>();
+
+    List<DeviceModel> list = new ArrayList<DeviceModel>();
 
     @Override
     protected View createContentView(LayoutInflater inflater, Bundle savedInstanceState) {
@@ -75,12 +80,12 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         mDeviceAdapter = new DeviceAdapter(getContext(), list, R.layout.setting_list_item_device);
         mDeviceAdapter.setItemArrayList(list);
         mListView.setAdapter(mDeviceAdapter);
-        if (list == null || list.size() == 0){
-            mNoDataTextView.setText("Please add a new device directly \n\r or by scanning the QR code");
-            mNoDataTextView.setTextSize(22);
-            mNoDateTitle.setText("");
-            showNoDataVew();
-        }
+//        if (list == null || list.size() == 0){
+//            mNoDataTextView.setText("Please add a new device directly \n\r or by scanning the QR code");
+//            mNoDataTextView.setTextSize(22);
+//            mNoDateTitle.setText("");
+//            showNoDataVew();
+//        }
         // 侧滑打来的时候滑动没有想到什么好的办法解决，只能这样了。
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -107,7 +112,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 break;
             }
             case R.id.ble_connect_device: {
-                Intent intent = new Intent(SettingFragment.this.getContext(), DeviceScanActivity.class);
+                Intent intent = new Intent(SettingFragment.this.getContext(), DeviceConnectActivity.class);
                 startActivity(intent);
                 break;
             }
@@ -121,12 +126,15 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
     private void initData() {
         showLoadingView();
-        for (int i = 0;i < 9;i ++){
-            LockBluetoothDevice bluetoothDevice = new LockBluetoothDevice();
-            bluetoothDevice.name = "SC Device";
-            bluetoothDevice.mac = "A3DF8NF9HFD88";
-            list.add(bluetoothDevice);
-        }
+
+        list = DeviceShare.getDevices(SettingFragment.this.getContext());
+
+//        for (int i = 0;i < 9;i ++){
+//            De bluetoothDevice = new LockBluetoothDevice();
+//            bluetoothDevice.name = "SC Device";
+//            bluetoothDevice.mac = "A3DF8NF9HFD88";
+//            list.add(bluetoothDevice);
+//        }
         hiddenLoadingView();
         checkPermission(new String[]{Manifest.permission.READ_PHONE_STATE}, new PermissionAction() {
             @Override
