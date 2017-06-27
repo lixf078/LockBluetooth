@@ -20,11 +20,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.lock.lib.api.Server;
+import com.lock.lib.api.event.ResponseEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * This class includes a small subset of standard GATT attributes for demonstration purposes.
@@ -138,5 +148,37 @@ public class Utils {
             stringBuilder.append(hv);  
         }  
         return stringBuilder.toString();  
-    }  
+    }
+
+    public static AlertDialog showEditDialog(final Context context, final DeviceModel model) {
+        final EditText et = new EditText(context);
+        et.setText(model.name);
+
+        return new AlertDialog.Builder(context).setTitle("Edit device name")
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .setView(et)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        String input = et.getText().toString();
+                        if (input.equals("")) {
+                            Toast.makeText(context, "Please enter device name!" + input, Toast.LENGTH_LONG).show();
+                        } else {
+                            model.name = input;
+                            DeviceShare.editDevice(context, model);
+                            postResponseEvent(ResponseEvent.TYPE_EDIT_DEVICE, Server.Code.SUCCESS, "", model);
+                        }
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private static void postResponseEvent(int eventType, int errorCode, String errorMsg, DeviceModel deviceModel) {
+        ResponseEvent event = new ResponseEvent();
+        event.eventType = eventType;
+        event.errorCode = errorCode;
+        event.errorMsg = errorMsg;
+        event.resultObj = deviceModel;
+        EventBus.getDefault().post(event);
+    }
 }

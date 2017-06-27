@@ -301,6 +301,10 @@ public  class CaptureActivity extends Activity implements SurfaceHolder.Callback
 
         }
 
+        startCamera();
+    }
+
+    private void startCamera(){
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
@@ -312,8 +316,6 @@ public  class CaptureActivity extends Activity implements SurfaceHolder.Callback
             surfaceHolder.addCallback(this);
         }
     }
-
-    private void startCmaera(){}
 
     private int getCurrentOrientation() {
         int rotation = getWindowManager().getDefaultDisplay().getRotation();

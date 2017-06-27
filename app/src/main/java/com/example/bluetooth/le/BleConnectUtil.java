@@ -62,13 +62,17 @@ public class BleConnectUtil {
 
     char[] AES_Key_Table = new char[]{};
 
-    /**搜索BLE终端*/
+    /**
+     * 搜索BLE终端
+     */
     private BluetoothAdapter mBluetoothAdapter;
-    /**读写BLE终端*/
+    /**
+     * 读写BLE终端
+     */
     private BluetoothLeClass mBLE;
     private boolean mScanning;
     private Handler mHandler;
-    BluetoothDevice mDevice ;
+    BluetoothDevice mDevice;
 
     private String mMac;
 
@@ -78,11 +82,7 @@ public class BleConnectUtil {
 
     private List<DeviceModel> connectDevices = null;
 
-    static {
-        System.loadLibrary("native_le-lib");
-    }
-
-    public BleConnectUtil(Context context, BluetoothLeClass.OnServiceDiscoverListener discoverListener, BluetoothLeClass.OnDataAvailableListener dataAvailableListener){
+    public BleConnectUtil(Context context, BluetoothLeClass.OnServiceDiscoverListener discoverListener, BluetoothLeClass.OnDataAvailableListener dataAvailableListener) {
         mContext = context;
 
         connectDevices = DeviceShare.getDevices(context);
@@ -124,9 +124,9 @@ public class BleConnectUtil {
         mHandler = new Handler();
     }
 
-    public void connectDevice(String mac){
+    public void connectDevice(String mac) {
         Log.e(TAG, "connectDevice mac " + mac);
-        if (mBLE == null){
+        if (mBLE == null) {
             return;
         }
         mMac = mac;
@@ -136,31 +136,32 @@ public class BleConnectUtil {
 
     }
 
-    public void disconnectDevice(){
+    public void disconnectDevice() {
         scanLeDevice(false);
-        mBLE.disconnect();
-        mBLE.close();
-        mBLE = null;
+        if (mBLE != null) {
+            mBLE.disconnect();
+            mBLE.close();
+            mBLE = null;
+        }
     }
 
     public void displayGattServices(List<BluetoothGattService> gattServices) {
         if (gattServices == null) return;
         String mac = mDevice.getAddress();
-        Log.e(TAG, "--> Device Mac Address " + mac);
+        Log.e(TAG, "displayGattServices --> Device Mac Address " + mac);
 
         mac = mac.replace(":", "");
         StringBuffer stringBufferMac = new StringBuffer(mac);
         String temp = ByteUtil.getStringRandom(20);
         temp = temp + stringBufferMac;
-        Log.e(TAG, "--> 16 byte data " + temp);
-        Log.e(TAG, "--> 16 byte key " + HandShackKey_String);
+        Log.e(TAG, "displayGattServices --> 16 byte data " + temp);
+        Log.e(TAG, "displayGattServices --> 16 byte key " + HandShackKey_String);
         byte[] bytes = ByteUtil.hexStringToBytes(temp);
         byte[] tempByte = ByteUtil.hexStringToBytes(HandShackKey_String);
         byte[] result = aesEncrypt(bytes, tempByte);
-        Log.e(TAG, "--> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
         byte[] result2 = new byte[4];
         final byte[] result3 = ByteUtil.addBytes(result, result2);
-        Log.e(TAG,"----> result3 " + ByteUtil.bytesToHexString(result3));
+        Log.e(TAG, "displayGattServices aesEncrypt----> result3 " + ByteUtil.bytesToHexString(result3));
 
         for (BluetoothGattService gattService : gattServices) {
             //-----Service的字段信息-----//
@@ -168,13 +169,13 @@ public class BleConnectUtil {
 //            Log.e(TAG,"-->service type:"+Utils.getServiceType(type));
 //            Log.e(TAG,"-->includedServices size:"+gattService.getIncludedServices().size());
 //            Log.e(TAG,"-->service uuid:"+gattService.getUuid());
-            if (gattService.getUuid().toString().equals(UUID_KEY_DATA_SERVICE)){
+            if (gattService.getUuid().toString().equals(UUID_KEY_DATA_SERVICE)) {
                 mGattService = gattService;
             }
 
             //-----Characteristics的字段信息-----//
-            List<BluetoothGattCharacteristic> gattCharacteristics =gattService.getCharacteristics();
-            for (final BluetoothGattCharacteristic  gattCharacteristic: gattCharacteristics) {
+            List<BluetoothGattCharacteristic> gattCharacteristics = gattService.getCharacteristics();
+            for (final BluetoothGattCharacteristic gattCharacteristic : gattCharacteristics) {
 //                Log.e(TAG,"---->char uuid:"+gattCharacteristic.getUuid());
 
                 int permission = gattCharacteristic.getPermissions();
@@ -183,18 +184,13 @@ public class BleConnectUtil {
                 int property = gattCharacteristic.getProperties();
 //                Log.e(TAG,"---->char property:"+Utils.getCharPropertie(property));
 
-//                byte[] data = gattCharacteristic.getValue();
-//                if (data != null && data.length > 0) {
-//                    Log.e(TAG,"---->char value:"+new String(data));
-//                }
-
                 //UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
-                if(gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_A)){
+                if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_A)) {
                     mCharacteristicAa = gattCharacteristic;
-                }else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_C)){
+                } else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_C)) {
                     mCharacteristicAc = gattCharacteristic;
                     mBLE.setCharacteristicNotification(mCharacteristicAc, true);
-                }else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_B)){
+                } else if (gattCharacteristic.getUuid().toString().equals(UUID_KEY_DATA_CHARACTERISTIC_B)) {
                     mCharacteristicAb = gattCharacteristic;
                 }
 
@@ -202,8 +198,8 @@ public class BleConnectUtil {
         }//
 
         //UUID_KEY_DATA是可以跟蓝牙模块串口通信的Characteristic
-        if(mCharacteristicAa != null) {
-            if (current_status == status_activation){
+        if (mCharacteristicAa != null) {
+            if (current_status == status_activation) {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -223,7 +219,7 @@ public class BleConnectUtil {
     /**
      * 搜索到BLE终端服务的事件
      */
-    private BluetoothLeClass.OnServiceDiscoverListener mOnServiceDiscover = new BluetoothLeClass.OnServiceDiscoverListener(){
+    private BluetoothLeClass.OnServiceDiscoverListener mOnServiceDiscover = new BluetoothLeClass.OnServiceDiscoverListener() {
 
         @Override
         public void onServiceDiscover(BluetoothGatt gatt) {
@@ -235,7 +231,7 @@ public class BleConnectUtil {
     /**
      * 收到BLE终端数据交互的事件
      */
-    private BluetoothLeClass.OnDataAvailableListener mOnDataAvailable = new BluetoothLeClass.OnDataAvailableListener(){
+    private BluetoothLeClass.OnDataAvailableListener mOnDataAvailable = new BluetoothLeClass.OnDataAvailableListener() {
 
         /**
          * BLE终端数据被读的事件
@@ -244,11 +240,11 @@ public class BleConnectUtil {
         public void onCharacteristicRead(BluetoothGatt gatt,
                                          BluetoothGattCharacteristic characteristic, int status) {
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.e(TAG,"onCharRead "+gatt.getDevice().getName()
-                        +" read "
-                        +characteristic.getUuid().toString()
-                        +" -> "
-                        +Utils.bytesToHexString(characteristic.getValue()));
+                Log.e(TAG, "onCharRead " + gatt.getDevice().getName()
+                        + " read "
+                        + characteristic.getUuid().toString()
+                        + " -> "
+                        + Utils.bytesToHexString(characteristic.getValue()));
 
             }
 
@@ -261,51 +257,48 @@ public class BleConnectUtil {
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt,
                                           final BluetoothGattCharacteristic characteristic) {
-            Log.e(TAG,"onCharWrite "+gatt.getDevice().getName()
-                    +" write "
-                    +characteristic.getUuid().toString());
-            if (current_status == status_activation){
+            Log.e(TAG, "onCharacteristicWrite " + gatt.getDevice().getName() + " write " + characteristic.getUuid().toString() + "---current_status " + current_status);
+            if (current_status == status_activation) {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         byte[] resultByte = characteristic.getValue();
-                        if (resultByte.length == 20){
+                        if (resultByte.length == 20) {
                             String key2Temp = ByteUtil.bytesToHexString(resultByte);
                             byte[] key2TempByte = ByteUtil.hexStringToBytes(key2Temp.substring(0, 32));
                             byte[] tempKeyByte = ByteUtil.hexStringToBytes(HandShackKey_String);
                             HandShakeKey2 = resultByte = aesDecrypt(key2TempByte, tempKeyByte);
 
-
                             String mac = mDevice.getAddress();
-                            Log.e(TAG, "--------> Device Mac Address " + mac);
+                            Log.e(TAG, "onCharacteristicWrite--------> onCharacteristicWrite Device Mac Address " + mac + ", HandShakeKey2 " + ByteUtil.bytesToHexString(HandShakeKey2));
 
                             mac = mac.replace(":", "");
                             StringBuffer stringBufferMac = new StringBuffer(mac);
                             String temp = ByteUtil.getStringRandom(20);
                             temp = temp + stringBufferMac;
-                            Log.e(TAG, "-------> 16 byte data " + temp);
-                            Log.e(TAG, "-------> 16 byte key " + key2Temp);
+                            Log.e(TAG, "onCharacteristicWrite-------> 16 byte data " + temp);
+                            Log.e(TAG, "onCharacteristicWrite-------> 16 byte key " + key2Temp);
                             byte[] bytes = ByteUtil.hexStringToBytes(temp);
                             byte[] result = aesEncrypt(bytes, resultByte);
-                            Log.e(TAG, "-------> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
+                            Log.e(TAG, "onCharacteristicWrite-------> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
                             byte[] result2 = new byte[4];
                             final byte[] result3 = ByteUtil.addBytes(result, result2);
 
                             mCharacteristicAa.setValue(result3);
                             //往蓝牙模块写入数据
                             mBLE.writeCharacteristic(mCharacteristicAa);
-                        }else if (resultByte.length == 2){
+                        } else if (resultByte.length == 2) {
                             String key2Temp = ByteUtil.bytesToHexString(resultByte);
-                            if ("FF01".equals(key2Temp.toUpperCase())){
-                                Log.e(TAG, "-------> activation device success ");
+                            if ("FF01".equals(key2Temp.toUpperCase())) {
+                                Log.e(TAG, "onCharacteristicWrite-------> activation device success ");
                                 DeviceModel model = new DeviceModel();
                                 model.name = mDevice.getName();
                                 model.mac = mDevice.getAddress();
                                 model.key = ByteUtil.bytesToHexString(HandShakeKey2);
                                 DeviceShare.saveDevice(mContext, model);
                                 current_status = status_unlock;
-                                postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE, Server.Code.SUCCESS, "", getShareDeviceModel(mDevice));
-                            }else{
+                                postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE_SUCCESS, Server.Code.SUCCESS, "", model);
+                            } else {
                                 postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE, Server.Code.FAIL, "Activation device failed", getShareDeviceModel(mDevice));
                             }
                         }
@@ -313,9 +306,9 @@ public class BleConnectUtil {
                     }
                 }, 2000);
 
-            }else if (current_status == status_unlock){
+            } else if (current_status == status_unlock) {
                 byte[] temp = characteristic.getValue();
-                if (temp.length == 16){
+                if (temp.length == 16) {
                     byte[] tempKeyByte = ByteUtil.hexStringToBytes(HandShackKey_String);
                     byte[] decTemp = aesDecrypt(temp, tempKeyByte);
                     byte[] aesTemp = aesEncrypt(decTemp, HandShakeKey2);
@@ -332,16 +325,16 @@ public class BleConnectUtil {
                             mBLE.writeCharacteristic(mCharacteristicAb);
                         }
                     }, 3000);
-                }else{
+                } else {
                     String key2Temp = ByteUtil.bytesToHexString(temp);
 
-                    Log.e(TAG, "-------> unlock device result  " + key2Temp);
-                    if ("FF02".equals(key2Temp.toUpperCase())){
+                    Log.e(TAG, "onCharacteristicWrite-------> unlock device result  " + key2Temp);
+                    if ("FF02".equals(key2Temp.toUpperCase())) {
                         current_status = status_unlock_success;
-                        Log.e(TAG, "-------> unlock device success  ");
+                        Log.e(TAG, "onCharacteristicWrite-------> unlock device success  ");
 
-                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE, Server.Code.SUCCESS, "", getShareDeviceModel(mDevice));
-                    }else {
+                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.SUCCESS, "", getShareDeviceModel(mDevice));
+                    } else {
                         postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE, Server.Code.FAIL, "Unlock device failed", getShareDeviceModel(mDevice));
                     }
                 }
@@ -349,14 +342,18 @@ public class BleConnectUtil {
         }
     };
 
-
     private void scanLeDevice(final boolean enable) {
         if (enable) {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     mScanning = false;
-                    mScanner.stopScan(mScanCallback);
+                    if (mScanner != null && mScanCallback != null) {
+                        mScanner.stopScan(mScanCallback);
+//                        DeviceModel model = new DeviceModel();
+//                        model.mac = mMac;
+//                        postResponseEvent(ResponseEvent.TYPE_STOP_SCAN, Server.Code.SUCCESS, "", model);
+                    }
                 }
             }, SCAN_PERIOD);
 
@@ -364,7 +361,12 @@ public class BleConnectUtil {
             mScanner.startScan(mScanCallback);
         } else {
             mScanning = false;
-            mScanner.stopScan(mScanCallback);
+            if (mScanner != null && mScanCallback != null) {
+                mScanner.stopScan(mScanCallback);
+//                DeviceModel model = new DeviceModel();
+//                model.mac = mMac;
+//                postResponseEvent(ResponseEvent.TYPE_STOP_SCAN, Server.Code.SUCCESS, "", model);
+            }
         }
     }
 
@@ -373,66 +375,66 @@ public class BleConnectUtil {
         public void onScanResult(int callbackType, final ScanResult result) {
             super.onScanResult(callbackType, result);
             final BluetoothDevice device = result.getDevice();
-            Log.e(TAG, "--------> onScanResult Device Mac Address " + device.getAddress() + ", name " + device.getName());
-            if ("SC".equals(device.getName())){
+            Log.e(TAG, "onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
+            if ("SC".equalsIgnoreCase(device.getName())) {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        Log.e(TAG, "onScanResult-------->  ble device ");
+                        SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
 
+                        byte[] b = manufacturerSpecificData.valueAt(manufacturerSpecificData.size() - 1);
+                        String str = new String(ByteUtil.bytesToHexString(b));
 
-                            SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
-
-                            byte[] b = manufacturerSpecificData.valueAt(manufacturerSpecificData.size() - 1);
-                            String str = new String(ByteUtil.bytesToHexString(b));
-
-                            if (str.endsWith("00")){
-                                current_status = 0;
-                            }else{
-                                current_status = 1;
-                            }
-
-                            if (TextUtils.isEmpty(mMac)){
-                                // 激活
-                                if (connectDevices.size() == 0){
-                                    scanLeDevice(false);
-                                    mDevice = device;
-                                    mBLE.connect(mDevice.getAddress());
-                                }else{
-                                    for (int i = 0, j= connectDevices.size(); i<j; i++){
-                                        DeviceModel deviceModel = connectDevices.get(i);
-                                        if (!device.getAddress().equals(deviceModel.mac)){
-                                            scanLeDevice(false);
-                                            mDevice = device;
-                                            mBLE.connect(mDevice.getAddress());
-
-                                        }
-                                    }
-                                }
-
-                            }else {
-                                if (device.getAddress().equals(mMac)) {
-                                    scanLeDevice(false);
-                                    if (connectDevices.size() > 0){
-                                        for (int i = 0, j= connectDevices.size(); i<j; i++){
-                                            DeviceModel deviceModel = connectDevices.get(i);
-                                            if (device.getAddress().equals(deviceModel.mac)){
-                                                HandShakeKey2 = ByteUtil.hexStringToBytes(deviceModel.key);
-                                            }
-                                        }
-                                    }
-
-                                    mDevice = device;
-                                    mBLE.connect(mDevice.getAddress());
-
-                                }
-                            }
-
+                        if (str.endsWith("00")) {
+                            current_status = 0;
+                        } else {
+                            current_status = 1;
                         }
-
+                        Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
+                        if (TextUtils.isEmpty(mMac)) {
+                            if (current_status != 0){
+                                postResponseEvent(ResponseEvent.TYPE_STOP_SCAN, Server.Code.FAIL, "Please reset device!", null);
+                                return;
+                            }
+                            // 激活
+                            if (connectDevices.size() == 0) {
+                                scanLeDevice(false);
+                                mDevice = device;
+                                mBLE.connect(mDevice.getAddress());
+                            } else {
+                                for (int i = 0, j = connectDevices.size(); i < j; i++) {
+                                    DeviceModel deviceModel = connectDevices.get(i);
+                                    if (!device.getAddress().equals(deviceModel.mac)) {
+                                        scanLeDevice(false);
+                                        mDevice = device;
+                                        mBLE.connect(mDevice.getAddress());
+                                    }
+                                }
+                            }
+                        } else {
+                            if (current_status == status_activation){
+                                scanLeDevice(false);
+                                postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
+                                return;
+                            }
+                            if (device.getAddress().equals(mMac)) {
+                                scanLeDevice(false);
+                                if (connectDevices.size() > 0) {
+                                    for (int i = 0, j = connectDevices.size(); i < j; i++) {
+                                        DeviceModel deviceModel = connectDevices.get(i);
+                                        if (device.getAddress().equals(deviceModel.mac)) {
+                                            HandShakeKey2 = ByteUtil.hexStringToBytes(deviceModel.key);
+                                        }
+                                    }
+                                }
+                                mDevice = device;
+                                mBLE.connect(mDevice.getAddress());
+                            }
+                        }
+                    }
                 }, 100);
             }
-
-
         }
 
         @Override
@@ -448,7 +450,6 @@ public class BleConnectUtil {
         }
     };
 
-
     private void postResponseEvent(int eventType, int errorCode, String errorMsg, DeviceModel deviceModel) {
         ResponseEvent event = new ResponseEvent();
         event.eventType = eventType;
@@ -458,17 +459,18 @@ public class BleConnectUtil {
         EventBus.getDefault().post(event);
     }
 
-    public DeviceModel getShareDeviceModel(BluetoothDevice device){
+    public DeviceModel getShareDeviceModel(BluetoothDevice device) {
 
         DeviceModel deviceModel = null;
 
-        if (connectDevices == null || connectDevices.size() == 0){
+        if (connectDevices == null || connectDevices.size() == 0) {
+            deviceModel = new DeviceModel();
             deviceModel.mac = device.getAddress();
             deviceModel.name = device.getName();
             deviceModel.key = ByteUtil.bytesToHexString(HandShakeKey2);
-        }else{
-            for (DeviceModel model : connectDevices){
-                if (model.mac.equals(device.getAddress())){
+        } else {
+            for (DeviceModel model : connectDevices) {
+                if (model.mac.equals(device.getAddress())) {
                     deviceModel = model;
                 }
             }
@@ -478,6 +480,7 @@ public class BleConnectUtil {
     }
 
     public native byte[] aesEncrypt(byte[] data, byte[] key);
+
     public native byte[] aesDecrypt(byte[] data, byte[] key);
 
 

@@ -22,8 +22,6 @@ Java_com_example_bluetooth_le_BleConnectUtil_aesEncrypt(
 
     jbyte * dataByte = (jbyte*)env->GetByteArrayElements(data, 0);
 
-    char* byArray = (char*)dataByte;
-
     jbyte * keyByte = (jbyte*)env->GetByteArrayElements(key, 0);
 
     char* keyArray = (char*)keyByte;
@@ -39,14 +37,10 @@ Java_com_example_bluetooth_le_BleConnectUtil_aesEncrypt(
     memset(chainCipherBlock, 0x00, sizeof(chainCipherBlock));
     aesEncInit();
     aesEncrypt(dat, chainCipherBlock);
-
     int size = sizeof(dat);
-
-
     jbyte *by = (jbyte*)dat;
     jbyteArray jarray = env->NewByteArray(size);
     env->SetByteArrayRegion(jarray, 0, size, by);
-
     return  jarray;
 }
 
@@ -61,8 +55,6 @@ Java_com_example_bluetooth_le_BleConnectUtil_aesDecrypt(
         jbyteArray key) {
 
     jbyte * dataByte = (jbyte*)env->GetByteArrayElements(data, 0);
-
-    char* byArray = (char*)dataByte;
 
     jbyte * keyByte = (jbyte*)env->GetByteArrayElements(key, 0);
 
@@ -81,7 +73,6 @@ Java_com_example_bluetooth_le_BleConnectUtil_aesDecrypt(
     aesDecrypt(dat, chainCipherBlock);
 
     int size = sizeof(dat);
-
 
     jbyte *by = (jbyte*)dat;
     jbyteArray jarray = env->NewByteArray(size);

@@ -497,7 +497,6 @@ void aesEncrypt( unsigned char * buffer, unsigned char * chainBlock )
 
 #include <string.h>
 
-
 void AES_Test(void)
 {
     unsigned char dat[32]="5086988648509756BB74";

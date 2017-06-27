@@ -140,6 +140,7 @@ public abstract class BaseFragment extends Fragment {
     protected void postEvent(RequestEvent requestEvent){
         EventBus.getDefault().post(requestEvent);
     }
+
     @Subscribe
     public void onEvent(ResponseEvent event){
         if(event!=null){

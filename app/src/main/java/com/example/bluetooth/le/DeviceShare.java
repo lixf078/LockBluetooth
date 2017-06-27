@@ -1,6 +1,7 @@
 package com.example.bluetooth.le;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.lock.lib.common.util.ShareUtil;
 
@@ -24,7 +25,36 @@ public class DeviceShare {
         }
         list.add(deviceModel);
         saveDevices(context, list);
+    }
 
+    public static void deleteDevice(Context context, DeviceModel deviceModel){
+        List<DeviceModel> list = getDevices(context);
+        if (list == null){
+            list = new ArrayList<>();
+        }
+        for (int i = 0, j = list.size(); i<j; i++){
+            DeviceModel model = list.get(i);
+            if (model.mac.equals(deviceModel.mac)){
+                list.remove(model);
+                break;
+            }
+        }
+
+        saveDevices(context, list);
+    }
+
+    public static void editDevice(Context context, DeviceModel deviceModel){
+        List<DeviceModel> list = getDevices(context);
+        if (list == null){
+            list = new ArrayList<>();
+        }
+        for (int i = 0, j = list.size(); i<j; i++){
+            DeviceModel model = list.get(i);
+            if (model.mac.equals(deviceModel.mac)){
+                model.name = deviceModel.name;
+            }
+        }
+        saveDevices(context, list);
     }
 
     public static void saveDevices(Context context, List<DeviceModel> deviceModels){
@@ -42,6 +72,8 @@ public class DeviceShare {
         }
         if (jsonArray.length() > 0){
             ShareUtil.getInstance(context).save("devices", jsonArray.toString());
+        }else{
+            ShareUtil.getInstance(context).save("devices", "");
         }
     }
 
@@ -49,16 +81,18 @@ public class DeviceShare {
         String jsonString = ShareUtil.getInstance(context).getStringValue("devices", "");
         List<DeviceModel> list = new ArrayList<>();
         try {
-            JSONArray jsonArray = new JSONArray(jsonString);
-            if (jsonArray != null && jsonArray.length()>0){
-                list = new ArrayList<>();
-                for(int i = 0,j = jsonArray.length(); i<j; i++){
-                    JSONObject jsonObject = jsonArray.optJSONObject(i);
-                    DeviceModel device = new DeviceModel();
-                    device.name = jsonObject.optString("name");
-                    device.mac = jsonObject.optString("mac");
-                    device.key = jsonObject.optString("key");
-                    list.add(device);
+            if (!TextUtils.isEmpty(jsonString)){
+                JSONArray jsonArray = new JSONArray(jsonString);
+                if (jsonArray != null && jsonArray.length()>0){
+                    list = new ArrayList<>();
+                    for(int i = 0,j = jsonArray.length(); i<j; i++){
+                        JSONObject jsonObject = jsonArray.optJSONObject(i);
+                        DeviceModel device = new DeviceModel();
+                        device.name = jsonObject.optString("name");
+                        device.mac = jsonObject.optString("mac");
+                        device.key = jsonObject.optString("key");
+                        list.add(device);
+                    }
                 }
             }
         } catch (JSONException e) {

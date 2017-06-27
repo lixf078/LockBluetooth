@@ -27,6 +27,7 @@ import com.lock.lib.api.event.ResponseEvent;
 import com.lock.lib.common.constants.Constants;
 import com.lock.lib.common.util.Logger;
 import com.lock.lib.common.util.ShareUtil;
+import com.lock.lib.common.util.ToastUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -38,7 +39,6 @@ import org.json.JSONObject;
 
 public class DeviceConnectActivity extends Activity {
 
-
     BleConnectUtil bleConnectUtil = null;
 
     private TextView mDismissView;
@@ -46,11 +46,9 @@ public class DeviceConnectActivity extends Activity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_search_device);
 
         EventBus.getDefault().register(this);
-
         bleConnectUtil = new BleConnectUtil(DeviceConnectActivity.this, null, null);
         mDismissView = (TextView) findViewById(R.id.touch_dismiss);
         mDismissView.setOnClickListener(new View.OnClickListener() {
@@ -60,14 +58,11 @@ public class DeviceConnectActivity extends Activity {
                 finish();
             }
         });
-
     }
-
 
     @Override
     protected void onResume() {
         super.onResume();
-
         requestPermission();
     }
 
@@ -76,7 +71,6 @@ public class DeviceConnectActivity extends Activity {
         super.onStop();
         bleConnectUtil.disconnectDevice();
     }
-
 
     @Override
     protected void onDestroy() {
@@ -87,16 +81,24 @@ public class DeviceConnectActivity extends Activity {
     @Subscribe
     public void onEventMainThread(ResponseEvent event) {
         if (event != null) {
-            if (event.eventType == ResponseEvent.TYPE_ACTIVITY_DEVICE) {
+            if (event.eventType == ResponseEvent.TYPE_ACTIVITY_DEVICE_SUCCESS) {
                 if (event.errorCode == Server.Code.SUCCESS) {
                     finish();
                 } else {
 //                    resolveError(event.errorCode, event.errorMsg);
                 }
+            }else if (event.eventType == ResponseEvent.TYPE_STOP_SCAN) {
+                if (event.errorCode == Server.Code.SUCCESS) {
+                    ToastUtil.showToast(DeviceConnectActivity.this, "Stop scan device");
+                    finish();
+                } else {
+                    ToastUtil.showToast(DeviceConnectActivity.this, "" + event.errorMsg);
+                    finish();
+//                    resolveError(event.errorCode, event.errorMsg);
+                }
             }
         }
     }
-
 
     private static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 1;
     private void requestPermission(){

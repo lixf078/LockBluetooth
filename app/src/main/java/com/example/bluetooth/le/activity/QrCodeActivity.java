@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Toast;
 
+import com.example.bluetooth.le.DeviceModel;
+import com.example.bluetooth.le.DeviceShare;
 import com.google.zxing.client.android.CaptureActivity;
 import com.lock.lib.common.constants.Constants;
 import com.lock.lib.common.util.Logger;
@@ -27,41 +29,24 @@ public class QrCodeActivity extends CaptureActivity {
     public void dealScanResult(String result){
         Logger.e(Constants.TAG, "QrCodeActivity dealScanResult result " + result);
         if(TextUtils.isEmpty(result)){
-            ToastUtil.showToast(this,"主人，识别出错啦，请确认二维码是否正确");
+            ToastUtil.showToast(this,"QRcode error !");
             return;
         }
         Intent intent = null;
         try {
             JSONObject jsonObject = new JSONObject(result);
-            int action = jsonObject.optInt("action");
-            String value = jsonObject.optString("value");
-            String qrCodeId = jsonObject.optString("qrCodeId");
-            Logger.e(Constants.TAG, "QrCodeActivity dealScanResult action " + action + ", value " + value);
+            String name = jsonObject.optString("name");
+            String macStr = jsonObject.optString("macStr");
+            String secretKey2 = jsonObject.optString("secretKey2");
+            Logger.e(Constants.TAG, "QrCodeActivity dealScanResult name " + name + ", macStr " + macStr + ", secretKey2 " + secretKey2);
 
-            switch (action){
-                case 0:{
-                    intent = new Intent(QrCodeActivity.this, WebActivity.class);
-                    intent.putExtra(Constants.Key.Key_WEB_URL, "" + value);
-                    break;
-                }
-                default:{
-                    Toast.makeText(this, "维护中", Toast.LENGTH_SHORT).show();
-                }
-            }
+            DeviceModel deviceModel = new DeviceModel();
+            deviceModel.name = name;
+            deviceModel.mac = macStr;
+            deviceModel.key = secretKey2;
+            DeviceShare.saveDevice(QrCodeActivity.this, deviceModel);
         } catch (JSONException e) {
-            if(isURL(result)){
-                if(!result.toUpperCase().startsWith("HTTP")){
-                    result += "http://";
-                }
-                intent = new Intent(QrCodeActivity.this, WebActivity.class);
-                intent.putExtra(Constants.Key.Key_WEB_URL, result);
-            }else{
-                Toast.makeText(QrCodeActivity.this, "错误的二维码信息:" + result, Toast.LENGTH_SHORT).show();
-            }
             e.printStackTrace();
-        }
-        if(null != intent){
-            startActivity(intent);
         }
     }
 

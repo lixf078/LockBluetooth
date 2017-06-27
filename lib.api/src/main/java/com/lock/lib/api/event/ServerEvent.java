@@ -114,7 +114,14 @@ public class ServerEvent extends BaseEvent {
     public static final int TYPE_REGIST_USER = TYPE_SMS_LOADING + 1;//注册接口
 //    public static final int TYPE_SMS_VERIFY_CODE = TYPE_IMAGE_VERIFY_CODE + 1;//获取短信验证码
 
-    public static final int TYPE_ACTIVITY_DEVICE = TYPE_REGIST_USER + 1;// 激活设备
-    public static final int TYPE_UNLOCK_DEVICE = TYPE_ACTIVITY_DEVICE + 1;// 开锁设备
+    public static final int TYPE_START_SCAN = TYPE_REGIST_USER + 1;// 开始扫描
+    public static final int TYPE_STOP_SCAN = TYPE_START_SCAN + 1;// 停止扫描
+
+    public static final int TYPE_ACTIVITY_DEVICE = TYPE_STOP_SCAN + 1;// 激活设备
+    public static final int TYPE_ACTIVITY_DEVICE_SUCCESS = TYPE_ACTIVITY_DEVICE + 1;// 激活设备成功
+    public static final int TYPE_UNLOCK_DEVICE = TYPE_ACTIVITY_DEVICE_SUCCESS + 1;// 开锁设备
+    public static final int TYPE_UNLOCK_DEVICE_SUCCESS = TYPE_UNLOCK_DEVICE + 1;// 开锁成功
+    public static final int TYPE_DELETE_DEVICE = TYPE_UNLOCK_DEVICE_SUCCESS + 1;// 删除设备
+    public static final int TYPE_EDIT_DEVICE = TYPE_DELETE_DEVICE + 1;// 编辑设备
 
 }

@@ -76,7 +76,7 @@ public class MainActivity extends FragmentActivity {
                 }
                 //请求权限
                 ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA},
                         REQUEST_CODE_ACCESS_COARSE_LOCATION);
             }
         }
