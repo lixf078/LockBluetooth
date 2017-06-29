@@ -3,6 +3,7 @@ package com.example.bluetooth.le.fragment;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
@@ -12,34 +13,26 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.bluetooth.le.BleConnectUtil;
-import com.example.bluetooth.le.DeviceConnectActivity;
 import com.example.bluetooth.le.DeviceModel;
 import com.example.bluetooth.le.DeviceShare;
 import com.example.bluetooth.le.R;
-import com.example.bluetooth.le.adapter.DeviceAdapter;
 import com.example.bluetooth.le.adapter.HomeDeviceAdapter;
-import com.example.bluetooth.le.view.SwipeLayoutManager;
 import com.lock.lib.api.Server;
 import com.lock.lib.api.base.BaseFragment;
 import com.lock.lib.api.event.ResponseEvent;
 import com.lock.lib.common.util.ToastUtil;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import in.srain.cube.views.loadmore.LoadMoreContainer;
@@ -204,6 +197,12 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
         WindowManager.LayoutParams lp = w.getAttributes();
         lp.x = 0;
         lp.y = 40;
+        dia.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                bleConnectUtil.disconnectDevice();
+            }
+        });
         dia.onWindowAttributesChanged(lp);
 //        imageView.setOnClickListener(
 //                new View.OnClickListener() {
@@ -228,7 +227,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
                 }
                 //请求权限
                 ActivityCompat.requestPermissions(SmartCoolFragment.this.getActivity(),
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA},
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_CODE_ACCESS_COARSE_LOCATION);
             }else{
 //                if (deviceModel != null){
