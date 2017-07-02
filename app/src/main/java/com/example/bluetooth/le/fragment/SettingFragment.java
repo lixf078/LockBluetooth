@@ -1,13 +1,21 @@
 package com.example.bluetooth.le.fragment;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -22,6 +30,7 @@ import com.example.bluetooth.le.view.SwipeLayoutManager;
 import com.lock.lib.api.Server;
 import com.lock.lib.api.base.BaseFragment;
 import com.lock.lib.api.event.ResponseEvent;
+import com.lock.lib.qr.QRCodeUtil;
 
 import org.greenrobot.eventbus.Subscribe;
 
@@ -49,6 +58,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
 //    private ExpandableListView expandableListView;
 
+    Dialog dia;
 
     @Override
     protected View createContentView(LayoutInflater inflater, Bundle savedInstanceState) {
@@ -154,7 +164,9 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
             case R.id.ble_scan_qr_code: {
                 Intent intent = new Intent(SettingFragment.this.getContext(), QrCodeActivity.class);
                 startActivity(intent);
+//                showQRDialog();
                 break;
+
             }
             case R.id.ble_connect_device: {
                 Intent intent = new Intent(SettingFragment.this.getContext(), DeviceConnectActivity.class);
@@ -179,6 +191,40 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     public void onDestroy() {
         super.onDestroy();
     }
+
+
+
+    public void showQRDialog(){
+        dia = new Dialog(SettingFragment.this.getContext(), R.style.edit_AlertDialog_style);
+        dia.setContentView(R.layout.unlock_dialog);
+        ImageView imageView = (ImageView) dia.findViewById(R.id.start_img);
+        Bitmap bitmap = QRCodeUtil.encodeQRBitmap("{ \"name\" : \"Digital Ant-B5\", \"macStr\" : \"E6983577CEB5\", \"secretKey2\" : \"8DF9A4704A226BC1D341B7EAA16D988F\" }");
+        imageView.setImageBitmap(bitmap);
+//        imageView.setBackgroundResource(R.drawable.unlock_animation);
+
+        //选择true的话点击其他地方可以使dialog消失，为false的话不会消失
+        dia.setCanceledOnTouchOutside(true); // Sets whether this dialog is
+        Window w = dia.getWindow();
+        WindowManager.LayoutParams lp = w.getAttributes();
+        lp.x = 0;
+        lp.y = 40;
+        dia.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+
+            }
+        });
+        dia.onWindowAttributesChanged(lp);
+//        imageView.setOnClickListener(
+//                new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        dia.dismiss();
+//                    }
+//                });
+        dia.show();
+    }
+
 
 //    @Override
 //    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

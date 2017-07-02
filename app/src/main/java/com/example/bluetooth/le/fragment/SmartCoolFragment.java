@@ -14,6 +14,8 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -88,6 +90,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 //                    resolveError(event.errorCode, event.errorMsg);
                 }
             }else if (event.eventType == ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS) {
+                bleConnectUtil.disconnectDevice();
                 if (dia != null && dia.isShowing()){
                     dia.dismiss();
                 }
@@ -97,6 +100,16 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
                 } else {
 //                    resolveError(event.errorCode, event.errorMsg);
                     ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
+                }
+            }else if (event.eventType == ResponseEvent.TYPE_SCAN_TIME_OUT) {
+                bleConnectUtil.disconnectDevice();
+                if (dia != null && dia.isShowing()){
+                    dia.dismiss();
+                }
+                if (event.errorCode == Server.Code.SUCCESS) {
+                    ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
+                } else {
+//                    resolveError(event.errorCode, event.errorMsg);
                 }
             }
         }
@@ -133,6 +146,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initData() {
+
         showLoadingView();
         connectDevices = DeviceShare.getDevices(SmartCoolFragment.this.getContext());
         hiddenLoadingView();
@@ -211,7 +225,23 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 //                        dia.dismiss();
 //                    }
 //                });
+
+        dia.setCanceledOnTouchOutside(false);
+
+        dia.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                Log.e("lxf", "" + keyEvent.getKeyCode());
+                if (KeyEvent.KEYCODE_BACK == keyEvent.getKeyCode()){
+                    return true;
+                }
+                return false;
+            }
+        });
+
         dia.show();
+
+
     }
 
     private static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 1;
@@ -237,6 +267,8 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
             }
         }
     }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE_ACCESS_COARSE_LOCATION) {

@@ -42,7 +42,7 @@ public class QrCodeActivity extends CaptureActivity {
 
             DeviceModel deviceModel = new DeviceModel();
             deviceModel.name = name;
-            deviceModel.mac = macStr;
+            deviceModel.mac = dealString(macStr);
             deviceModel.key = secretKey2;
             DeviceShare.saveDevice(QrCodeActivity.this, deviceModel);
         } catch (JSONException e) {
@@ -50,5 +50,15 @@ public class QrCodeActivity extends CaptureActivity {
         }
     }
 
+    private String dealString(String str){
+        StringBuffer stringBuffer = new StringBuffer();
+        String result = "";
+
+        for (int i = 0, j = 6; i<j ; i ++){
+            result += str.substring(2*i , i*2 +2) + ":";
+        }
+//        result.substring(0, result.length() -1);
+        return result.substring(0, result.length() -1);
+    }
 
 }

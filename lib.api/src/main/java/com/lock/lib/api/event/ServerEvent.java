@@ -116,8 +116,9 @@ public class ServerEvent extends BaseEvent {
 
     public static final int TYPE_START_SCAN = TYPE_REGIST_USER + 1;// 开始扫描
     public static final int TYPE_STOP_SCAN = TYPE_START_SCAN + 1;// 停止扫描
+    public static final int TYPE_SCAN_TIME_OUT = TYPE_STOP_SCAN + 1;// 15秒超时
 
-    public static final int TYPE_ACTIVITY_DEVICE = TYPE_STOP_SCAN + 1;// 激活设备
+    public static final int TYPE_ACTIVITY_DEVICE = TYPE_SCAN_TIME_OUT + 1;// 激活设备
     public static final int TYPE_ACTIVITY_DEVICE_SUCCESS = TYPE_ACTIVITY_DEVICE + 1;// 激活设备成功
     public static final int TYPE_UNLOCK_DEVICE = TYPE_ACTIVITY_DEVICE_SUCCESS + 1;// 开锁设备
     public static final int TYPE_UNLOCK_DEVICE_SUCCESS = TYPE_UNLOCK_DEVICE + 1;// 开锁成功

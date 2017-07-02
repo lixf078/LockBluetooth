@@ -23,7 +23,18 @@ public class DeviceShare {
         if (list == null){
             list = new ArrayList<>();
         }
-        list.add(deviceModel);
+        boolean flag = true;
+        for (DeviceModel device : list) {
+            if (deviceModel.mac.equalsIgnoreCase(device.mac)){
+                flag = false;
+                device.name = deviceModel.name;
+                device.key = deviceModel.key;
+            }
+        }
+        if (flag){
+            list.add(deviceModel);
+        }
+
         saveDevices(context, list);
     }
 

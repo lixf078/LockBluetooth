@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.bluetooth.le.fragment.SettingFragment;
@@ -42,6 +43,7 @@ public class DeviceConnectActivity extends Activity {
     BleConnectUtil bleConnectUtil = null;
 
     private TextView mDismissView;
+    private View mSearchLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,8 +52,9 @@ public class DeviceConnectActivity extends Activity {
 
         EventBus.getDefault().register(this);
         bleConnectUtil = new BleConnectUtil(DeviceConnectActivity.this, null, null);
-        mDismissView = (TextView) findViewById(R.id.touch_dismiss);
-        mDismissView.setOnClickListener(new View.OnClickListener() {
+        mSearchLayout = findViewById(R.id.search_layout);
+//        mDismissView = (TextView) findViewById(R.id.touch_dismiss);
+        mSearchLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 bleConnectUtil.disconnectDevice();
@@ -96,6 +99,9 @@ public class DeviceConnectActivity extends Activity {
                     finish();
 //                    resolveError(event.errorCode, event.errorMsg);
                 }
+            }else if (event.eventType == ResponseEvent.TYPE_SCAN_TIME_OUT){
+                ToastUtil.showToast(DeviceConnectActivity.this, "" + event.errorMsg);
+                finish();
             }
         }
     }
@@ -118,6 +124,8 @@ public class DeviceConnectActivity extends Activity {
             }else{
                 bleConnectUtil.connectDevice("");
             }
+        }else{
+            bleConnectUtil.connectDevice("");
         }
     }
     @Override

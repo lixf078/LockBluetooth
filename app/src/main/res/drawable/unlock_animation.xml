@@ -38,4 +38,34 @@
     <item
         android:drawable="@drawable/unlock_100"
         android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_90"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_80"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_70"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_60"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_50"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_40"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_30"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_20"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_10"
+        android:duration="150"></item>
+    <item
+        android:drawable="@drawable/unlock_0"
+        android:duration="150"></item>
 </animation-list>

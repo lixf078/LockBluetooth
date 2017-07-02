@@ -2,6 +2,7 @@ package com.lock.lib.qr;
 
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -42,8 +43,10 @@ public class QRCodeUtil {
                 pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
             }
         }
+
         bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, 100, 0, 0, w, h);
+        // Log.e("lxf", "encodeQRBitmap w " + w + " h " + h);
+        bitmap.setPixels(pixels, 0, 200, 0, 0, w, h);
 
         return bitmap;
     }
