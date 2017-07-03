@@ -30,7 +30,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.List;
 
 /**
- * Created by oriolexia on 17/6/25.
+ * Created by admin on 17/6/25.
  */
 
 public class BleConnectUtil {
@@ -58,7 +58,6 @@ public class BleConnectUtil {
     public int status_unlock = 1; //已激活
     public int status_unlock_success = 2;
 
-
     String HandShackKey_String = "ea8b2a7316e9b04945b339280ac3283c";
 
     byte[] HandShakeKey2;
@@ -77,7 +76,7 @@ public class BleConnectUtil {
 
     private String mMac;
 
-    // Stops scanning after 10 seconds.
+    // Stops scanning after 15 seconds.
     private static final long SCAN_PERIOD = 15000;
     private static Context mContext;
 
@@ -396,17 +395,13 @@ public class BleConnectUtil {
         }
     };
 
-
     Runnable scanRunnable = new Runnable() {
         @Override
         public void run() {
             mScanning = false;
             if (mScanner != null && mScanCallback != null) {
-
                 if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
-//                            stopBleScan();
                     disconnectDevice();
-
                     Log.e(TAG, "scanLeDevice mDeviceConnectState " + mDeviceConnectState);
                     if (mDeviceConnectState == 1){
                         postResponseEvent(ResponseEvent.TYPE_SCAN_TIME_OUT, Server.Code.FAIL, "Can not find the device", null);
@@ -417,7 +412,6 @@ public class BleConnectUtil {
                 }else{
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                 }
-
             }
         }
     };
@@ -453,103 +447,23 @@ public class BleConnectUtil {
                     if ("SC".equalsIgnoreCase(device.getName())) {
                         FileUtil.writeTxtToFile("4.4 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
                         Log.e(TAG, "4.4 onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
-                        mHandler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                String str = new String(ByteUtil.bytesToHexString(scanRecord));
-                                FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName() + ", scanRecord " + str);
-                                Log.e(TAG, "onScanResult--------> scanRecord ble device " + str);
 
-                                if (str.endsWith("00")) {
-                                    current_status = 0;
-                                } else {
-                                    current_status = 1;
-                                }
-                                Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
-                                FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
-                                if (TextUtils.isEmpty(mMac)) {
-                                    if (current_status != 0){
-                                        FileUtil.writeTxtToFile("4.4 扫描到 ble 设备  Please reset device! ");
-                                        // postResponseEvent(ResponseEvent.TYPE_STOP_SCAN, Server.Code.FAIL, "Please reset device!", null);
-                                        return;
-                                    }
-                                    // 激活
-                                    if (connectDevices.size() == 0) {
-                                        scanLeDevice(false);
-                                        mDevice = device;
-                                        FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
-                                        mBLE.connect(mDevice.getAddress());
-                                    } else {
-                                        for (int i = 0, j = connectDevices.size(); i < j; i++) {
-                                            DeviceModel deviceModel = connectDevices.get(i);
-                                            if (!device.getAddress().equals(deviceModel.mac)) {
-                                                scanLeDevice(false);
-                                                mDevice = device;
-                                                FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
-                                                mBLE.connect(mDevice.getAddress());
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (current_status == status_activation){
-                                        scanLeDevice(false);
-                                        FileUtil.writeTxtToFile("扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + mDevice.getAddress());
-                                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
-                                        return;
-                                    }
-                                    if (device.getAddress().equals(mMac)) {
-                                        scanLeDevice(false);
-                                        if (connectDevices.size() > 0) {
-                                            for (int i = 0, j = connectDevices.size(); i < j; i++) {
-                                                DeviceModel deviceModel = connectDevices.get(i);
-                                                if (device.getAddress().equals(deviceModel.mac)) {
-                                                    HandShakeKey2 = ByteUtil.hexStringToBytes(deviceModel.key);
-                                                }
-                                            }
-                                        }
-                                        mDevice = device;
-                                        FileUtil.writeTxtToFile("扫描到 ble 设备 11 开始连接 " + mDevice.getAddress());
-                                        mBLE.connect(mDevice.getAddress());
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            };
-
-    ScanCallback mScanCallback = null;
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void initBleScan(){
-        mScanner = mBluetoothAdapter.getBluetoothLeScanner();
-        mScanCallback = new ScanCallback() {
-            @Override
-            public void onScanResult(int callbackType, final ScanResult result) {
-                super.onScanResult(callbackType, result);
-                final BluetoothDevice device = result.getDevice();
-                FileUtil.writeTxtToFile("4.4+ 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
-                Log.e(TAG, "onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
-                if ("SC".equalsIgnoreCase(device.getName()) && mDevice == null) {
-                        FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName());
-                        Log.e(TAG, "onScanResult-------->  ble device ");
-                        SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
-
-                        byte[] b = manufacturerSpecificData.valueAt(manufacturerSpecificData.size() - 1);
-                        String str = new String(ByteUtil.bytesToHexString(b));
+                        String str = new String(ByteUtil.bytesToHexString(scanRecord));
+                        FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName() + ", scanRecord " + str);
+                        Log.e(TAG, "onScanResult--------> scanRecord ble device " + str);
 
                         if (str.endsWith("00")) {
                             current_status = 0;
                         } else {
                             current_status = 1;
                         }
+
                         Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
                         FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
                         if (TextUtils.isEmpty(mMac)) {
                             if (current_status == 0){
                                 // 激活
                                 if (connectDevices.size() == 0) {
-
                                     scanLeDevice(false);
                                     mDevice = device;
                                     Log.e(TAG, "扫描到 ble 设备 1  开始连接 ");
@@ -573,16 +487,12 @@ public class BleConnectUtil {
                                     }else{
                                         Log.e(TAG, "本地存储设备已被重置 Mac " + device.getAddress());
                                         FileUtil.writeTxtToFile("本地存储设备已被重置 Mac " + device.getAddress());
-
                                     }
-
                                 }
                             }else{
                                 FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
                                 Log.e(TAG, "扫描到 ble 设备  Please reset device! ");
-//                                postResponseEvent(ResponseEvent.TYPE_STOP_SCAN, Server.Code.FAIL, "Please reset device!", null);
                             }
-
                         } else {
                             if (device.getAddress().equalsIgnoreCase(mMac)){
                                 if (current_status == status_unlock){
@@ -602,6 +512,8 @@ public class BleConnectUtil {
                                     mBLE.connect(mDevice.getAddress());
                                 }else{
                                     scanLeDevice(false);
+                                    mHandler.removeCallbacks(scanRunnable);
+                                    mDeviceConnectState = 0;
                                     Log.e(TAG, "开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. " + device.getAddress());
                                     FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + device.getAddress());
                                     postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
@@ -609,73 +521,95 @@ public class BleConnectUtil {
                             }
                         }
 
-//                    synchronized (lock){
-//                        mHandler.postDelayed(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName());
-//                                Log.e(TAG, "onScanResult-------->  ble device ");
-//                                SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
-//
-//                                byte[] b = manufacturerSpecificData.valueAt(manufacturerSpecificData.size() - 1);
-//                                String str = new String(ByteUtil.bytesToHexString(b));
-//
-//                                if (str.endsWith("00")) {
-//                                    current_status = 0;
-//                                } else {
-//                                    current_status = 1;
-//                                }
-//                                Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
-//                                FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
-//                                if (TextUtils.isEmpty(mMac)) {
-//                                    if (current_status != 0){
-//                                        FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
-//                                        postResponseEvent(ResponseEvent.TYPE_STOP_SCAN, Server.Code.FAIL, "Please reset device!", null);
-//                                        return;
-//                                    }
-//                                    // 激活
-//                                    if (connectDevices.size() == 0) {
-//                                        scanLeDevice(false);
-//                                        mDevice = device;
-//                                        FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
-//                                        mBLE.connect(mDevice.getAddress());
-//                                    } else {
-//                                        for (int i = 0, j = connectDevices.size(); i < j; i++) {
-//                                            DeviceModel deviceModel = connectDevices.get(i);
-//                                            if (!device.getAddress().equals(deviceModel.mac)) {
-//                                                scanLeDevice(false);
-//                                                mDevice = device;
-//                                                FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
-//                                                mBLE.connect(mDevice.getAddress());
-//                                            }
-//                                        }
-//                                    }
-//                                } else {
-//                                    if (current_status == status_activation){
-//                                        scanLeDevice(false);
-//                                        FileUtil.writeTxtToFile("扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + mDevice.getAddress());
-//                                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
-//                                        return;
-//                                    }
-//                                    if (device.getAddress().equals(mMac)) {
-//                                        scanLeDevice(false);
-//                                        if (connectDevices.size() > 0) {
-//                                            for (int i = 0, j = connectDevices.size(); i < j; i++) {
-//                                                DeviceModel deviceModel = connectDevices.get(i);
-//                                                if (device.getAddress().equals(deviceModel.mac)) {
-//                                                    HandShakeKey2 = ByteUtil.hexStringToBytes(deviceModel.key);
-//                                                }
-//                                            }
-//                                        }
-//                                        mDevice = device;
-//                                        FileUtil.writeTxtToFile("扫描到 ble 设备 11 开始连接 " + mDevice.getAddress());
-//                                        mBLE.connect(mDevice.getAddress());
-//                                    }
-//                                }
-//                            }
-//                        }, 100);
-//                    }
+                    }
+                }
+            };
+    ScanCallback mScanCallback = null;
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void initBleScan(){
+        mScanner = mBluetoothAdapter.getBluetoothLeScanner();
+        mScanCallback = new ScanCallback() {
+            @Override
+            public void onScanResult(int callbackType, final ScanResult result) {
+                super.onScanResult(callbackType, result);
+                final BluetoothDevice device = result.getDevice();
+                FileUtil.writeTxtToFile("4.4+ 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
+                Log.e(TAG, "onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
+                if ("SC".equalsIgnoreCase(device.getName()) && mDevice == null) {
+                    FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName());
+                    Log.e(TAG, "onScanResult-------->  ble device ");
+                    SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
+                    byte[] b = manufacturerSpecificData.valueAt(manufacturerSpecificData.size() - 1);
+
+                    String str = new String(ByteUtil.bytesToHexString(b));
+                    if (str.endsWith("00")) {
+                        current_status = 0;
+                    } else {
+                        current_status = 1;
+                    }
+                    Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
+                    FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
+                    if (TextUtils.isEmpty(mMac)) {
+                        if (current_status == 0){
+                            // 激活
+                            if (connectDevices.size() == 0) {
+                                scanLeDevice(false);
+                                mDevice = device;
+                                Log.e(TAG, "扫描到 ble 设备 1  开始连接 ");
+                                FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
+                                mBLE.connect(mDevice.getAddress());
+                            } else {
+                                boolean flag = false;
+                                for (int i = 0, j = connectDevices.size(); i < j; i++) {
+                                    DeviceModel deviceModel = connectDevices.get(i);
+                                    if (device.getAddress().equals(deviceModel.mac)) {
+                                        flag = true;
+                                        break;
+                                    }
+                                }
+                                if (!flag){
+                                    scanLeDevice(false);
+                                    mDevice = device;
+                                    Log.e(TAG, "扫描到 ble 设备 2  开始连接 ");
+                                    FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
+                                    mBLE.connect(mDevice.getAddress());
+                                }else{
+                                    Log.e(TAG, "本地存储设备已被重置 Mac " + device.getAddress());
+                                    FileUtil.writeTxtToFile("本地存储设备已被重置 Mac " + device.getAddress());
+                                }
+                            }
+                        }else{
+                            FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
+                            Log.e(TAG, "扫描到 ble 设备  Please reset device! ");
+                        }
+                    } else {
+                        if (device.getAddress().equalsIgnoreCase(mMac)){
+                            if (current_status == status_unlock){
+                                scanLeDevice(false);
+                                if (connectDevices.size() > 0) {
+                                    for (int i = 0, j = connectDevices.size(); i < j; i++) {
+                                        DeviceModel deviceModel = connectDevices.get(i);
+                                        if (device.getAddress().equals(deviceModel.mac)) {
+                                            HandShakeKey2 = ByteUtil.hexStringToBytes(deviceModel.key);
+                                            break;
+                                        }
+                                    }
+                                }
+                                mDevice = device;
+                                Log.e(TAG, "开锁： 扫描到 ble 设备 开始连接 " + mDevice.getAddress());
+                                FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备 开始开锁 " + mDevice.getAddress());
+                                mBLE.connect(mDevice.getAddress());
+                            }else{
+                                scanLeDevice(false);
+                                mHandler.removeCallbacks(scanRunnable);
+                                mDeviceConnectState = 0;
+                                Log.e(TAG, "开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. " + device.getAddress());
+                                FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + device.getAddress());
+                                postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -684,7 +618,6 @@ public class BleConnectUtil {
                 super.onBatchScanResults(results);
                 Log.e(TAG, "onBatchScanResults ");
             }
-
             @Override
             public void onScanFailed(int errorCode) {
                 super.onScanFailed(errorCode);
@@ -715,9 +648,7 @@ public class BleConnectUtil {
     }
 
     public DeviceModel getShareDeviceModel(BluetoothDevice device) {
-
         DeviceModel deviceModel = null;
-
         if (connectDevices == null || connectDevices.size() == 0) {
             deviceModel = new DeviceModel();
             deviceModel.mac = device.getAddress();
@@ -730,13 +661,9 @@ public class BleConnectUtil {
                 }
             }
         }
-
         return deviceModel;
     }
 
     public native byte[] aesEncrypt(byte[] data, byte[] key);
-
     public native byte[] aesDecrypt(byte[] data, byte[] key);
-
-
 }

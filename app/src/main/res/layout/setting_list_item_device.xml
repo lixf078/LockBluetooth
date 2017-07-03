@@ -24,92 +24,94 @@
         android:layout_height="wrap_content">
 
         <RelativeLayout
+            android:id="@+id/root"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:paddingLeft="15dp"
-            android:id="@+id/root"
             android:background="@color/white"
             android:gravity="center_vertical"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingLeft="15dp">
 
             <ImageView
                 android:id="@+id/device_logo"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:layout_marginRight="10dp"
                 android:paddingBottom="10dp"
                 android:scaleType="fitXY"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/icon"/>
-
+                android:src="@drawable/icon" />
 
             <TextView
-                android:layout_toRightOf="@+id/device_logo"
                 android:id="@+id/device_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
+                android:layout_toRightOf="@+id/device_logo"
                 android:text="SC Device"
+                android:maxLines="1"
+                android:ellipsize="end"
                 android:textSize="20sp" />
 
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/device_logo"
                 android:layout_below="@id/device_name"
                 android:layout_toRightOf="@+id/device_logo"
-                android:layout_alignBottom="@+id/device_logo"
-                android:layout_width="match_parent"
-                android:paddingTop="4dp"
-                android:layout_height="wrap_content">
+                android:paddingTop="4dp">
+
                 <TextView
-                    android:paddingBottom="2dp"
-                    android:paddingTop="2dp"
-                    android:layout_weight="1"
                     android:id="@+id/display_qr_code"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/device_name"
-                    android:text="QR Code"
+                    android:layout_weight="1"
                     android:gravity="left|center_vertical"
-                    android:textSize="20sp" />
-                <TextView
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
-                    android:layout_weight="1"
-                    android:background="@color/red"
+                    android:text="QR Code"
+                    android:textSize="20sp" />
+
+                <TextView
                     android:id="@+id/rename_device"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/device_name"
-                    android:text="Rename"
+                    android:layout_weight="1"
+                    android:background="@color/soft_opaque"
                     android:gravity="center"
-                    android:textSize="20sp" />
-                <TextView
                     android:paddingBottom="2dp"
                     android:paddingTop="2dp"
-                    android:gravity="center"
-                    android:layout_weight="1"
-                android:id="@+id/device_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                    android:text="Rename"
+                    android:textSize="20sp" />
 
-                android:layout_alignParentRight="true"
-                android:layout_toRightOf="@+id/device_name"
-                android:text="Delete"
-                android:textSize="20sp" />
+                <TextView
+                    android:id="@+id/device_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_toRightOf="@+id/device_name"
+                    android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:paddingBottom="2dp"
+                    android:paddingTop="2dp"
+                    android:text="Delete"
+                    android:textSize="20sp" />
             </LinearLayout>
 
         </RelativeLayout>
-
-
         <!--delete-->
         <TextView
             android:id="@+id/swipe_delete"
             android:layout_width="80dp"
             android:layout_height="match_parent"
-            android:textSize="18sp"
-            android:textColor="#ffffff"
-            android:gravity="center"
             android:background="#eeff0000"
-            android:text="Delete"/>
+            android:gravity="center"
+            android:text="Delete"
+            android:textColor="#ffffff"
+            android:textSize="18sp" />
     </com.example.bluetooth.le.view.SwipeLayout>
 </LinearLayout>

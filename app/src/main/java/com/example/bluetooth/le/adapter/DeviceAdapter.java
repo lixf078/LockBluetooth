@@ -21,6 +21,7 @@ import com.example.bluetooth.le.fragment.SettingFragment;
 import com.example.bluetooth.le.view.EditDialog;
 import com.example.bluetooth.le.view.SwipeLayout;
 import com.example.bluetooth.le.view.SwipeLayoutManager;
+import com.example.bluetooth.le.view.WarningDialog;
 import com.lock.lib.api.Server;
 import com.lock.lib.api.event.ResponseEvent;
 import com.lock.lib.qr.QRCodeUtil;
@@ -59,8 +60,6 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
     public void convert(ViewHolder holder, final DeviceModel deviceModel) {
 
         holder.setText(R.id.device_name, deviceModel.name);
-//        holder.setText(R.id.device_address, "Display QR Code");
-
         final SwipeLayout swipeLayout = holder.getView(R.id.swipelayout);
 
         swipeLayout.setOnSwipeLayoutClickListener(new SwipeLayout.OnSwipeLayoutClickListener() {
@@ -92,15 +91,7 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
         qrView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("name", deviceModel.name);
-                    jsonObject.put("macStr", deviceModel.mac.replace(":", ""));
-                    jsonObject.put("secretKey2", deviceModel.key);
-                    showQRDialog(jsonObject.toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                showWarningDialog("qr", deviceModel);
 
             }
         });
@@ -109,9 +100,9 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
         deleteView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DeviceShare.deleteDevice(mContext, deviceModel);
-                postResponseEvent(ResponseEvent.TYPE_DELETE_DEVICE, Server.Code.SUCCESS, "", deviceModel);
-
+//                DeviceShare.deleteDevice(mContext, deviceModel);
+//                postResponseEvent(ResponseEvent.TYPE_DELETE_DEVICE, Server.Code.SUCCESS, "", deviceModel);
+                showWarningDialog("del", deviceModel);
             }
         });
     }
@@ -167,6 +158,39 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
         });
         dia.onWindowAttributesChanged(lp);
         dia.show();
+    }
+
+    public void showWarningDialog(final String type, final DeviceModel deviceModel){
+        String content = "Please pay attention to the protection of the QR code in order to avoid the loss of your property";
+        if (type.equals("del")){
+            content = "Delete current device!";
+        }
+        WarningDialog editDialog = new WarningDialog(mContext, content);
+        editDialog.show();
+        editDialog.setOnPosNegClickListener(new WarningDialog.OnPosNegClickListener() {
+            @Override
+            public void posClickListener(String value) {
+                if (type.equals("del")){
+                    DeviceShare.deleteDevice(mContext, deviceModel);
+                    postResponseEvent(ResponseEvent.TYPE_DELETE_DEVICE, Server.Code.SUCCESS, "", deviceModel);
+                }else{
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("name", deviceModel.name);
+                        jsonObject.put("macStr", deviceModel.mac.replace(":", ""));
+                        jsonObject.put("secretKey2", deviceModel.key);
+                        showQRDialog(jsonObject.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void negCliclListener(String value) {
+
+            }
+        });
     }
 
 }

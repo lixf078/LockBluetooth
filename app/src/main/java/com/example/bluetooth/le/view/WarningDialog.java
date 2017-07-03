@@ -6,7 +6,6 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -20,7 +19,7 @@ import com.lock.lib.common.util.ToastUtil;
  * Created by admin on 2017/6/26.
  */
 
-public class EditDialog extends Dialog implements View.OnClickListener {
+public class WarningDialog extends Dialog implements View.OnClickListener {
 
     private View mView;
     private Context mContext;
@@ -28,23 +27,23 @@ public class EditDialog extends Dialog implements View.OnClickListener {
 
     private LinearLayout mBgLl;
     private TextView mTitleTv;
-    private EditText mMsgEt;
+    private TextView mMsgEt;
     private TextView mNegBtn;
     private TextView mPosBtn;
 
 
-    public EditDialog(Context context, String content) {
+    public WarningDialog(Context context, String content) {
         this(context, 0, null, content);
     }
 
-    public EditDialog(Context context, int theme, View contentView, String content) {
+    public WarningDialog(Context context, int theme, View contentView, String content) {
         super(context, theme == 0 ? R.style.MyDialogStyle : theme);
         mContent = content;
         this.mView = contentView;
         this.mContext = context;
 
         if (mView == null) {
-            mView = View.inflate(mContext, R.layout.view_enter_edit, null);
+            mView = View.inflate(mContext, R.layout.view_show_warning, null);
         }
 
         init();
@@ -61,7 +60,7 @@ public class EditDialog extends Dialog implements View.OnClickListener {
     private void initView() {
         mBgLl = (LinearLayout) mView.findViewById(R.id.lLayout_bg);
         mTitleTv = (TextView) mView.findViewById(R.id.txt_title);
-        mMsgEt = (EditText) mView.findViewById(R.id.et_msg);
+        mMsgEt = (TextView) mView.findViewById(R.id.et_msg);
         mNegBtn = (TextView) mView.findViewById(R.id.btn_neg);
         mPosBtn = (TextView) mView.findViewById(R.id.btn_pos);
     }

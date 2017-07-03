@@ -109,7 +109,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
                 if (event.errorCode == Server.Code.SUCCESS) {
                     ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
                 } else {
-//                    resolveError(event.errorCode, event.errorMsg);
+                    ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
                 }
             }
         }
