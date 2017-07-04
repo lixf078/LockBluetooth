@@ -399,8 +399,8 @@ public class BleConnectUtil {
         @Override
         public void run() {
             mScanning = false;
-            if (mScanner != null && mScanCallback != null) {
-                if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
+            if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
+                if (mScanner != null && mScanCallback != null) {
                     disconnectDevice();
                     Log.e(TAG, "scanLeDevice mDeviceConnectState " + mDeviceConnectState);
                     if (mDeviceConnectState == 1){
@@ -409,8 +409,13 @@ public class BleConnectUtil {
                         postResponseEvent(ResponseEvent.TYPE_SCAN_TIME_OUT, Server.Code.SUCCESS, "Can not find the device", null);
                     }
                     FileUtil.writeTxtToFile("Scan time out, Can not find the device");
+                }
+            }else{
+                disconnectDevice();
+                if (mDeviceConnectState == 1){
+                    postResponseEvent(ResponseEvent.TYPE_SCAN_TIME_OUT, Server.Code.FAIL, "Can not find the device", null);
                 }else{
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    postResponseEvent(ResponseEvent.TYPE_SCAN_TIME_OUT, Server.Code.SUCCESS, "Can not find the device", null);
                 }
             }
         }
@@ -426,7 +431,7 @@ public class BleConnectUtil {
             if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
                 startBleScan();
             }else{
-                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                mBluetoothAdapter.startLeScan(mLeScanCallback);
             }
         } else {
             FileUtil.writeTxtToFile("结束扫描 ");
@@ -448,11 +453,14 @@ public class BleConnectUtil {
                         FileUtil.writeTxtToFile("4.4 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
                         Log.e(TAG, "4.4 onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
 
-                        String str = new String(ByteUtil.bytesToHexString(scanRecord));
+                        String str = new String(ByteUtil.bytesToHexString(scanRecord)).toUpperCase();
                         FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName() + ", scanRecord " + str);
+                        String tempMac = device.getAddress().replace(":", "").toUpperCase();
+                        int s = str.indexOf(tempMac) + 12;
+                        String string = str.substring(s, s+2);
                         Log.e(TAG, "onScanResult--------> scanRecord ble device " + str);
 
-                        if (str.endsWith("00")) {
+                        if (string.endsWith("00")) {
                             current_status = 0;
                         } else {
                             current_status = 1;
@@ -535,7 +543,7 @@ public class BleConnectUtil {
                 super.onScanResult(callbackType, result);
                 final BluetoothDevice device = result.getDevice();
                 FileUtil.writeTxtToFile("4.4+ 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
-                Log.e(TAG, "onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
+                Log.e(TAG, "onScanResult 4.4+ -------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
                 if ("SC".equalsIgnoreCase(device.getName()) && mDevice == null) {
                     FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName());
                     Log.e(TAG, "onScanResult-------->  ble device ");
