@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/setting_bg"
     android:orientation="vertical">
 
     <LinearLayout
@@ -21,30 +21,31 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="14dp"
             android:layout_weight="1"
-            android:background="@drawable/lib_style_corner_orange"
-            android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+            android:background="@drawable/connect_device_icon"
             android:gravity="center_vertical"
             android:paddingBottom="12dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="12dp"
-            android:text="Connect Device"
             android:textColor="@color/white"
             android:textSize="16sp" />
+        <!--android:text="Connect Device"-->
+
+        <!--android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"-->
+        <!--android:text="Scan QR Code"-->
+
         <TextView
             android:id="@+id/ble_scan_qr_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="14dp"
             android:layout_weight="1"
-            android:background="@drawable/lib_style_corner_orange"
-            android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"
+            android:background="@drawable/scan_qr_code"
             android:gravity="center_vertical"
             android:paddingBottom="12dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="12dp"
-            android:text="Scan QR Code"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
@@ -58,16 +59,17 @@
         android:id="@+id/fragment_load_more_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
 
         <ListView
+            android:dividerHeight="5dp"
+            android:layout_marginRight="15dp"
             android:id="@+id/list_view"
+            android:layout_marginLeft="15dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="#fafafa"
-            android:dividerHeight="10dp"
+            android:divider="@null"
             android:scrollbars="none" />
     </in.srain.cube.views.loadmore.LoadMoreListViewContainer>
 </LinearLayout>

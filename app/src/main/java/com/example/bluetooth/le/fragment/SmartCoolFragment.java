@@ -118,6 +118,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     private void initContentView(View view){
         setHeadLayoutVisiable(View.VISIBLE);
         getHeadMiddelView().setText("Home");
+
         getHeadLeftView().setVisibility(View.GONE);
 
         mLoadMoreContainer = (LoadMoreListViewContainer) view.findViewById(R.id.fragment_load_more_container);

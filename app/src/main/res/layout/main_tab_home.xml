@@ -12,13 +12,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/tab_home_selector"
-        android:contentDescription="@null"
-        android:scaleType="fitXY" />
+        android:contentDescription="@null"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Home"
-        android:textSize="@dimen/text_size_extre_mini"
+        android:textSize="@dimen/text_size_tiny"
         android:textColor="@color/home_tab_txt_color"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="3dp"/>

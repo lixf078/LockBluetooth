@@ -184,6 +184,7 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     private void initData() {
         showLoadingView();
         list = DeviceShare.getDevices(SettingFragment.this.getContext());
+//        list.addAll(list);
         hiddenLoadingView();
     }
 

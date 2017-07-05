@@ -23,7 +23,8 @@
         android:layout_centerInParent="true"
         android:drawablePadding="5dp"
         android:gravity="center"
-        android:textSize="@dimen/lib_style_text_size_large" />
+        android:textColor="@color/lib_style_half_black"
+        android:textSize="@dimen/lib_style_text_size_xlarge" />
 
     <TextView
         android:id="@+id/head_right_view"
