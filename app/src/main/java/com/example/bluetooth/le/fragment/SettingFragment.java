@@ -113,8 +113,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 //                    resolveError(event.errorCode, event.errorMsg);
                 }
             }
-
-
         }
     }
 
@@ -184,6 +182,11 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
     private void initData() {
         showLoadingView();
         list = DeviceShare.getDevices(SettingFragment.this.getContext());
+//        DeviceModel deviceModel = new DeviceModel();
+//        deviceModel.name = "Digital Ant-TB";
+//        deviceModel.mac = "afafafafafaf";
+//        list.add(deviceModel);
+//        list.add(deviceModel);
 //        list.addAll(list);
         hiddenLoadingView();
     }

@@ -163,7 +163,8 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
     public void showWarningDialog(final String type, final DeviceModel deviceModel){
         String content = "Please pay attention to the protection of the QR code in order to avoid the loss of your property";
         if (type.equals("del")){
-            content = "Delete current device!";
+            content = "You can't open your garage after deleting this device.\n" +
+                    "Are you sure to delete this device?";
         }
         WarningDialog editDialog = new WarningDialog(mContext, content);
         editDialog.show();

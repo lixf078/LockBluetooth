@@ -9,11 +9,11 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:paddingBottom="10dp">
+        android:paddingBottom="8dp">
 
         <TextView
             android:id="@+id/ble_connect_device"
@@ -23,12 +23,12 @@
             android:layout_weight="1"
             android:background="@drawable/connect_device_icon"
             android:gravity="center_vertical"
-            android:paddingBottom="12dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:paddingTop="12dp"
+            android:paddingTop="10dp"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="12sp" />
         <!--android:text="Connect Device"-->
 
         <!--android:drawableLeft="@android:drawable/stat_sys_data_bluetooth"-->
@@ -42,10 +42,10 @@
             android:layout_weight="1"
             android:background="@drawable/scan_qr_code"
             android:gravity="center_vertical"
-            android:paddingBottom="12dp"
+            android:paddingBottom="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:paddingTop="12dp"
+            android:paddingTop="10dp"
             android:textColor="@color/white"
             android:textSize="16sp" />
     </LinearLayout>

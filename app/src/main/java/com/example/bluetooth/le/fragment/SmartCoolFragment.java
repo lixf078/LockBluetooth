@@ -137,6 +137,12 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
         if (connectDevices.size() > 0){
             deviceModel = connectDevices.get(0);
         }
+//        DeviceModel deviceModel = new DeviceModel();
+//        deviceModel.name = "Digital Ant-TB";
+//        deviceModel.mac = "afafafafafaf";
+//        connectDevices.add(deviceModel);
+//        connectDevices.add(deviceModel);
+//        connectDevices.add(deviceModel);
         mDeviceAdapter.setDevices(connectDevices);
         requestPermission();
     }
@@ -150,6 +156,11 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 
         showLoadingView();
         connectDevices = DeviceShare.getDevices(SmartCoolFragment.this.getContext());
+//        DeviceModel deviceModel = new DeviceModel();
+//        deviceModel.name = "Digital Ant-TB";
+//        deviceModel.mac = "afafafafafaf";
+//        connectDevices.add(deviceModel);
+//        connectDevices.add(deviceModel);
         hiddenLoadingView();
         if (connectDevices == null || connectDevices.size() == 0){
 //            mNoDataTextView.setText("Please add a new device directly \n\r or by scanning the QR code");
