@@ -40,13 +40,22 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/logo" />
 
+            <ImageView
+                android:id="@+id/device_delete"
+                android:layout_width="25dp"
+                android:layout_height="28dp"
+                android:src="@drawable/delete_icon"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:scaleType="fitXY"
+                android:layout_alignParentRight="true"/>
+
             <TextView
                 android:id="@+id/device_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
-                android:drawableRight="@drawable/edit"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="24dp"
                 android:layout_toRightOf="@+id/device_logo"
                 android:text="SC Device"
                 android:textColor="@color/black"
@@ -90,13 +99,13 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/device_delete"
+                    android:id="@+id/device_delete_"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_toRightOf="@+id/device_name"
                     android:layout_weight="1"
-                    android:background="@drawable/icon_delete"
+                    android:background="@drawable/edit_icon"
                     android:gravity="center"
                     android:layout_marginLeft="15dp"
                     android:paddingBottom="2dp"
