@@ -75,6 +75,5 @@ public class ByteUtil {
         System.arraycopy(data1, 0, data3, 0, data1.length);
         System.arraycopy(data2, 0, data3, data1.length, data2.length);
         return data3;
-
     }
 }

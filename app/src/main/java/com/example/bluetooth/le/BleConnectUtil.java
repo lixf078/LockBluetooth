@@ -2,6 +2,7 @@ package com.example.bluetooth.le;
 
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -75,6 +76,7 @@ public class BleConnectUtil {
     BluetoothDevice mDevice;
 
     private String mMac;
+    private int tryCount = 0;
 
     // Stops scanning after 15 seconds.
     private static final long SCAN_PERIOD = 15000;
@@ -117,7 +119,7 @@ public class BleConnectUtil {
         mBLE = new BluetoothLeClass(mContext);
         if (!mBLE.initialize()) {
             Log.e(TAG, "Unable to initialize Bluetooth");
-            FileUtil.writeTxtToFile("Unable to initialize Bluetooth ");
+//            FileUtil.writeTxtToFile("Unable to initialize Bluetooth ");
             return;
         }
         //发现BLE终端的Service时回调
@@ -125,31 +127,35 @@ public class BleConnectUtil {
         //收到BLE终端数据交互的事件
         mBLE.setOnDataAvailableListener(mOnDataAvailable);
 
+        mBLE.setOnDisconnectListener(mOnDisconnectListener);
+
         mHandler = new Handler();
+
+        if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
+            initBleScan();
+        }
     }
 
     public void connectDevice(String mac) {
         Log.e(TAG, "connectDevice mac " + mac);
-        FileUtil.writeTxtToFile("connectDevice mac");
+//        FileUtil.writeTxtToFile("connectDevice mac");
         if (mBLE == null) {
 
             mBLE = new BluetoothLeClass(mContext);
             if (!mBLE.initialize()) {
                 Log.e(TAG, "Unable to initialize Bluetooth");
-                FileUtil.writeTxtToFile("Unable to initialize Bluetooth ");
+//                FileUtil.writeTxtToFile("Unable to initialize Bluetooth ");
                 return;
             }
             //发现BLE终端的Service时回调
             mBLE.setOnServiceDiscoverListener(mOnServiceDiscover);
             //收到BLE终端数据交互的事件
             mBLE.setOnDataAvailableListener(mOnDataAvailable);
+
+            mBLE.setOnDisconnectListener(mOnDisconnectListener);
 //            return;
         }
         mMac = mac;
-
-        if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
-            initBleScan();
-        }
 
 //        mScanner = mBluetoothAdapter.getBluetoothLeScanner();
         scanLeDevice(true);
@@ -170,21 +176,21 @@ public class BleConnectUtil {
         if (gattServices == null) return;
         String mac = mDevice.getAddress();
         Log.e(TAG, "displayGattServices --> Device Mac Address " + mac);
-        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> Device Mac Address  " + mac);
+//        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> Device Mac Address  " + mac);
         mac = mac.replace(":", "");
         StringBuffer stringBufferMac = new StringBuffer(mac);
         String temp = ByteUtil.getStringRandom(20);
-        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> 生成的随机数 " + temp);
+//        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> 生成的随机数 " + temp);
         temp = temp + stringBufferMac;
         Log.e(TAG, "displayGattServices --> 16 byte data " + temp);
         Log.e(TAG, "displayGattServices --> 16 byte key 1 " + HandShackKey_String);
-        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> 16 byte key 1 " + HandShackKey_String);
+//        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> 16 byte key 1 " + HandShackKey_String);
         byte[] bytes = ByteUtil.hexStringToBytes(temp);
         byte[] tempByte = ByteUtil.hexStringToBytes(HandShackKey_String);
         byte[] result = aesEncrypt(bytes, tempByte);
         byte[] result2 = new byte[4];
         final byte[] result3 = ByteUtil.addBytes(result, result2);
-        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> aesEncrypt 秘钥1 加密和补0后数据 " + ByteUtil.bytesToHexString(result3));
+//        FileUtil.writeTxtToFile("获取BLE设备服务相关信息 --> aesEncrypt 秘钥1 加密和补0后数据 " + ByteUtil.bytesToHexString(result3));
         Log.e(TAG, "displayGattServices aesEncrypt----> result3 " + ByteUtil.bytesToHexString(result3));
 
         for (BluetoothGattService gattService : gattServices) {
@@ -229,7 +235,7 @@ public class BleConnectUtil {
                     public void run() {
                         //设置数据内容
                         Log.e(TAG, "---->will write data  result3 " + ByteUtil.bytesToHexString(result3));
-                        FileUtil.writeTxtToFile("准备通过特征FFAA写入数据 -->  " + ByteUtil.bytesToHexString(result3));
+//                        FileUtil.writeTxtToFile("准备通过特征FFAA写入数据 -->  " + ByteUtil.bytesToHexString(result3));
                         mCharacteristicAa.setValue(result3);
                         //往蓝牙模块写入数据
                         mBLE.writeCharacteristic(mCharacteristicAa);
@@ -240,16 +246,40 @@ public class BleConnectUtil {
 
     }
 
+    private BluetoothLeClass.OnDisconnectListener mOnDisconnectListener = new BluetoothLeClass.OnDisconnectListener(){
+
+        @Override
+        public void onDisconnect(BluetoothGatt gatt) {
+//            stopBleScan();
+//            connectDevice(mMac);
+
+            Log.e(TAG, "onDisconnect ");
+
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (mDevice != null && mBLE != null && tryCount <= 3) {
+                        tryCount++;
+                        try {
+                            Log.e(TAG, "onDisconnect device mac " + mDevice.getAddress());
+                            mBLE.connect(mDevice.getAddress());
+                        }catch (Exception e){
+                        }
+                    }
+                }
+            }, 500);
+        }
+    };
+
+
     /**
      * 搜索到BLE终端服务的事件
      */
     private BluetoothLeClass.OnServiceDiscoverListener mOnServiceDiscover = new BluetoothLeClass.OnServiceDiscoverListener() {
-
         @Override
         public void onServiceDiscover(BluetoothGatt gatt) {
             displayGattServices(mBLE.getSupportedGattServices());
         }
-
     };
 
     /**
@@ -282,14 +312,14 @@ public class BleConnectUtil {
         public void onCharacteristicWrite(BluetoothGatt gatt,
                                           final BluetoothGattCharacteristic characteristic) {
             Log.e(TAG, "onCharacteristicWrite " + gatt.getDevice().getName() + " write " + characteristic.getUuid().toString() + "---current_status " + current_status);
-            FileUtil.writeTxtToFile("收到BLE返回的数据 设备名：" + gatt.getDevice().getName()  + " UUID " + characteristic.getUuid().toString() + " 当前状态 " + current_status);
+//            FileUtil.writeTxtToFile("收到BLE返回的数据 设备名：" + gatt.getDevice().getName()  + " UUID " + characteristic.getUuid().toString() + " 当前状态 " + current_status);
             if (current_status == status_activation) {
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         byte[] resultByte = characteristic.getValue();
                         if (resultByte.length == 20) {
-                            FileUtil.writeTxtToFile("激活设备：激活第一步 "  );
+//                            FileUtil.writeTxtToFile("激活设备：激活第一步 "  );
                             String key2Temp = ByteUtil.bytesToHexString(resultByte);
                             byte[] key2TempByte = ByteUtil.hexStringToBytes(key2Temp.substring(0, 32));
                             byte[] tempKeyByte = ByteUtil.hexStringToBytes(HandShackKey_String);
@@ -297,22 +327,22 @@ public class BleConnectUtil {
 
                             String mac = mDevice.getAddress();
                             Log.e(TAG, "onCharacteristicWrite--------> onCharacteristicWrite Device Mac Address " + mac + ", HandShakeKey2 " + ByteUtil.bytesToHexString(HandShakeKey2));
-                            FileUtil.writeTxtToFile("激活设备：Device Mac Address " + mac  + " 密钥2  " + ByteUtil.bytesToHexString(HandShakeKey2));
+//                            FileUtil.writeTxtToFile("激活设备：Device Mac Address " + mac  + " 密钥2  " + ByteUtil.bytesToHexString(HandShakeKey2));
 
                             mac = mac.replace(":", "");
                             StringBuffer stringBufferMac = new StringBuffer(mac);
                             String temp = ByteUtil.getStringRandom(20);
                             temp = temp + stringBufferMac;
                             Log.e(TAG, "onCharacteristicWrite-------> 16 byte data " + temp);
-                            FileUtil.writeTxtToFile("激活设备：加密前数据 " + temp );
+//                            FileUtil.writeTxtToFile("激活设备：加密前数据 " + temp );
                             Log.e(TAG, "onCharacteristicWrite-------> 16 byte key " + key2Temp);
                             byte[] bytes = ByteUtil.hexStringToBytes(temp);
                             byte[] result = aesEncrypt(bytes, resultByte);
                             Log.e(TAG, "onCharacteristicWrite-------> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
-                            FileUtil.writeTxtToFile("激活设备：加密后数据 " + ByteUtil.bytesToHexString(result) );
+//                            FileUtil.writeTxtToFile("激活设备：加密后数据 " + ByteUtil.bytesToHexString(result) );
                             byte[] result2 = new byte[4];
                             final byte[] result3 = ByteUtil.addBytes(result, result2);
-                            FileUtil.writeTxtToFile("激活设备：通过特征FFAA写入 "  );
+//                            FileUtil.writeTxtToFile("激活设备：通过特征FFAA写入 "  );
                             mCharacteristicAa.setValue(result3);
                             //往蓝牙模块写入数据
                             mBLE.writeCharacteristic(mCharacteristicAa);
@@ -332,11 +362,11 @@ public class BleConnectUtil {
                                 DeviceShare.saveDevice(mContext, model);
                                 current_status = status_unlock;
                                 postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE_SUCCESS, Server.Code.SUCCESS, "", model);
-                                FileUtil.writeTxtToFile("激活设备：激活第二步 验证成功："  + key2Temp);
+//                                FileUtil.writeTxtToFile("激活设备：激活第二步 验证成功："  + key2Temp);
                                 disconnectDevice();
                             } else {
                                 postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE, Server.Code.FAIL, "Activation device failed", getShareDeviceModel(mDevice));
-                                FileUtil.writeTxtToFile("激活设备：激活第二步 验证失败："  + key2Temp);
+//                                FileUtil.writeTxtToFile("激活设备：激活第二步 验证失败："  + key2Temp);
                                 disconnectDevice();
                             }
                         }
@@ -345,20 +375,20 @@ public class BleConnectUtil {
                 }, 100);
 
             } else if (current_status == status_unlock) {
-                FileUtil.writeTxtToFile("开锁设备：" );
+//                FileUtil.writeTxtToFile("开锁设备：" );
                 Log.e(TAG, "onCharacteristicWrite-------> 开锁设备： " + mMac);
                 byte[] temp = characteristic.getValue();
                 if (temp.length == 16) {
                     Log.e(TAG, "开锁设备：开锁第一步： 密钥1 " + HandShackKey_String);
                     Log.e(TAG, "开锁设备：开锁第一步： 密钥2 " + HandShakeKey2);
-                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 密钥1 "  + HandShackKey_String);
-                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 密钥2 "  + HandShakeKey2);
+//                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 密钥1 "  + HandShackKey_String);
+//                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 密钥2 "  + HandShakeKey2);
                     byte[] tempKeyByte = ByteUtil.hexStringToBytes(HandShackKey_String);
                     byte[] decTemp = aesDecrypt(temp, tempKeyByte);
-                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 解密后设备数据 decTemp "  + ByteUtil.bytesToHexString(decTemp));
+//                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 解密后设备数据 decTemp "  + ByteUtil.bytesToHexString(decTemp));
                     byte[] aesTemp = aesEncrypt(decTemp, HandShakeKey2);
                     String decTempStr = ByteUtil.bytesToHexString(aesTemp);
-                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 重新使用密钥2 加密 设备数据 decTemp "  + decTempStr);
+//                    FileUtil.writeTxtToFile("开锁设备：开锁第一步 重新使用密钥2 加密 设备数据 decTemp "  + decTempStr);
 
                     decTempStr = decTempStr + "00000000";
                     final byte[] encrypData = ByteUtil.hexStringToBytes(decTempStr);
@@ -367,10 +397,11 @@ public class BleConnectUtil {
                         @Override
                         public void run() {
                             Log.e(TAG, "开锁设备：开锁第一步 FFAA写入 ");
-                            FileUtil.writeTxtToFile("开锁设备：开锁第一步 FFAA写入 "  + ByteUtil.bytesToHexString(encrypData));
+//                            FileUtil.writeTxtToFile("开锁设备：开锁第一步 FFAA写入 "  + ByteUtil.bytesToHexString(encrypData));
                             mCharacteristicAb.setValue(encrypData);
                             //往蓝牙模块写入数据
                             mBLE.writeCharacteristic(mCharacteristicAb);
+                            Log.e(TAG, "开锁设备：开锁第一步 FFAA写入 完成");
                         }
                     }, 100);
                 } else {
@@ -384,10 +415,10 @@ public class BleConnectUtil {
                     if ("FF02".equals(key2Temp.toUpperCase())) {
                         current_status = status_unlock_success;
                         Log.e(TAG, "开锁设备 onCharacteristicWrite-------> unlock device success  ");
-                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁成功 "  + key2Temp);
+//                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁成功 "  + key2Temp);
                         postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.SUCCESS, "", getShareDeviceModel(mDevice));
                     } else {
-                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁失败 "  + key2Temp);
+//                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁失败 "  + key2Temp);
                         postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Unlock device failed", getShareDeviceModel(mDevice));
                     }
                 }
@@ -424,7 +455,7 @@ public class BleConnectUtil {
     private void scanLeDevice(final boolean enable) {
         Log.e(TAG, "scanLeDevice enable " + enable);
         if (enable) {
-            FileUtil.writeTxtToFile("开始扫描 ");
+//            FileUtil.writeTxtToFile("开始扫描 ");
             mHandler.postDelayed(scanRunnable, SCAN_PERIOD);
 
             mScanning = true;
@@ -434,7 +465,7 @@ public class BleConnectUtil {
                 mBluetoothAdapter.startLeScan(mLeScanCallback);
             }
         } else {
-            FileUtil.writeTxtToFile("结束扫描 ");
+//            FileUtil.writeTxtToFile("结束扫描 ");
             mScanning = false;
             if (mOsVersion >= Build.VERSION_CODES.LOLLIPOP){
                 stopBleScan();
@@ -450,11 +481,11 @@ public class BleConnectUtil {
                 @Override
                 public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord) {
                     if ("SC".equalsIgnoreCase(device.getName())) {
-                        FileUtil.writeTxtToFile("4.4 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
+//                        FileUtil.writeTxtToFile("4.4 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
                         Log.e(TAG, "4.4 onScanResult-------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
 
                         String str = new String(ByteUtil.bytesToHexString(scanRecord)).toUpperCase();
-                        FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName() + ", scanRecord " + str);
+//                        FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName() + ", scanRecord " + str);
                         String tempMac = device.getAddress().replace(":", "").toUpperCase();
                         int s = str.indexOf(tempMac) + 12;
                         String string = str.substring(s, s+2);
@@ -467,7 +498,7 @@ public class BleConnectUtil {
                         }
 
                         Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
-                        FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
+//                        FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
                         if (TextUtils.isEmpty(mMac)) {
                             if (current_status == 0){
                                 // 激活
@@ -475,7 +506,7 @@ public class BleConnectUtil {
                                     scanLeDevice(false);
                                     mDevice = device;
                                     Log.e(TAG, "扫描到 ble 设备 1  开始连接 ");
-                                    FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
+//                                    FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
                                     mBLE.connect(mDevice.getAddress());
                                 } else {
                                     boolean flag = false;
@@ -490,15 +521,15 @@ public class BleConnectUtil {
                                         scanLeDevice(false);
                                         mDevice = device;
                                         Log.e(TAG, "扫描到 ble 设备 2  开始连接 ");
-                                        FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
+//                                        FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
                                         mBLE.connect(mDevice.getAddress());
                                     }else{
                                         Log.e(TAG, "本地存储设备已被重置 Mac " + device.getAddress());
-                                        FileUtil.writeTxtToFile("本地存储设备已被重置 Mac " + device.getAddress());
+//                                        FileUtil.writeTxtToFile("本地存储设备已被重置 Mac " + device.getAddress());
                                     }
                                 }
                             }else{
-                                FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
+//                                FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
                                 Log.e(TAG, "扫描到 ble 设备  Please reset device! ");
                             }
                         } else {
@@ -516,19 +547,18 @@ public class BleConnectUtil {
                                     }
                                     mDevice = device;
                                     Log.e(TAG, "开锁： 扫描到 ble 设备 开始连接 " + mDevice.getAddress());
-                                    FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备 开始开锁 " + mDevice.getAddress());
+//                                    FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备 开始开锁 " + mDevice.getAddress());
                                     mBLE.connect(mDevice.getAddress());
                                 }else{
                                     scanLeDevice(false);
                                     mHandler.removeCallbacks(scanRunnable);
                                     mDeviceConnectState = 0;
                                     Log.e(TAG, "开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. " + device.getAddress());
-                                    FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + device.getAddress());
+//                                    FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + device.getAddress());
                                     postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
                                 }
                             }
                         }
-
                     }
                 }
             };
@@ -542,10 +572,10 @@ public class BleConnectUtil {
             public void onScanResult(int callbackType, final ScanResult result) {
                 super.onScanResult(callbackType, result);
                 final BluetoothDevice device = result.getDevice();
-                FileUtil.writeTxtToFile("4.4+ 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
+//                FileUtil.writeTxtToFile("4.4+ 扫描到设备  Mac " + device.getAddress() + ", name " + device.getName());
                 Log.e(TAG, "onScanResult 4.4+ -------->  Device Mac Address " + device.getAddress() + ", name " + device.getName());
                 if ("SC".equalsIgnoreCase(device.getName()) && mDevice == null) {
-                    FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName());
+//                    FileUtil.writeTxtToFile("扫描到 ble 设备  Mac " + device.getAddress() + ", name " + device.getName());
                     Log.e(TAG, "onScanResult-------->  ble device ");
                     SparseArray<byte[]> manufacturerSpecificData = result.getScanRecord().getManufacturerSpecificData();
                     byte[] b = manufacturerSpecificData.valueAt(manufacturerSpecificData.size() - 1);
@@ -557,7 +587,7 @@ public class BleConnectUtil {
                         current_status = 1;
                     }
                     Log.e(TAG, "onScanResult-------->  ble device current_status " + current_status);
-                    FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
+//                    FileUtil.writeTxtToFile("扫描到 ble 设备  ble device current_status " + current_status);
                     if (TextUtils.isEmpty(mMac)) {
                         if (current_status == 0){
                             // 激活
@@ -565,7 +595,7 @@ public class BleConnectUtil {
                                 scanLeDevice(false);
                                 mDevice = device;
                                 Log.e(TAG, "扫描到 ble 设备 1  开始连接 ");
-                                FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
+//                                FileUtil.writeTxtToFile("扫描到 ble 设备 1  开始连接 " + mDevice.getAddress());
                                 mBLE.connect(mDevice.getAddress());
                             } else {
                                 boolean flag = false;
@@ -580,15 +610,16 @@ public class BleConnectUtil {
                                     scanLeDevice(false);
                                     mDevice = device;
                                     Log.e(TAG, "扫描到 ble 设备 2  开始连接 ");
-                                    FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
+//                                    FileUtil.writeTxtToFile("扫描到 ble 设备 2 开始连接 " + mDevice.getAddress());
                                     mBLE.connect(mDevice.getAddress());
                                 }else{
                                     Log.e(TAG, "本地存储设备已被重置 Mac " + device.getAddress());
-                                    FileUtil.writeTxtToFile("本地存储设备已被重置 Mac " + device.getAddress());
+//                                    FileUtil.writeTxtToFile("本地存储设备已被重置 Mac " + device.getAddress());
+//                                    postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
                                 }
                             }
                         }else{
-                            FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
+//                            FileUtil.writeTxtToFile("扫描到 ble 设备  Please reset device! ");
                             Log.e(TAG, "扫描到 ble 设备  Please reset device! ");
                         }
                     } else {
@@ -606,14 +637,14 @@ public class BleConnectUtil {
                                 }
                                 mDevice = device;
                                 Log.e(TAG, "开锁： 扫描到 ble 设备 开始连接 " + mDevice.getAddress());
-                                FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备 开始开锁 " + mDevice.getAddress());
+//                                FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备 开始开锁 " + mDevice.getAddress());
                                 mBLE.connect(mDevice.getAddress());
                             }else{
                                 scanLeDevice(false);
                                 mHandler.removeCallbacks(scanRunnable);
                                 mDeviceConnectState = 0;
                                 Log.e(TAG, "开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. " + device.getAddress());
-                                FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + device.getAddress());
+//                                FileUtil.writeTxtToFile("开锁： 扫描到 ble 设备  Device is reset,please delete record and re-activate it. ---- " + device.getAddress());
                                 postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Device is reset,please delete record and re-activate it.", null);
                             }
                         }

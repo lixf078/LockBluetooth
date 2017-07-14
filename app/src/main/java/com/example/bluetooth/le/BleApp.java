@@ -1,8 +1,8 @@
 package com.example.bluetooth.le;
 
 import android.app.Application;
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+//import com.crashlytics.android.Crashlytics;
+//import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by admin on 2017/6/26.
@@ -17,7 +17,7 @@ public class BleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
     }
 }

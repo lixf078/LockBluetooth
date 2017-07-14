@@ -131,6 +131,14 @@ public class BluetoothLeClass{
         	if (mOnDataAvailableListener!=null)
         		mOnDataAvailableListener.onCharacteristicWrite(gatt, characteristic);
         }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicWrite(gatt, characteristic, status);
+            Log.e(TAG, "onCharacteristicChanged received: ");
+//            if (mOnDataAvailableListener!=null)
+//                mOnDataAvailableListener.onCharacteristicWrite(gatt, characteristic);
+        }
     };
 
     /**
@@ -192,7 +200,7 @@ public class BluetoothLeClass{
         }
         // We want to directly connect to the device, so we are setting the autoConnect
         // parameter to false.
-        mBluetoothGatt = device.connectGatt(mContext, false, mGattCallback);
+        mBluetoothGatt = device.connectGatt(mContext, true, mGattCallback);
         Log.e(TAG, "Trying to create a new connection.");
         mBluetoothDeviceAddress = address;
         return true;
