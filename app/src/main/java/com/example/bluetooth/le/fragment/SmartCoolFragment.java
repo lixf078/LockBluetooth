@@ -26,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.example.bluetooth.le.BleConnectUtil;
+import com.example.bluetooth.le.DeviceConnectActivity;
 import com.example.bluetooth.le.DeviceModel;
 import com.example.bluetooth.le.DeviceShare;
 import com.example.bluetooth.le.R;
@@ -60,6 +61,8 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 
     Dialog dia;
 
+    long lastTime;
+
     @Override
     protected View createContentView(LayoutInflater inflater, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, null);
@@ -92,6 +95,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
             }else if (event.eventType == ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS) {
                 bleConnectUtil.disconnectDevice();
                 if (dia != null && dia.isShowing()){
+                    lastTime = System.currentTimeMillis();
                     dia.dismiss();
                 }
 
@@ -104,6 +108,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
             }else if (event.eventType == ResponseEvent.TYPE_SCAN_TIME_OUT) {
                 bleConnectUtil.disconnectDevice();
                 if (dia != null && dia.isShowing()){
+                    lastTime = System.currentTimeMillis();
                     dia.dismiss();
                 }
                 if (event.errorCode == Server.Code.SUCCESS) {
@@ -175,10 +180,24 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        deviceModel = connectDevices.get(position);
-        if (bleConnectUtil != null){
-             bleConnectUtil.connectDevice(deviceModel.mac);
-            showDialog();
+
+        long time = System.currentTimeMillis();
+        if (time - lastTime <= 1000){
+            return;
+        }
+
+        int result = checkBluetooth();
+        if (result == 1){
+            deviceModel = connectDevices.get(position);
+            if (bleConnectUtil != null){
+                bleConnectUtil.connectDevice(deviceModel.mac);
+                showDialog();
+            }
+        }else if (result == -1){
+            ToastUtil.showToast(SmartCoolFragment.this.getContext(), R.string.error_bluetooth_not_supported);
+        }else if (result == 0){
+            Intent settingIntent = new Intent(Settings.ACTION_SETTINGS);
+            startActivity(settingIntent);
         }
     }
 
@@ -275,11 +294,9 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 //                if (deviceModel != null){
 //                    bleConnectUtil.connectDevice(deviceModel.mac);
 //                }
-
             }
         }
     }
-
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -341,5 +358,4 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
             }
         } else super.onActivityResult(requestCode, resultCode, data);
     }
-
 }

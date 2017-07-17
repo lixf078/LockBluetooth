@@ -271,7 +271,6 @@ public class BleConnectUtil {
         }
     };
 
-
     /**
      * 搜索到BLE终端服务的事件
      */

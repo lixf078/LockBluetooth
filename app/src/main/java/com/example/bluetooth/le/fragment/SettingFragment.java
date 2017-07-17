@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import com.example.bluetooth.le.view.SwipeLayoutManager;
 import com.lock.lib.api.Server;
 import com.lock.lib.api.base.BaseFragment;
 import com.lock.lib.api.event.ResponseEvent;
+import com.lock.lib.common.util.ToastUtil;
 import com.lock.lib.qr.QRCodeUtil;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -167,8 +169,16 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
 
             }
             case R.id.ble_connect_device: {
-                Intent intent = new Intent(SettingFragment.this.getContext(), DeviceConnectActivity.class);
-                startActivity(intent);
+                int result = checkBluetooth();
+                if (result == 1){
+                    Intent intent = new Intent(SettingFragment.this.getContext(), DeviceConnectActivity.class);
+                    startActivity(intent);
+                }else if (result == -1){
+                    ToastUtil.showToast(SettingFragment.this.getContext(), R.string.error_bluetooth_not_supported);
+                }else if (result == 0){
+                    Intent settingIntent = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(settingIntent);
+                }
                 break;
             }
         }

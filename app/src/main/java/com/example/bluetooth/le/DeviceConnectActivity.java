@@ -128,6 +128,7 @@ public class DeviceConnectActivity extends Activity {
             bleConnectUtil.connectDevice("");
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CODE_ACCESS_COARSE_LOCATION) {

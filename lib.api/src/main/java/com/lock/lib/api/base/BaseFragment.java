@@ -2,6 +2,7 @@ package com.lock.lib.api.base;
 
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -366,5 +367,19 @@ public abstract class BaseFragment extends Fragment {
 
     protected  interface PermissionAction{
         public void done(boolean confirm);
+    }
+
+    public int checkBluetooth(){
+        BluetoothAdapter blueAdapter= BluetoothAdapter.getDefaultAdapter();
+        if (blueAdapter == null){
+            return -1;
+        }else{
+            if (blueAdapter.isEnabled()){
+                blueAdapter = null;
+                return 1;
+            }
+            blueAdapter = null;
+            return 0;
+        }
     }
 }
