@@ -1,6 +1,7 @@
 package com.example.bluetooth.le.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -77,7 +78,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     @Override
-    protected void onEventResponse(ResponseEvent event) {
+    protected void onEventResponse(final ResponseEvent event) {
         if (event != null) {
             if (event.eventType == ResponseEvent.TYPE_DELETE_DEVICE) {
                 if (event.errorCode == Server.Code.SUCCESS) {
@@ -99,23 +100,24 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
                     dia.dismiss();
                 }
 
-                if (event.errorCode == Server.Code.SUCCESS) {
-                    ToastUtil.showToast(SmartCoolFragment.this.getContext(), "Unlock Success !");
-                } else {
-//                    resolveError(event.errorCode, event.errorMsg);
-                    ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
-                }
+                ((Activity)getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.showToast(getContext(), "" + event.errorMsg);
+                    }
+                });
             }else if (event.eventType == ResponseEvent.TYPE_SCAN_TIME_OUT) {
                 bleConnectUtil.disconnectDevice();
                 if (dia != null && dia.isShowing()){
                     lastTime = System.currentTimeMillis();
                     dia.dismiss();
                 }
-                if (event.errorCode == Server.Code.SUCCESS) {
-                    ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
-                } else {
-                    ToastUtil.showToast(SmartCoolFragment.this.getContext(), "" + event.errorMsg);
-                }
+                ((Activity)getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.showToast(getContext(), "" + event.errorMsg);
+                    }
+                });
             }
         }
     }

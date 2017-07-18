@@ -62,12 +62,12 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
         holder.setText(R.id.device_name, deviceModel.name);
         final SwipeLayout swipeLayout = holder.getView(R.id.swipelayout);
 
-        swipeLayout.setOnSwipeLayoutClickListener(new SwipeLayout.OnSwipeLayoutClickListener() {
-            @Override
-            public void onClick() {
-                showDialog(deviceModel);
-            }
-        });
+//        swipeLayout.setOnSwipeLayoutClickListener(new SwipeLayout.OnSwipeLayoutClickListener() {
+//            @Override
+//            public void onClick() {
+//                showDialog(deviceModel);
+//            }
+//        });
 
         (swipeLayout.getDeleteView()).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +83,6 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
             @Override
             public void onClick(View view) {
                 showDialog(deviceModel);
-
             }
         });
 

@@ -143,7 +143,7 @@ public abstract class BaseFragment extends Fragment {
     }
 
     @Subscribe
-    public void onEvent(ResponseEvent event){
+    public void onEventMainThread(ResponseEvent event){
         if(event!=null){
             onEventResponse(event);
         }

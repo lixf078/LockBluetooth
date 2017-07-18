@@ -82,7 +82,7 @@ public class DeviceConnectActivity extends Activity {
     }
 
     @Subscribe
-    public void onEventMainThread(ResponseEvent event) {
+    public void onEventMainThread(final ResponseEvent event) {
         if (event != null) {
             if (event.eventType == ResponseEvent.TYPE_ACTIVITY_DEVICE_SUCCESS) {
                 if (event.errorCode == Server.Code.SUCCESS) {
@@ -100,7 +100,12 @@ public class DeviceConnectActivity extends Activity {
 //                    resolveError(event.errorCode, event.errorMsg);
                 }
             }else if (event.eventType == ResponseEvent.TYPE_SCAN_TIME_OUT){
-                ToastUtil.showToast(DeviceConnectActivity.this, "" + event.errorMsg);
+                DeviceConnectActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.showToast(DeviceConnectActivity.this, "" + event.errorMsg);
+                    }
+                });
                 finish();
             }
         }

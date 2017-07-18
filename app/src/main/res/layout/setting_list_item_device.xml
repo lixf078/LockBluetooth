@@ -84,7 +84,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/rename_device"
+                    android:id="@+id/rename_device_"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -99,7 +99,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/device_delete_"
+                    android:id="@+id/rename_device"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
