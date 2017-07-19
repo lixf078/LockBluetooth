@@ -3,7 +3,10 @@ package com.lock.lib.api.base;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -11,12 +14,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lock.lib.api.R;
 import com.lock.lib.api.Server;
 import com.lock.lib.api.event.RequestEvent;
 import com.lock.lib.api.event.ResponseEvent;
 import com.lock.lib.common.constants.Constants;
+import com.lock.lib.common.util.DeviceUtil;
 import com.lock.lib.common.util.Logger;
 import com.lock.lib.common.util.NetUtil;
 import com.lock.lib.common.util.PermissionUtil;
@@ -370,16 +375,30 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public int checkBluetooth(){
-        BluetoothAdapter blueAdapter= BluetoothAdapter.getDefaultAdapter();
-        if (blueAdapter == null){
+        BluetoothManager bluetoothManager =
+                (BluetoothManager) getContext().getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter blueAdapter = bluetoothManager.getAdapter();
+
+        // Checks if Bluetooth is supported on the device.
+        if (blueAdapter == null) {
+            Toast.makeText(getContext(), "Bluetooth not supported.", Toast.LENGTH_SHORT).show();
             return -1;
-        }else{
-            if (blueAdapter.isEnabled()){
-                blueAdapter = null;
-                return 1;
-            }
-            blueAdapter = null;
-            return 0;
         }
+
+        if (blueAdapter.isEnabled()){
+            blueAdapter = null;
+            return 1;
+        }
+
+        int mOsVersion = DeviceUtil.getOsVersion();
+        if (mOsVersion >= Build.VERSION_CODES.N){
+            ToastUtil.showToast(getContext(), "Please open bluetooth and try again.");
+        }else{
+            ToastUtil.showToast(getContext(), "Bluetooth is opening, please try again.");
+        }
+
+        //开启蓝牙
+        blueAdapter.enable();
+        return 0;
     }
 }

@@ -176,8 +176,8 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                 }else if (result == -1){
                     ToastUtil.showToast(SettingFragment.this.getContext(), R.string.error_bluetooth_not_supported);
                 }else if (result == 0){
-                    Intent settingIntent = new Intent(Settings.ACTION_SETTINGS);
-                    startActivity(settingIntent);
+//                    Intent settingIntent = new Intent(Settings.ACTION_SETTINGS);
+//                    startActivity(settingIntent);
                 }
                 break;
             }

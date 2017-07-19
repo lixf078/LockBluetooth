@@ -13,7 +13,7 @@ public class ToastUtil {
 
     public static Toast showToast(Context context,String content){
         Toast toast = Toast.makeText(context, content, Toast.LENGTH_SHORT);
-//        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setGravity(Gravity.CENTER,0,0);
         toast.show();
 
         return toast;
@@ -22,7 +22,7 @@ public class ToastUtil {
 
     public static Toast showToast(Context context,int contentRes){
         Toast toast = Toast.makeText(context, contentRes, Toast.LENGTH_SHORT);
-//        toast.setGravity(Gravity.CENTER,0,0);
+        toast.setGravity(Gravity.CENTER,0,0);
         toast.show();
         return  toast;
     }

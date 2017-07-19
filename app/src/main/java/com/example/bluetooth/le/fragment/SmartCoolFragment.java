@@ -66,6 +66,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
 
     @Override
     protected View createContentView(LayoutInflater inflater, Bundle savedInstanceState) {
+        Log.e("lxf", "createContentView");
         View view = inflater.inflate(R.layout.fragment_home, null);
         bleConnectUtil = new BleConnectUtil(SmartCoolFragment.this.getContext(), null, null);
         connectDevices = DeviceShare.getDevices(SmartCoolFragment.this.getContext());
@@ -198,8 +199,9 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
         }else if (result == -1){
             ToastUtil.showToast(SmartCoolFragment.this.getContext(), R.string.error_bluetooth_not_supported);
         }else if (result == 0){
-            Intent settingIntent = new Intent(Settings.ACTION_SETTINGS);
-            startActivity(settingIntent);
+//            Intent settingIntent = new Intent(Settings.ACTION_SETTINGS);
+//            startActivity(settingIntent);
+//            ToastUtil.showToast(SmartCoolFragment.this.getContext(), R.string.bluetooth_is_opening);
         }
     }
 

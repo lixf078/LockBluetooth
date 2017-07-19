@@ -138,6 +138,7 @@ public class BleConnectUtil {
 
     public void connectDevice(String mac) {
         Log.e(TAG, "connectDevice mac " + mac);
+        tryCount = 0;
 //        FileUtil.writeTxtToFile("connectDevice mac");
         if (mBLE == null) {
 
@@ -258,12 +259,20 @@ public class BleConnectUtil {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    if (mDevice != null && mBLE != null && tryCount <= 3) {
-                        tryCount++;
-                        try {
-                            Log.e(TAG, "onDisconnect device mac " + mDevice.getAddress());
-                            mBLE.connect(mDevice.getAddress());
-                        }catch (Exception e){
+                    if (mDevice != null && mBLE != null) {
+                        if ( ++tryCount <= 2){
+                            try {
+                                Log.e(TAG, "onDisconnect device mac " + mDevice.getAddress());
+                                mBLE.connect(mDevice.getAddress());
+                            }catch (Exception e){
+                            }
+                        }else{
+                            mHandler.removeCallbacks(scanRunnable);
+                            if (current_status == status_activation){
+                                postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Activation Garage failed", getShareDeviceModel(mDevice));
+                            }else if (current_status == status_unlock){
+                                postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Garage opened failed", getShareDeviceModel(mDevice));
+                            }
                         }
                     }
                 }
@@ -326,25 +335,24 @@ public class BleConnectUtil {
 
                             String mac = mDevice.getAddress();
                             Log.e(TAG, "onCharacteristicWrite--------> onCharacteristicWrite Device Mac Address " + mac + ", HandShakeKey2 " + ByteUtil.bytesToHexString(HandShakeKey2));
-//                            FileUtil.writeTxtToFile("激活设备：Device Mac Address " + mac  + " 密钥2  " + ByteUtil.bytesToHexString(HandShakeKey2));
 
                             mac = mac.replace(":", "");
                             StringBuffer stringBufferMac = new StringBuffer(mac);
                             String temp = ByteUtil.getStringRandom(20);
                             temp = temp + stringBufferMac;
                             Log.e(TAG, "onCharacteristicWrite-------> 16 byte data " + temp);
-//                            FileUtil.writeTxtToFile("激活设备：加密前数据 " + temp );
                             Log.e(TAG, "onCharacteristicWrite-------> 16 byte key " + key2Temp);
                             byte[] bytes = ByteUtil.hexStringToBytes(temp);
                             byte[] result = aesEncrypt(bytes, resultByte);
                             Log.e(TAG, "onCharacteristicWrite-------> 16 byte aesEncrypt data " + ByteUtil.bytesToHexString(result));
-//                            FileUtil.writeTxtToFile("激活设备：加密后数据 " + ByteUtil.bytesToHexString(result) );
                             byte[] result2 = new byte[4];
                             final byte[] result3 = ByteUtil.addBytes(result, result2);
 //                            FileUtil.writeTxtToFile("激活设备：通过特征FFAA写入 "  );
                             mCharacteristicAa.setValue(result3);
                             //往蓝牙模块写入数据
-                            mBLE.writeCharacteristic(mCharacteristicAa);
+                            if (mBLE != null){
+                                mBLE.writeCharacteristic(mCharacteristicAa);
+                            }
                         } else if (resultByte.length == 2) {
                             mHandler.removeCallbacks(scanRunnable);
                             mDeviceConnectState = 0;
@@ -364,7 +372,7 @@ public class BleConnectUtil {
 //                                FileUtil.writeTxtToFile("激活设备：激活第二步 验证成功："  + key2Temp);
                                 disconnectDevice();
                             } else {
-                                postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE, Server.Code.FAIL, "Activation device failed", getShareDeviceModel(mDevice));
+                                postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE, Server.Code.FAIL, "Activation Garage failed", getShareDeviceModel(mDevice));
 //                                FileUtil.writeTxtToFile("激活设备：激活第二步 验证失败："  + key2Temp);
                                 disconnectDevice();
                             }
@@ -391,16 +399,19 @@ public class BleConnectUtil {
 
                     decTempStr = decTempStr + "00000000";
                     final byte[] encrypData = ByteUtil.hexStringToBytes(decTempStr);
+                    Log.e(TAG, "开锁设备：开锁第一步 FFAA写入 ");
+//                            FileUtil.writeTxtToFile("开锁设备：开锁第一步 FFAA写入 "  + ByteUtil.bytesToHexString(encrypData));
 
+                    mCharacteristicAb.setValue(encrypData);
+                    //往蓝牙模块写入数据
+                    if (mBLE != null){
+                        mBLE.writeCharacteristic(mCharacteristicAb);
+                    }
+                    Log.e(TAG, "开锁设备：开锁第一步 FFAA写入 完成");
                     mHandler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Log.e(TAG, "开锁设备：开锁第一步 FFAA写入 ");
-//                            FileUtil.writeTxtToFile("开锁设备：开锁第一步 FFAA写入 "  + ByteUtil.bytesToHexString(encrypData));
-                            mCharacteristicAb.setValue(encrypData);
-                            //往蓝牙模块写入数据
-                            mBLE.writeCharacteristic(mCharacteristicAb);
-                            Log.e(TAG, "开锁设备：开锁第一步 FFAA写入 完成");
+
                         }
                     }, 100);
                 } else {
@@ -415,10 +426,10 @@ public class BleConnectUtil {
                         current_status = status_unlock_success;
                         Log.e(TAG, "开锁设备 onCharacteristicWrite-------> unlock device success  ");
 //                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁成功 "  + key2Temp);
-                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.SUCCESS, "Unlock device Success", getShareDeviceModel(mDevice));
+                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.SUCCESS, "Garage has been opened successfully.", getShareDeviceModel(mDevice));
                     } else {
 //                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁失败 "  + key2Temp);
-                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Unlock device failed", getShareDeviceModel(mDevice));
+                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Garage opened failed", getShareDeviceModel(mDevice));
                     }
                 }
             }
@@ -666,7 +677,12 @@ public class BleConnectUtil {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void startBleScan(){
-        mScanner.startScan(mScanCallback);
+        if (mScanner == null){
+            mScanner = mBluetoothAdapter.getBluetoothLeScanner();
+        }
+        if (mScanner != null && mScanCallback != null) {
+            mScanner.startScan(mScanCallback);
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -686,6 +702,7 @@ public class BleConnectUtil {
     }
 
     public DeviceModel getShareDeviceModel(BluetoothDevice device) {
+        if (device == null) return null;
         DeviceModel deviceModel = null;
         if (connectDevices == null || connectDevices.size() == 0) {
             deviceModel = new DeviceModel();

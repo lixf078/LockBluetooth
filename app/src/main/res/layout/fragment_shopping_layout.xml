@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/common_head_layout"
+        layout="@layout/lib_style_common_head_layout" />
+    <WebView
+        android:id="@+id/web_detail"
+        android:layout_below="@id/common_head_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eef2f3"/>
+
+    <ProgressBar
+        android:id="@+id/pb_act_web"
+        android:layout_below="@+id/common_head_layout"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10px" />
+
+    <ViewStub
+        android:layout_marginTop="44dp"
+        android:id="@+id/no_net_stub"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout="@layout/no_net_layout_old"
+        android:visibility="gone" />
+
+    <ViewStub
+        android:layout_marginTop="44dp"
+        android:id="@+id/no_data_stub"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout="@layout/empty_data_layout" />
+
+    <ViewStub
+        android:id="@+id/loading_view_stub"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout="@layout/loading_layout" />
+</RelativeLayout>

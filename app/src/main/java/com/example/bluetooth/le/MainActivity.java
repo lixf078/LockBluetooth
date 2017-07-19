@@ -1,6 +1,8 @@
 package com.example.bluetooth.le;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,8 +17,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TabHost;
+import android.widget.Toast;
 
 import com.example.bluetooth.le.fragment.SettingFragment;
 import com.example.bluetooth.le.fragment.ShoppingFragment;
@@ -61,6 +66,25 @@ public class MainActivity extends FragmentActivity {
 
         final View tabShopping = mInflater.inflate(R.layout.main_tab_shop, null, false);
         mTabHost.addTab(mTabHost.newTabSpec(mShopping).setIndicator(tabShopping), ShoppingFragment.class, null);
+        mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                Log.e("lxf", "onTabChanged tabId " + tabId);
+                if (!"Smart".equals(tabId)){
+                    BluetoothManager bluetoothManager =
+                            (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+                    BluetoothAdapter mBluetoothAdapter = bluetoothManager.getAdapter();
+
+                    // Checks if Bluetooth is supported on the device.
+                    if (mBluetoothAdapter == null) {
+                        Toast.makeText(MainActivity.this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    //开启蓝牙
+                    mBluetoothAdapter.enable();
+                }
+            }
+        });
     }
 
     private static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 1;

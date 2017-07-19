@@ -135,7 +135,7 @@ public class BluetoothLeClass{
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicWrite(gatt, characteristic, status);
-            Log.e(TAG, "onCharacteristicChanged received: ");
+            Log.e(TAG, "onCharacteristicWrite received: ");
 //            if (mOnDataAvailableListener!=null)
 //                mOnDataAvailableListener.onCharacteristicWrite(gatt, characteristic);
         }

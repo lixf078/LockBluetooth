@@ -66,4 +66,5 @@
             android:value="8cb69bee280af92d4bf158d194a8d4d505fb66c3" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>

@@ -30,4 +30,12 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 是否使用背景半透明 -->
     </style>
+
+    <style name="progress_circle">
+        <item name="android:indeterminateDrawable">@drawable/loading_progress</item>
+        <item name="android:minWidth">25dp</item>
+        <item name="android:minHeight">25dp</item>
+        <item name="android:maxWidth">60dp</item>
+        <item name="android:maxHeight">60dp</item>
+    </style>
 </resources>

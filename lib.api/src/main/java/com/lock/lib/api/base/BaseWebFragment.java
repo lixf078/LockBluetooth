@@ -41,11 +41,10 @@ public abstract class BaseWebFragment extends BaseFragment {
 
     private DrawableCenterTextView mNoNetRefreshView;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        View contentView = onCreateConentView(inflater);
+        View contentView = onCreateContentView(inflater);
         mWebView = onCreateWebView(contentView);
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -84,7 +83,7 @@ public abstract class BaseWebFragment extends BaseFragment {
     }
 
     protected void loadWebUrl(String url) {
-        if (isNetworkAvabile()) {
+        if (isNetworkAvailable()) {
             hiddenNoNetView();
             if (!TextUtils.isEmpty(url)) {
                 hiddenNoDataView();
@@ -138,7 +137,7 @@ public abstract class BaseWebFragment extends BaseFragment {
             mNoNetRefreshView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isNetworkAvabile()) {
+                    if (isNetworkAvailable()) {
                         mWebView.reload();
                     } else {
                         showToast(getString(R.string.fail_web_loading));
@@ -188,10 +187,10 @@ public abstract class BaseWebFragment extends BaseFragment {
 
     }
     protected abstract void showToast(String msg);
-    protected abstract boolean isNetworkAvabile();
+    protected abstract boolean isNetworkAvailable();
     protected abstract void onStartLoadUrl();
     protected abstract void initViewStub(View contentView);
-    protected abstract View onCreateConentView(LayoutInflater inflater);
+    protected abstract View onCreateContentView(LayoutInflater inflater);
     protected abstract WebView onCreateWebView(View contentView);
     protected abstract void onWebViewProgressChanged(WebView view, int newProgress);
 }
