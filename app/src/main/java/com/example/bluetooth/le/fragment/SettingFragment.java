@@ -31,6 +31,7 @@ import com.example.bluetooth.le.view.SwipeLayoutManager;
 import com.lock.lib.api.Server;
 import com.lock.lib.api.base.BaseFragment;
 import com.lock.lib.api.event.ResponseEvent;
+import com.lock.lib.common.util.DialogUtil;
 import com.lock.lib.common.util.ToastUtil;
 import com.lock.lib.qr.QRCodeUtil;
 
@@ -111,6 +112,19 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
                     mDeviceAdapter = new DeviceAdapter(getContext(), list, R.layout.setting_list_item_device);
                     mDeviceAdapter.setItemArrayList(list);
                     mListView.setAdapter(mDeviceAdapter);
+                    if ("true".equalsIgnoreCase(event.errorMsg)){
+                        final Dialog dialog = DialogUtil.showDialog(getActivity(), R.layout.custom_alert_dialog);
+
+                        TextView yes = (TextView) dialog.findViewById(R.id.action_yes);
+
+                        yes.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                    }
                 } else {
 //                    resolveError(event.errorCode, event.errorMsg);
                 }

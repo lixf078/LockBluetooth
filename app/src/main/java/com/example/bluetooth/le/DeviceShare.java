@@ -27,7 +27,7 @@ public class DeviceShare {
         for (DeviceModel device : list) {
             if (deviceModel.mac.equalsIgnoreCase(device.mac)){
                 flag = false;
-                device.name = deviceModel.name;
+//                device.name = deviceModel.name;
                 device.key = deviceModel.key;
             }
         }
