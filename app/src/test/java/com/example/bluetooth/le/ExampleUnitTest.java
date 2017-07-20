@@ -1,4 +1,4 @@
-package com.example.bluetooth.le;
+package com.lock.bluetooth.le;
 
 import org.junit.Test;
 

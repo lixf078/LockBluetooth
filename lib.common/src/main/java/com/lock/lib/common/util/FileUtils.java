@@ -436,7 +436,7 @@ public class FileUtils {
 
     /**
      * Given a path under the "before" directory, rewrite it to live under the
-     * "after" directory. For example, {@code /before/foo/bar.txt} would become
+     * "after" directory. For lock, {@code /before/foo/bar.txt} would become
      * {@code /after/foo/bar.txt}.
      */
     public static File rewriteAfterRename(File beforeDir, File afterDir, File file) {
@@ -471,8 +471,8 @@ public class FileUtils {
      * type is appended. If a file already exists, the name is appended with a numerical value to
      * make it unique.
      *
-     * For example, the display name 'example' with 'text/plain' MIME might produce
-     * 'example.txt' or 'example (1).txt', etc.
+     * For lock, the display name 'lock' with 'text/plain' MIME might produce
+     * 'lock.txt' or 'lock (1).txt', etc.
      *
      * @throws FileNotFoundException
      */

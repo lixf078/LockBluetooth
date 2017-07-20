@@ -17,7 +17,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <com.example.bluetooth.le.view.SwipeLayout
+    <com.lock.bluetooth.le.view.SwipeLayout
         android:id="@+id/swipelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -125,5 +125,5 @@
             android:text="Delete"
             android:textColor="#ffffff"
             android:textSize="18sp" />
-    </com.example.bluetooth.le.view.SwipeLayout>
+    </com.lock.bluetooth.le.view.SwipeLayout>
 </LinearLayout>

@@ -30,7 +30,7 @@ import java.util.Arrays;
  *
  * <p/>
  * Care must be taken so that the internal buffer is kept small. The best practice is to
- * precalculate the maximum buffer size that you will need. For example,
+ * precalculate the maximum buffer size that you will need. For lock,
  * say you have a loop that reads bytes from index <code>0</code> to <code>10</code>,
  * skips to index <code>N</code>, reads from index <code>N</code> to <code>N+10</code>, etc. Then
  * you know that the internal buffer can have a maximum size of <code>10</code>,
@@ -38,7 +38,7 @@ import java.util.Arrays;
  *
  * <p/>
  * Use {@link #advanceTo(int)} to declare that you will not need to access lesser indexes. This
- * helps to keep the internal buffer small. In the above example, after reading bytes from index
+ * helps to keep the internal buffer small. In the above lock, after reading bytes from index
  * <code>0</code> to <code>10</code>, you should call <code>advanceTo(N)</code> so that internal
  * buffer becomes filled with bytes from index <code>N</code> to <code>N+10</code>.
  *

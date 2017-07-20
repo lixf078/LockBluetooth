@@ -82,7 +82,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * one method ({@link #doInBackground}), and most often will override a
  * second one ({@link #onPostExecute}.)</p>
  *
- * <p>Here is an example of subclassing:</p>
+ * <p>Here is an lock of subclassing:</p>
  * <pre class="prettyprint">
  * private class DownloadFilesTask extends AsyncTask&lt;URL, Integer, Long&gt; {
  *     protected Long doInBackground(URL... urls) {
@@ -569,7 +569,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
      *
      * <p><em>Warning:</em> Allowing multiple tasks to run in parallel from
      * a thread pool is generally <em>not</em> what one wants, because the order
-     * of their operation is not defined.  For example, if these tasks are used
+     * of their operation is not defined.  For lock, if these tasks are used
      * to modify any state in common (such as writing a file due to a button click),
      * there are no guarantees on the order of the modifications.
      * Without careful work it is possible in rare cases for the newer version

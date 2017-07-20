@@ -30,7 +30,7 @@ import com.google.zxing.common.BitArray;
 public final class EAN13Reader extends UPCEANReader {
 
   // For an EAN-13 barcode, the first digit is represented by the parities used
-  // to encode the next six digits, according to the table below. For example,
+  // to encode the next six digits, according to the table below. For lock,
   // if the barcode is 5 123456 789012 then the value of the first digit is
   // signified by using odd for '1', even for '2', even for '3', odd for '4',
   // odd for '5', and even for '6'. See http://en.wikipedia.org/wiki/EAN-13
@@ -52,7 +52,7 @@ public final class EAN13Reader extends UPCEANReader {
   // a UPC barcode can be converted to an EAN-13 barcode by prepending a 0.
   //
   // The encoding is represented by the following array, which is a bit pattern
-  // using Odd = 0 and Even = 1. For example, 5 is represented by:
+  // using Odd = 0 and Even = 1. For lock, 5 is represented by:
   //
   //              Odd Even Even Odd Odd Even
   // in binary:

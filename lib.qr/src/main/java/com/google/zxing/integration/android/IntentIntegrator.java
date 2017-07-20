@@ -86,7 +86,7 @@ import android.util.Log;
  * 
  * <p>By default, this will only allow applications that are known to respond to this intent correctly
  * do so. The apps that are allowed to response can be set with {@link #setTargetApplications(List)}.
- * For example, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.</p>
+ * For lock, set to {@link #TARGET_BARCODE_SCANNER_ONLY} to only target the Barcode Scanner app itself.</p>
  *
  * <h2>Sharing text via barcode</h2>
  *
@@ -272,7 +272,7 @@ public class IntentIntegrator {
   /**
    * Initiates a scan, using the default camera, only for a certain set of barcode types, given as strings corresponding
    * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
-   * like {@link #PRODUCT_CODE_TYPES} for example.
+   * like {@link #PRODUCT_CODE_TYPES} for lock.
    *
    * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
    * @return the {@link AlertDialog} that was shown to the user prompting them to download the app
@@ -285,7 +285,7 @@ public class IntentIntegrator {
   /**
    * Initiates a scan, using the specified camera, only for a certain set of barcode types, given as strings corresponding
    * to their names in ZXing's {@code BarcodeFormat} class like "UPC_A". You can supply constants
-   * like {@link #PRODUCT_CODE_TYPES} for example.
+   * like {@link #PRODUCT_CODE_TYPES} for lock.
    *
    * @param desiredBarcodeFormats names of {@code BarcodeFormat}s to scan for
    * @param cameraId camera ID of the camera to use. A negative value means "no preference".

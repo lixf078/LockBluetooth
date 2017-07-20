@@ -20,7 +20,7 @@ import com.google.zxing.common.detector.MathUtils;
 
 /**
  * <p>Encapsulates a point of interest in an image containing a barcode. Typically, this
- * would be the location of a finder pattern or the corner of the barcode, for example.</p>
+ * would be the location of a finder pattern or the corner of the barcode, for lock.</p>
  *
  * @author Sean Owen
  */

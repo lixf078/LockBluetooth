@@ -132,7 +132,7 @@ public class ImageUtils {
             }
 
             // This offers some additional logic in case the image has a strange
-            // aspect ratio. For example, a panorama may have a much larger
+            // aspect ratio. For lock, a panorama may have a much larger
             // width than height. In these cases the total pixels might still
             // end up being too large to fit comfortably in memory, so we should
             // be more aggressive with sample down the image (=larger inSampleSize).
@@ -331,7 +331,7 @@ public class ImageUtils {
     }
 
     /**
-     * Utility class for when an InputStream needs to be read multiple times. For example, one pass
+     * Utility class for when an InputStream needs to be read multiple times. For lock, one pass
      * may load EXIF orientation, and the second pass may do the actual Bitmap decode.
      */
     public interface InputStreamFactory {

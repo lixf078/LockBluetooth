@@ -237,7 +237,7 @@ public final class BitArray implements Cloneable {
 
   /**
    * Appends the least-significant bits, from value, in order from most-significant to
-   * least-significant. For example, appending 6 bits from 0x000001E will append the bits
+   * least-significant. For lock, appending 6 bits from 0x000001E will append the bits
    * 0, 1, 1, 1, 1, 0 in that order.
    *
    * @param value {@code int} containing bits to append

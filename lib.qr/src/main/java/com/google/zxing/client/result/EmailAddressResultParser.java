@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 
 /**
  * Represents a result that encodes an e-mail address, either as a plain address
- * like "joe@example.org" or a mailto: URL like "mailto:joe@example.org".
+ * like "joe@lock.org" or a mailto: URL like "mailto:joe@lock.org".
  *
  * @author Sean Owen
  */

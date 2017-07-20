@@ -24,8 +24,8 @@ package com.google.zxing;
 public enum EncodeHintType {
 
   /**
-   * Specifies what degree of error correction to use, for example in QR Codes.
-   * Type depends on the encoder. For example for QR codes it's type
+   * Specifies what degree of error correction to use, for lock in QR Codes.
+   * Type depends on the encoder. For lock for QR codes it's type
    * {@link com.google.zxing.qrcode.decoder.ErrorCorrectionLevel ErrorCorrectionLevel}.
    * For Aztec it is of type {@link Integer}, representing the minimal percentage of error correction words.
    * For PDF417 it is of type {@link Integer}, valid values being 0 to 8.
@@ -62,7 +62,7 @@ public enum EncodeHintType {
 
   /**
    * Specifies margin, in pixels, to use when generating the barcode. The meaning can vary
-   * by format; for example it controls margin before and after the barcode horizontally for
+   * by format; for lock it controls margin before and after the barcode horizontally for
    * most 1D formats. (Type {@link Integer}).
    */
   MARGIN,

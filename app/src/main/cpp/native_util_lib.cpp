@@ -5,7 +5,7 @@
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_example_bluetooth_le_BleConnectUtil_stringFromJNI(
+Java_com_lock_bluetooth_le_BleConnectUtil_stringFromJNI(
         JNIEnv* env,
         jobject /* this */) {
     std::string hello = "Hello from C++";
@@ -14,7 +14,7 @@ Java_com_example_bluetooth_le_BleConnectUtil_stringFromJNI(
 //
 extern "C"
 JNIEXPORT jbyteArray JNICALL
-Java_com_example_bluetooth_le_BleConnectUtil_aesEncrypt(
+Java_com_lock_bluetooth_le_BleConnectUtil_aesEncrypt(
         JNIEnv* env,
         jobject ,
         jbyteArray data,
@@ -48,7 +48,7 @@ Java_com_example_bluetooth_le_BleConnectUtil_aesEncrypt(
 
 extern "C"
 JNIEXPORT jbyteArray JNICALL
-Java_com_example_bluetooth_le_BleConnectUtil_aesDecrypt(
+Java_com_lock_bluetooth_le_BleConnectUtil_aesDecrypt(
         JNIEnv* env,
         jobject ,
         jbyteArray data,

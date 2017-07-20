@@ -32,7 +32,7 @@ import com.ogaclejapan.smarttablayout.R;
 /**
  * <p>
  * Forked from Google Samples &gt; SlidingTabsBasic &gt;
- * <a href="https://developer.android.com/samples/SlidingTabsBasic/src/com.example.android.common/view/SlidingTabLayout.html">SlidingTabStrip</a>
+ * <a href="https://developer.android.com/samples/SlidingTabsBasic/src/com.lock.android.common/view/SlidingTabLayout.html">SlidingTabStrip</a>
  */
 class SmartTabStrip extends LinearLayout {
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.bluetooth.le"
+    package="com.lock.bluetooth.le"
     android:versionCode="1"
     android:versionName="1.0">
     <!-- Declare this required feature if you want to make the app available to BLE-capable

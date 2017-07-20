@@ -1,4 +1,4 @@
-package com.example.bluetooth.le;
+package com.lock.bluetooth.le;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.bluetooth.le", appContext.getPackageName());
+        assertEquals("com.lock.bluetooth.le", appContext.getPackageName());
     }
 }

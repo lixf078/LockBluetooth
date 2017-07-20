@@ -21,7 +21,7 @@ import com.google.zxing.ChecksumException;
 /**
  * <p>PDF417 error correction implementation.</p>
  *
- * <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">example</a>
+ * <p>This <a href="http://en.wikipedia.org/wiki/Reed%E2%80%93Solomon_error_correction#Example">lock</a>
  * is quite useful in understanding the algorithm.</p>
  *
  * @author Sean Owen

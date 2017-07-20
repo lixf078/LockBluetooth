@@ -174,7 +174,7 @@ public class ImageLoader {
          * as the bitmap (if it is loaded).
          * @param isImmediate True if this was called during ImageLoader.get() variants.
          * This can be used to differentiate between a cached image loading and a network
-         * image loading in order to, for example, run an animation to fade in network loaded
+         * image loading in order to, for lock, run an animation to fade in network loaded
          * images.
          */
         public void onResponse(ImageContainer response, boolean isImmediate);

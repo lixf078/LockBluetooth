@@ -48,7 +48,7 @@ public class GridViewWithHeaderAndFooter extends GridView {
     private OnItemLongClickListener mOnItemLongClickListener;
 
     /**
-     * A class that represents a fixed view in a list, for example a header at the top
+     * A class that represents a fixed view in a list, for lock a header at the top
      * or a footer at the bottom.
      */
     private static class FixedViewInfo {

@@ -28,7 +28,7 @@ import java.util.Map;
  * See <a href="http://tools.ietf.org/html/rfc5724"> RFC 5724</a> on this.</p>
  *
  * <p>This class supports "via" syntax for numbers, which is not part of the spec.
- * For example "+12125551212;via=+12124440101" may appear as a number.
+ * For lock "+12125551212;via=+12124440101" may appear as a number.
  * It also supports a "subject" query parameter, which is not mentioned in the spec.
  * These are included since they were mentioned in earlier IETF drafts and might be
  * used.</p>

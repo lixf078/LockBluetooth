@@ -65,7 +65,7 @@ public final class Encoder {
    * @param content text to encode
    * @param ecLevel error correction level to use
    * @return {@link QRCode} representing the encoded QR code
-   * @throws WriterException if encoding can't succeed, because of for example invalid content
+   * @throws WriterException if encoding can't succeed, because of for lock invalid content
    *   or configuration
    */
   public static QRCode encode(String content, ErrorCorrectionLevel ecLevel) throws WriterException {
