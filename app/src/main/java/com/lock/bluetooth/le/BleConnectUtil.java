@@ -428,7 +428,7 @@ public class BleConnectUtil {
                         current_status = status_unlock_success;
                         Log.e(TAG, "开锁设备 onCharacteristicWrite-------> unlock device success  ");
 //                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁成功 "  + key2Temp);
-                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.SUCCESS, "Garage has been opened successfully.", getShareDeviceModel(mDevice));
+                        postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.SUCCESS, "Your garage has been remotely triggered successfully.", getShareDeviceModel(mDevice));
                     } else {
 //                        FileUtil.writeTxtToFile("开锁设备：开锁第二步 开锁失败 "  + key2Temp);
                         postResponseEvent(ResponseEvent.TYPE_UNLOCK_DEVICE_SUCCESS, Server.Code.FAIL, "Garage opened failed", getShareDeviceModel(mDevice));
