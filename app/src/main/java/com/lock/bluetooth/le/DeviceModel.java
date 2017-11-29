@@ -10,6 +10,7 @@ public class DeviceModel {
     public String mac;
     public String name;
     public String key;
+    public int deviceType = 0; // 0 自己激活 1 分享获得
 
     @Override
     public boolean equals(Object obj) {

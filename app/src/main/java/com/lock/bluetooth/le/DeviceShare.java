@@ -76,6 +76,7 @@ public class DeviceShare {
                 jsonObject.put("name", model.name);
                 jsonObject.put("mac", model.mac);
                 jsonObject.put("key", model.key);
+                jsonObject.put("deviceType", model.deviceType);
                 jsonArray.put(jsonObject);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -102,6 +103,7 @@ public class DeviceShare {
                         device.name = jsonObject.optString("name");
                         device.mac = jsonObject.optString("mac");
                         device.key = jsonObject.optString("key");
+                        device.deviceType = jsonObject.optInt("deviceType", 0);
                         list.add(device);
                     }
                 }

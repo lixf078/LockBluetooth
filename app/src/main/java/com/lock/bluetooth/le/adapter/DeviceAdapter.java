@@ -87,13 +87,17 @@ public class DeviceAdapter extends CommonAdapter<DeviceModel> {
         });
 
         View qrView = swipeLayout.findViewById(R.id.display_qr_code);
-        qrView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showWarningDialog("qr", deviceModel);
-
-            }
-        });
+        if (deviceModel.deviceType == 1){
+            qrView.setVisibility(View.INVISIBLE);
+        }else{
+            qrView.setVisibility(View.VISIBLE);
+            qrView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showWarningDialog("qr", deviceModel);
+                }
+            });
+        }
 
         View deleteView = swipeLayout.findViewById(R.id.device_delete);
         deleteView.setOnClickListener(new View.OnClickListener() {

@@ -44,6 +44,7 @@ public class QrCodeActivity extends CaptureActivity {
             deviceModel.name = name;
             deviceModel.mac = dealString(macStr);
             deviceModel.key = secretKey2;
+            deviceModel.deviceType = 1;
             DeviceShare.saveDevice(QrCodeActivity.this, deviceModel);
         } catch (JSONException e) {
             e.printStackTrace();

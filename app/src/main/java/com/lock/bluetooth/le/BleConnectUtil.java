@@ -366,6 +366,7 @@ public class BleConnectUtil {
 
                                 model.mac = mDevice.getAddress();
                                 model.key = ByteUtil.bytesToHexString(HandShakeKey2);
+                                model.deviceType = 0;
                                 DeviceShare.saveDevice(mContext, model);
                                 current_status = status_unlock;
                                 postResponseEvent(ResponseEvent.TYPE_ACTIVITY_DEVICE_SUCCESS, Server.Code.SUCCESS, "" + hasReset, model);
