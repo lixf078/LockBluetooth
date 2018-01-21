@@ -5,9 +5,13 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -23,7 +27,9 @@ public class QRCodeUtil {
         BitMatrix result = null;
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
-            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 200, 200);
+            Map<EncodeHintType,String> hints = new HashMap<>();
+            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+            result = multiFormatWriter.encode(str, BarcodeFormat.QR_CODE, 200, 200,hints);
             // 使用 ZXing Android Embedded 要写的代码
 //            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
 //            bitmap = barcodeEncoder.createBitmap(result);

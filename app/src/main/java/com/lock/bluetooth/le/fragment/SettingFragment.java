@@ -220,8 +220,6 @@ public class SettingFragment extends BaseFragment implements View.OnClickListene
         super.onDestroy();
     }
 
-
-
     public void showQRDialog(){
         dia = new Dialog(SettingFragment.this.getContext(), R.style.edit_AlertDialog_style);
         dia.setContentView(R.layout.unlock_dialog);

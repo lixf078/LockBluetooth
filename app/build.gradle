@@ -1,29 +1,28 @@
 buildscript {
     repositories {
-        maven { url 'https://maven.fabric.io/public' }
+//        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+//        classpath 'io.fabric.tools:gradle:1.+'
     }
 }
 apply plugin: 'com.android.application'
-apply plugin: 'io.fabric'
+//apply plugin: 'io.fabric'
 
-repositories {
-    maven { url 'https://maven.fabric.io/public' }
-}
-
+//repositories {
+//    maven { url 'https://maven.fabric.io/public' }
+//}
 
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "com.example.bluetooth.le"
-        minSdkVersion 21
+        applicationId "com.lock.bluetooth.le"
+        minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 121
+        versionName "1.21"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
@@ -59,9 +58,9 @@ dependencies {
     compile project(':lib.volley')
     compile project(':lib.style')
     compile project(':lib.ptr')
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
-        transitive = true;
-    }
+//    compile 'org.greenrobot:eventbus:3.0.0'
+//    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+//        transitive = true;
+//    }
 
 }

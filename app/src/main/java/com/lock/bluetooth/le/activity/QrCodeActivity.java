@@ -35,7 +35,7 @@ public class QrCodeActivity extends CaptureActivity {
         Intent intent = null;
         try {
             JSONObject jsonObject = new JSONObject(result);
-            String name = jsonObject.optString("name");
+            String name = jsonObject.getString("name");
             String macStr = jsonObject.optString("macStr");
             String secretKey2 = jsonObject.optString("secretKey2");
             Logger.e(Constants.TAG, "QrCodeActivity dealScanResult name " + name + ", macStr " + macStr + ", secretKey2 " + secretKey2);
@@ -46,7 +46,7 @@ public class QrCodeActivity extends CaptureActivity {
             deviceModel.key = secretKey2;
             deviceModel.deviceType = 1;
             DeviceShare.saveDevice(QrCodeActivity.this, deviceModel);
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -2,6 +2,7 @@ package com.lock.bluetooth.le;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.lock.lib.common.util.ShareUtil;
 
@@ -104,6 +105,7 @@ public class DeviceShare {
                         device.mac = jsonObject.optString("mac");
                         device.key = jsonObject.optString("key");
                         device.deviceType = jsonObject.optInt("deviceType", 0);
+                        Log.e("lxf", device.name + ", " + device.mac);
                         list.add(device);
                     }
                 }

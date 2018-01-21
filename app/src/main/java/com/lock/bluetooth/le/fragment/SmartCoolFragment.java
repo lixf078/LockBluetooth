@@ -124,6 +124,7 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initContentView(View view){
+        requestPermission();
         setHeadLayoutVisiable(View.VISIBLE);
         getHeadMiddelView().setText("Home");
 
@@ -141,18 +142,12 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     @Override
     public void onResume() {
         super.onResume();
+        Log.e("lxf", "onResume");
         connectDevices = DeviceShare.getDevices(SmartCoolFragment.this.getContext());
         if (connectDevices.size() > 0){
             deviceModel = connectDevices.get(0);
         }
-//        DeviceModel deviceModel = new DeviceModel();
-//        deviceModel.name = "Digital Ant-TB";
-//        deviceModel.mac = "afafafafafaf";
-//        connectDevices.add(deviceModel);
-//        connectDevices.add(deviceModel);
-//        connectDevices.add(deviceModel);
         mDeviceAdapter.setDevices(connectDevices);
-        requestPermission();
     }
 
     @Override
@@ -161,21 +156,12 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     }
 
     private void initData() {
-
+        Log.e("lxf", "initData");
         showLoadingView();
         connectDevices = DeviceShare.getDevices(SmartCoolFragment.this.getContext());
-//        DeviceModel deviceModel = new DeviceModel();
-//        deviceModel.name = "Digital Ant-TB";
-//        deviceModel.mac = "afafafafafaf";
-//        connectDevices.add(deviceModel);
-//        connectDevices.add(deviceModel);
         hiddenLoadingView();
         if (connectDevices == null || connectDevices.size() == 0){
-//            mNoDataTextView.setText("Please add a new device directly \n\r or by scanning the QR code");
-//            mNoDataTextView.setTextSize(22);
-//            mNoDateTitle.setText("");
             mLoadMoreContainer.setVisibility(View.GONE);
-//            showNoDataVew();
         }else{
             mLoadMoreContainer.setVisibility(View.VISIBLE);
         }
@@ -282,23 +268,28 @@ public class SmartCoolFragment extends BaseFragment implements AdapterView.OnIte
     private static final int REQUEST_CODE_ACCESS_COARSE_LOCATION = 1;
     private void requestPermission(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {//如果 API level 是大于等于 23(Android 6.0) 时
-            //判断是否具有权限
-            if (ContextCompat.checkSelfPermission(SmartCoolFragment.this.getActivity(),
-                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                //判断是否需要向用户解释为什么需要申请该权限
-                if (ActivityCompat.shouldShowRequestPermissionRationale(SmartCoolFragment.this.getActivity(),
-                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
-//                    showToast("自Android 6.0开始需要打开位置权限才可以搜索到Ble设备");
-                }
-                //请求权限
-                ActivityCompat.requestPermissions(SmartCoolFragment.this.getActivity(),
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_CODE_ACCESS_COARSE_LOCATION);
-            }else{
-//                if (deviceModel != null){
-//                    bleConnectUtil.connectDevice(deviceModel.mac);
+
+            ActivityCompat.requestPermissions(SmartCoolFragment.this.getActivity(),
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN},
+                    REQUEST_CODE_ACCESS_COARSE_LOCATION);
+
+//            //判断是否具有权限
+//            if (ContextCompat.checkSelfPermission(SmartCoolFragment.this.getActivity(),
+//                    Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                //判断是否需要向用户解释为什么需要申请该权限
+//                if (ActivityCompat.shouldShowRequestPermissionRationale(SmartCoolFragment.this.getActivity(),
+//                        Manifest.permission.ACCESS_COARSE_LOCATION)) {
+////                    showToast("自Android 6.0开始需要打开位置权限才可以搜索到Ble设备");
 //                }
-            }
+//                //请求权限
+//                ActivityCompat.requestPermissions(SmartCoolFragment.this.getActivity(),
+//                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                        REQUEST_CODE_ACCESS_COARSE_LOCATION);
+//            }else{
+////                if (deviceModel != null){
+////                    bleConnectUtil.connectDevice(deviceModel.mac);
+////                }
+//            }
         }
     }
 
